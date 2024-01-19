@@ -3,10 +3,10 @@
 ###Elevator Pitch
 All across the country countless college students get into dorms and sign up for professors and go to businesses around the area, all things that come with starting or continuing college. However, the problem is that these college students do not know the quality of these roommates, teachers, or businesses. this rating application will allow the student to keep their user login safe and will also allow the user to view ratings from other users on experiences they have had with roommates, professors, or businesses that the current user may need information on. Furthermore, the student will be able add their own ratings to help out their fellow users. The application will help these new college students know what they are walking into before hand and equip them with the knowledge they need to make all preparations accordingly, knowing the history of these professors, businesses, and roommates.
 ###Design
-![](/assets/images/One.jpg)
-![](/assets/images/Two.jpg)
+![](https://github.com/benbethers/start-up/blob/main/assets/images/One.jpg)
+![](https://github.com/benbethers/start-up/blob/main/assets/images/Two.jpg)
 Here is an example of how the users interact with the server, rate other users, and view other user's ratings
-![Here is an example of how the users interact with the server, rate other users, and view other user's ratings](/assets/images/Three.jpg)
+![Here is an example of how the users interact with the server, rate other users, and view other user's ratings](https://github.com/benbethers/start-up/blob/main/assets/images/Three.jpg)
 ###Key Features
 - Secure login over HTTPS
 - Ability of users to rate businesses, roommates, and teachers
