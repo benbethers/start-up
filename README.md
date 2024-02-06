@@ -8,12 +8,12 @@ All across the country countless college students get into dorms and sign up for
 
 ### Design
 
-![](~/assets/images/One.jpg)
-![](~/assets/images/Two.jpg)
+![](assets/images/One.jpg)
+![](assets/images/Two.jpg)
 
 Here is an example of how the users interact with the server, rate other users, and view other user's ratings
 
-![Here is an example of how the users interact with the server, rate other users, and view other user's ratings](~/assets/images/Three.jpg)
+![Here is an example of how the users interact with the server, rate other users, and view other user's ratings](assets/images/Three.jpg)
 
 ### Key Features
 
