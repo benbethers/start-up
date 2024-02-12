@@ -4,7 +4,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             * {
+                text-decoration: none;
                 font-family: sans-serif;
+                color: white;
+            }
+
+            button, a {
+                cursor: pointer;
             }
             
             body {
@@ -18,8 +24,6 @@
                 display: flex;
                 flex-direction: row;
                 background-color: rgb(255, 255, 255, 0);
-
-                color: white;
             }
 
             header h1 {
@@ -55,6 +59,19 @@
                 color: white;
             }
 
+            main button {
+                width: 100px;
+                padding: 7px;
+                border: 2px solid white;
+                border-radius: 15px;
+                background-color: rgba(255, 255, 255, 0);
+                margin: 10px;
+            }
+
+            main button:hover {
+                background-color: rgba(113, 113, 113, 0.75);
+            }
+
             main video {
                 position: fixed;
                 top: 0;
@@ -88,7 +105,8 @@
             <h2>Login</h2>
             <input type="text" placeholder="Username"><br>
             <input type="password" placeholder="Password"><br>
-            <video width="100%" height="auto" autoplay loop>
+            <button>Sumbit</button>
+            <video width="100%" height="auto" autoplay= "true" loop="true">
                 <source src="../assets/videos/Falling%20Stars%20Motion%20Background,%20Twinkling%20Star%20Background%20Video%20Loop%20_%20Free%20Stock%20Footage.mp4" type="video/mp4"/>
             </video><br>
             <h4>Quote of the Day</h4>
