@@ -17,6 +17,7 @@
                 display: flex;
                 flex-direction: column;
                 margin: 0px;
+                background: rgb(0, 0, 0);
             }
 
             header {
@@ -87,6 +88,11 @@
                 flex: 0 20px;
                 text-align: center;
             }
+
+            @font-face {
+                font-family: "Twinkle Stars";
+                src: url("TwinkleStar-Regular.ttf");
+            }
         </style>
     </head>
     <body>  
@@ -109,8 +115,8 @@
             <input type="text" placeholder="Username"><br>
             <input type="password" placeholder="Password"><br>
             <button>Sumbit</button>
-            <video width="100%" height="height" autoplay= "true" loop="true">
-                <source src="../assets/videos/Falling%20Stars%20Motion%20Background,%20Twinkling%20Star%20Background%20Video%20Loop%20_%20Free%20Stock%20Footage.mp4" type="video/mp4"/>
+            <video width="100%" height="auto" autoplay loop mute>
+                <source src="../assets/videos/StarsFalling.mp4" type="video/mp4"/>
             </video><br>
             <h4>Quote of the Day</h4>
             <p>"I think that all people are bananas" -Banana</p>
