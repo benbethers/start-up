@@ -1,26 +1,99 @@
-<!DOCTYPE html
+<!DOCTYPE html>
 <html>
-    <body>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            * {
+                font-family: sans-serif;
+            }
+            
+            body {
+                display: flex;
+                flex-direction: column;
+                margin: 0px;
+            }
+
+            header {
+                flex: 0 50px;
+                display: flex;
+                flex-direction: row;
+                background-color: rgb(255, 255, 255, 0);
+
+                color: white;
+            }
+
+            header h1 {
+                flex: 1;
+                padding-left: 20px;
+            }
+
+            nav {
+                flex: 2;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+
+            nav div {
+                flex: 1;
+                display: grid;
+                text-decoration: none;
+            }
+
+            main {
+                flex: 1;
+                text-align: center;
+            }
+
+            main input {
+                width: 300px;
+                padding: 10px;
+                margin: 6px;
+                border: 0;
+                border-radius: 10px;
+                background: rgba(255, 255, 225, 0.25);
+                color: white;
+            }
+
+            main video {
+                position: fixed;
+                top: 0;
+                left: 0;
+                margin: 0;
+                z-index: -1;
+            }
+
+            footer {
+                flex: 0 20px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>  
         <head>
             <title>Login</title>
-            <link rel="icon" href="https://media.istockphoto.com/id/1124719195/vector/cartoon-golden-star-vector-illustration-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=loPyRa0CPMiSLAEhFAkr39IpkWkK6f_Jhrf1plur438=" type="image/x-icon"/>
+            <link rel="icon" href="https://media.istockphoto.com/id/1124719195/vector/cartoon-golden-star-vector-illustration-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=loPyRa0CPMiSLAEhFAkr39IpkWkK6f_Jhrf1plur438=" type="image/x-icon" />
         </head>
-        <header><h1>Ratings</h1></header>
-        <nav>
-            <li><a href="https://simon.cs260.click/">Simon</a></li>
-            <li><a href="search-ratings.html">Search Ratings</a></li>
-            <li><a href="my-ratings.html">My Ratings</a></li>
-            <li><a href="index.html">Sign Out</a></li>
-            <li><a href="database.html">Database</a></li>
-        </nav><hr>
+        <header>
+            <h1>Ratings</h1>
+            <nav>
+                <div><a href="https://simon.cs260.click/">Simon</a></div>
+                <div><a href="search-ratings.html">Search Ratings</a></div>
+                <div><a href="my-ratings.html">My Ratings</a></div>
+                <div><a href="index.html">Sign Out</a></div>
+                <div><a href="database.html">Database</a></div>
+            </nav>
+        </header>
         <main>
             <h2>Login</h2>
-            Username:<input type="text" placeholder="Username"><br>
-            Password:<input type="password" placeholder="Password"><br>
-            <img src="https://images.pexels.com/photos/1036804/pexels-photo-1036804.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"/>
+            <input type="text" placeholder="Username"><br>
+            <input type="password" placeholder="Password"><br>
+            <video width="100%" height="auto" autoplay loop>
+                <source src="../assets/videos/Falling%20Stars%20Motion%20Background,%20Twinkling%20Star%20Background%20Video%20Loop%20_%20Free%20Stock%20Footage.mp4" type="video/mp4"/>
+            </video><br>
             <h4>Quote of the Day</h4>
             <p>"I think that all people are bananas" -Banana</p>
-        </main><hr>
+        </main>
         <footer>
             Benjamin Bethers<br>
             <a href="https://github.com/benbethers/start-up">GitHub</a>
