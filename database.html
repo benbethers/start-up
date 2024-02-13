@@ -13,6 +13,24 @@
             button, a {
                 cursor: pointer;
             }
+
+            button {
+                background-color: rgba(255, 255, 255, 0);
+                width: 100px;
+                padding: 7px;
+                border: 2px solid red;
+                border-radius: 15px;
+                margin: 10px;
+                color: red;
+                box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
+                transition: all 150ms ease-in-out;
+                padding: 2px;
+  
+                &:hover {
+                    box-shadow: 0 0 6px 0 red inset, 0 0 6px 1px red;
+                    background-color: rgb(255, 255, 255, 0);
+                }
+            }
             
             body {
                 display: flex;
@@ -77,20 +95,23 @@
             .card {
                 box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.3);
                 transition: 0.3s;
-                width: 250px;
-                height: 350px;
+                width: wrap;
+                height: wrap;
                 border-radius: 12px;
                 text-align: center;
                 background-color: white;
                 margin: 10px;
+                display: inline-block;
+                cursor: pointer;
             }
 
             .card * {
                 color: black;
+                text-align: center;
             }
 
             .card:hover {
-                box-shadow: 0 8px 16px 0 rgba(255, 255, 255, 0.6);
+                box-shadow: 0 8px 16px 0 rgba(255, 255, 255, 0.7);
             }
 
             footer {
@@ -134,20 +155,26 @@
                 <h2>Ratings Database</h2><br>
             </section>
             <section>
-                <div class="card">
-                    <image src="assets/images/MaleAvatar.png" alt="Avatar"/>
-                    <div class="container">
-                      <h4><b>John Doe</b></h4>
-                      <p>Professor</p>
+                <a href="example.html">
+                    <div class="card">
+                        <image src="assets/images/MaleAvatar.png" alt="Avatar"/>
+                        <div class="container">
+                            <h4><b>John Doe</b></h4>
+                            <p>Professor</p>
+                            <button href="https://github.com/benbethers/start-up" style="color:red">Delete</button>
+                        </div>
                     </div>
-                </div>
-                <div class="card">
-                    <img src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
-                    <div class="container">
-                        <h4><b>Megan Turner</b></h4>
-                        <p>Professor</p>
+                </a>
+                <a href="example.html">
+                    <div class="card">
+                        <img src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
+                        <div class="container">
+                            <h4><b>Megan Turner</b></h4>
+                            <p>Professor</p>
+                            <button href="https://github.com/benbethers/start-up" style="color:red">Delete</button>
+                        </div>
                     </div>
-                </div>
+                </a>
             </section>
         </main>
         <footer>
