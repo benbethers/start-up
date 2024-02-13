@@ -13,12 +13,29 @@
             button, a {
                 cursor: pointer;
             }
+
+            button {
+                background-color: rgba(255, 255, 255, 0);
+                width: 100px;
+                padding: 7px;
+                border: 2px solid red;
+                border-radius: 15px;
+                margin: 10px;
+                color: red;
+                box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
+                transition: all 150ms ease-in-out;
+                padding: 2px;
+  
+                &:hover {
+                    box-shadow: 0 0 6px 0 red inset, 0 0 6px 1px red;
+                    background-color: rgb(255, 255, 255, 0);
+                }
+            }
             
             body {
                 display: flex;
                 flex-direction: column;
                 margin: 0px;
-                background: rgb(0, 0, 0);
             }
 
             header {
@@ -67,12 +84,51 @@
                 min-height: 87vh;
             }
 
-            main table {
+            main video {
+                position: fixed;
+                top: 0;
+                left: 0;
+                margin: 0;
+                z-index: -1;
+            }
+
+            .card {
+                box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.3);
+                transition: 0.3s;
+                width: wrap;
+                height: wrap;
+                border-radius: 12px;
+                text-align: center;
+                background-color: white;
+                margin: 10px;
+                display: inline-block;
+                cursor: pointer;
+            }
+
+            .card * {
+                color: black;
                 text-align: center;
             }
 
-            main table tr:nth-child(1) {
-                font-size: 20px;
+            .card:hover {
+                box-shadow: 0 8px 16px 0 rgba(255, 255, 255, 0.7);
+            }
+
+            main button {
+                background-color: rgba(255, 255, 255, 0);
+                width: 100px;
+                padding: 7px;
+                border: 2px solid white;
+                border-radius: 15px;
+                margin: 10px;
+                color: #fff;
+                box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
+                transition: all 150ms ease-in-out;
+  
+                &:hover {
+                    box-shadow: 0 0 10px 0 white inset, 0 0 10px 3px white;
+                    background-color: rgb(255, 255, 255, 0);
+                }
             }
 
             footer {
@@ -109,35 +165,35 @@
             </nav>
         </header>
         <main>
-            <h2>My Ratings</h2>
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Given Rating</th>
-                    <th>Description</th>
-                    <th>Type</th>
-                </tr>
-                <tr>
-                    <th><a href="example.html">Sarah Richards</a></th>
-                    <th>2 stars</th>
-                    <th>This person is awful.</th>
-                    <th>Student</th>
-                </tr>
-                <tr>
-                    <th><a href="example.html">Johnny Peoples</a></th>
-                    <th>1 stars</th>
-                    <th>No words explain how much I hate this person.</th>
-                    <th>Teacher</th>
-                </tr>
-                <tr>
-                    <th><a href="example.html">John Doe</a></th>
-                    <th>5 stars</th>
-                    <th>this person is really cool.</th>
-                    <th>Student</th>
-                </tr>
-            </table><br>
-            <a href="new-rating.html">New Rating</a>
-        </main><hr>
+            <video width="100%" height="auto" autoplay loop muted>
+                <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
+            </video><br>
+            <section>  
+                <h2>My Ratings</h2>
+            </section>
+            <section>
+                <a href="example.html">
+                    <div class="card">
+                        <image src="assets/images/MaleAvatar.png" alt="Avatar"/>
+                        <div class="container">
+                            <h4><b>John Doe</b></h4>
+                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
+                            <a href="index.html"><button style="color:red">Delete</button></a>
+                        </div>
+                    </div>
+                </a>
+                <a href="example.html">
+                    <div class="card">
+                        <img src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
+                        <div class="container">
+                            <h4><b>Megan Turner</b></h4>
+                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
+                            <a href="index.html"><button style="color:red">Delete</button></a>
+                        </div>
+                    </div>
+                </a>
+            </section>
+            <a href="new-rating.html"><button>New Rating</button></a>
         <footer>
             Benjamin Bethers<br>
             <a href="https://github.com/benbethers/start-up">GitHub</a>
