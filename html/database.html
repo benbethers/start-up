@@ -3,19 +3,114 @@
     <head>
         <title>Database</title>
         <link rel="icon" href="https://media.istockphoto.com/id/1124719195/vector/cartoon-golden-star-vector-illustration-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=loPyRa0CPMiSLAEhFAkr39IpkWkK6f_Jhrf1plur438=" type="image/x-icon"/>
+        <style>
+            * {
+                text-decoration: none;
+                color: white;
+                font-family: sans-serif;
+            }
+
+            button, a {
+                cursor: pointer;
+            }
+            
+            body {
+                display: flex;
+                flex-direction: column;
+                margin: 0px;
+                background: rgb(0, 0, 0);
+            }
+
+            header {
+                font-family: "Cinzel";
+                flex: 0 50px;
+                display: flex;
+                flex-direction: row;
+                background-color: rgb(255, 255, 255, 0);
+                max-height: 50px;
+            }
+
+            header h1 {
+                flex: 1;
+                margin-top: 7px;
+                font-family: "Cinzel";
+            }
+
+            header image {
+                margin-top: 9px;
+                flex: .17;
+                align-items: center;
+            }
+
+            nav {
+                flex: 2;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+
+            nav div {
+                flex: 1;
+            }
+
+            nav div a {
+                font-family: "Cinzel";
+            }
+
+            nav div a:hover {
+                animation: glow 1s ease-in-out infinite alternate;
+            }
+
+            main {
+                flex: 1;
+                text-align: center;
+                min-height: 87vh;
+            }
+
+            main image {
+                position: fixed;
+                top: 0;
+                left: 0;
+                margin: 0;
+                z-index: -1;
+            }
+
+            footer {
+                flex: 0 20px;
+                text-align: center;
+            }
+
+            @font-face {
+                font-family: "Cinzel";
+                src: url("../assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
+            }
+
+            @keyframes glow {
+                from {
+	                text-shadow: 0 0 10px rgb(255, 255, 255), 0 0 20px rgb(255, 255, 255), 0 0 30px rgb(255, 255, 255), 0 0 40px #0ff,0 0 50px #0ff;
+	            }
+
+	            to {
+	                text-shadow: 0 0 60px rgb(255, 255, 255), 0 0 70px rgb(255, 255, 255);
+	            }
+            }
+        </style>
     </head>
     <body>
-        <header><h1>Ratings</h1><header>
-        <nav>
-            <li><a href="https://simon.cs260.click/">Simon</a></li>
-            <li><a href="search-ratings.html">Search Ratings</a></li>
-            <li><a href="my-ratings.html">My Ratings</a></li>
-            <li><a href="index.html">Sign Out</a></li>
-            <li><a href="database.html">Database</a></li>
-            Search:<input type="text" placeholder="Search ratings">
-        </nav><hr>
+        <header>
+            <image src="../assets/images/StarCluster.png" height="54px" width="54px"></image>
+            <h1>Ratings</h1>
+            <nav>
+                <div><a href="https://simon.cs260.click/">Simon</a></div>
+                <div><a href="search-ratings.html">Search Ratings</a></div>
+                <div><a href="my-ratings.html">My Ratings</a></div>
+                <div><a href="index.html">Sign Out</a></div>
+                <div><a href="database.html">Database</a></div>
+            </nav>
+        </header>
         <main>
-            <h2>Ratings Database</h2>
+            <image width="100%" height="auto" src="https://imageio.forbes.com/specials-images/imageserve/577c129fd7c6ee6a37c42b99/This-is-the-Milky-Way-from-Concordia-Camp--in-Pakistan-s-Karakoram-Range-/960x0.jpg?format=jpg&width=1440"></image>
+            <h2>Ratings Database</h2><br>
             <table>
                 <tr>
                     <th>Name</th>
@@ -82,7 +177,7 @@
                     <th>Student</th>
                 </tr>
             </table>
-        </main><hr>
+        </main>
         <footer>
             Benjamin Bethers<br>
             <a href="https://github.com/benbethers/start-up">GitHub</a>
