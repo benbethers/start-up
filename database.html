@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Database</title>
+        <link rel="icon" href="https://media.istockphoto.com/id/1124719195/vector/cartoon-golden-star-vector-illustration-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=loPyRa0CPMiSLAEhFAkr39IpkWkK6f_Jhrf1plur438=" type="image/x-icon"/>
+        <style>
+            * {
+                text-decoration: none;
+                color: white;
+                font-family: sans-serif;
+            }
+
+            button, a {
+                cursor: pointer;
+            }
+            
+            body {
+                display: flex;
+                flex-direction: column;
+                margin: 0px;
+                background: rgb(0, 0, 0);
+            }
+
+            header {
+                font-family: "Cinzel";
+                flex: 0 50px;
+                display: flex;
+                flex-direction: row;
+                background-color: rgb(255, 255, 255, 0);
+                max-height: 50px;
+            }
+
+            header h1 {
+                flex: 1;
+                margin-top: 7px;
+                font-family: "Cinzel";
+            }
+
+            header image {
+                margin-top: 9px;
+                flex: .17;
+                align-items: center;
+            }
+
+            nav {
+                flex: 2;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+
+            nav div {
+                flex: 1;
+            }
+
+            nav div a {
+                font-family: "Cinzel";
+            }
+
+            nav div a:hover {
+                animation: glow 1s ease-in-out infinite alternate;
+            }
+
+            main {
+                flex: 1;
+                text-align: center;
+                min-height: 87vh;
+            }
+
+            main table {
+                text-align: center;
+            }
+
+            main table tr:nth-child(1) {
+                font-size: 20px;
+            }
+
+            footer {
+                flex: 0 20px;
+                text-align: center;
+            }
+
+            @font-face {
+                font-family: "Cinzel";
+                src: url("../assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
+            }
+
+            @keyframes glow {
+                from {
+	                text-shadow: 0 0 10px rgb(255, 255, 255), 0 0 20px rgb(255, 255, 255), 0 0 30px rgb(255, 255, 255), 0 0 40px #0ff,0 0 50px #0ff;
+	            }
+
+	            to {
+	                text-shadow: 0 0 60px rgb(255, 255, 255), 0 0 70px rgb(255, 255, 255);
+	            }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <image src="../assets/images/StarCluster.png" height="54px" width="54px"></image>
+            <h1>Ratings</h1>
+            <nav>
+                <div><a href="https://simon.cs260.click/">Simon</a></div>
+                <div><a href="search-ratings.html">Search Ratings</a></div>
+                <div><a href="my-ratings.html">My Ratings</a></div>
+                <div><a href="index.html">Sign Out</a></div>
+                <div><a href="database.html">Database</a></div>
+            </nav>
+        </header>
+        <main>
+            <h2>Ratings Database</h2><br>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Average Rating</th>
+                    <th>Rating Count</th>
+                    <th>Ratings</th>
+                    <th>Type</th>
+                </tr>
+                <tr>
+                    <th><a href="example.html">Sarah Richards</a></th>
+                    <th>4 stars</th>
+                    <th>243 ratings</th>
+                    <th>
+                        <li>
+                            John Doe<br>
+                            Five Stars<br>
+                            "I love this person"
+                        </li>
+                        <li>
+                            Fidgetty Phil<br>
+                            Four Stars<br>
+                            "I hate this person but they are still cool"
+                        </li>
+                        <li>...</li>
+                    </th>
+                    <th>Teacher</th>
+                </tr>
+                <tr>
+                    <th><a href="example.html">Johnny Peoples</a></th>
+                    <th>2 stars</th>
+                    <th>23 ratings</th>
+                    <th>
+                        <li>
+                            John Doe<br>
+                            Five Stars<br>
+                            "I love this person"
+                        </li>
+                        <li>
+                            Fidgetty Phil<br>
+                            Four Stars<br>
+                            "I hate this person but they are still cool"
+                        </li>
+                        <li>...</li>
+                    </th>
+                    <th>Business</th>
+                </tr>
+                <tr>
+                    <th><a href="example.html">John Doe</a></th>
+                    <th>4.5 stars</th>
+                    <th>5 ratings</th>
+                    <th>
+                        <li>
+                            John Doe<br>
+                            Five Stars<br>
+                            "I love this person"
+                        </li>
+                        <li>
+                            Fidgetty Phil<br>
+                            Four Stars<br>
+                            "I hate this person but they are still cool"
+                        </li>
+                        <li>...</li>
+                    </th>
+                    <th>Student</th>
+                </tr>
+            </table>
+        </main>
+        <footer>
+            Benjamin Bethers<br>
+            <a href="https://github.com/benbethers/start-up">GitHub</a>
+        </footer>
+    </body>
+</html>

@@ -1,7 +1,8 @@
-<!DOCTYPE html>
+<!DOCTYPE html
 <html>
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Ratings</title>
+        <link rel="icon" href="https://media.istockphoto.com/id/1124719195/vector/cartoon-golden-star-vector-illustration-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=loPyRa0CPMiSLAEhFAkr39IpkWkK6f_Jhrf1plur438=" type="image/x-icon"/>
         <style>
             * {
                 text-decoration: none;
@@ -61,55 +62,22 @@
             }
 
             main {
-                flex: 0 87vh;
+                flex: 1;
                 text-align: center;
-                height: 50%;
+                min-height: 87vh;
             }
 
-            main h2 {
-                height: 12px;
-                margin: 17px;
+            main table {
+                text-align: center;
             }
 
-            main input {
-                width: 20%;
-                padding: 10px;
-                margin: 6px;
-                border: 0;
-                border-radius: 10px;
-                background: rgba(255, 255, 225, 0.25);
-                color: white;
-            }
-
-            main button {
-                background-color: rgba(255, 255, 255, 0);
-                width: 100px;
-                padding: 7px;
-                border: 2px solid white;
-                border-radius: 15px;
-                margin: 10px;
-                color: #fff;
-                box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
-                transition: all 150ms ease-in-out;
-  
-                &:hover {
-                    box-shadow: 0 0 10px 0 white inset, 0 0 10px 3px white;
-                    background-color: rgb(255, 255, 255, 0);
-                }
-            }
-
-            main video {
-                position: fixed;
-                top: 0;
-                left: 0;
-                margin: 0;
-                z-index: -1;
+            main table tr:nth-child(1) {
+                font-size: 20px;
             }
 
             footer {
                 flex: 0 20px;
                 text-align: center;
-                font-size: 13px;
             }
 
             @font-face {
@@ -128,13 +96,8 @@
             }
         </style>
     </head>
-    <body>  
-        <head>
-            <title>Login</title>
-            <link rel="icon" href="https://media.istockphoto.com/id/1124719195/vector/cartoon-golden-star-vector-illustration-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=loPyRa0CPMiSLAEhFAkr39IpkWkK6f_Jhrf1plur438=" type="image/x-icon" />
-        </head>
+    <body>
         <header>
-            <image src="../assets/images/StarCluster.png" height="54px" width="54px"></image>
             <h1>Ratings</h1>
             <nav>
                 <div><a href="https://simon.cs260.click/">Simon</a></div>
@@ -145,14 +108,35 @@
             </nav>
         </header>
         <main>
-            <h2>Login</h2>
-            <input type="text" placeholder="Username"><br>
-            <input type="password" placeholder="Password"><br>
-            <button>Sumbit</button>
-            <video width="100%" height="auto" autoplay loop muted>
-                <source src="../assets/videos/StarsFalling.mp4" type="video/mp4"/>
-            </video><br>
-        </main>
+            <h2>My Ratings</h2>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Given Rating</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                </tr>
+                <tr>
+                    <th><a href="example.html">Sarah Richards</a></th>
+                    <th>2 stars</th>
+                    <th>This person is awful.</th>
+                    <th>Student</th>
+                </tr>
+                <tr>
+                    <th><a href="example.html">Johnny Peoples</a></th>
+                    <th>1 stars</th>
+                    <th>No words explain how much I hate this person.</th>
+                    <th>Teacher</th>
+                </tr>
+                <tr>
+                    <th><a href="example.html">John Doe</a></th>
+                    <th>5 stars</th>
+                    <th>this person is really cool.</th>
+                    <th>Student</th>
+                </tr>
+            </table><br>
+            <a href="new-rating.html">New Rating</a>
+        </main><hr>
         <footer>
             Benjamin Bethers<br>
             <a href="https://github.com/benbethers/start-up">GitHub</a>
