@@ -5,8 +5,8 @@
         <style>
             * {
                 text-decoration: none;
-                font-family: sans-serif;
                 color: white;
+                font-family: sans-serif;
             }
 
             button, a {
@@ -21,15 +21,24 @@
             }
 
             header {
+                font-family: "Cinzel";
                 flex: 0 50px;
                 display: flex;
                 flex-direction: row;
                 background-color: rgb(255, 255, 255, 0);
+                max-height: 50px;
             }
 
             header h1 {
                 flex: 1;
-                padding-left: 20px;
+                margin-top: 7px;
+                font-family: "Cinzel";
+            }
+
+            header image {
+                margin-top: 9px;
+                flex: .17;
+                align-items: center;
             }
 
             nav {
@@ -41,17 +50,29 @@
 
             nav div {
                 flex: 1;
-                display: grid;
-                text-decoration: none;
+            }
+
+            nav div a {
+                font-family: "Cinzel";
+            }
+
+            nav div a:hover {
+                animation: glow 1s ease-in-out infinite alternate;
             }
 
             main {
-                flex: 1;
+                flex: 0 87vh;
                 text-align: center;
+                height: 50%;
+            }
+
+            main h2 {
+                height: 12px;
+                margin: 17px;
             }
 
             main input {
-                width: 300px;
+                width: 20%;
                 padding: 10px;
                 margin: 6px;
                 border: 0;
@@ -61,17 +82,18 @@
             }
 
             main button {
+                background-color: rgba(255, 255, 255, 0);
                 width: 100px;
                 padding: 7px;
                 border: 2px solid white;
                 border-radius: 15px;
                 margin: 10px;
                 color: #fff;
-                box-shadow: 0 0 40px 40px rgb(0, 0, 53) inset;
+                box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
                 transition: all 150ms ease-in-out;
   
                 &:hover {
-                    box-shadow: 0 0 10px 0 white inset, 0 0 10px 4px white;
+                    box-shadow: 0 0 10px 0 white inset, 0 0 10px 3px white;
                     background-color: rgb(255, 255, 255, 0);
                 }
             }
@@ -87,11 +109,22 @@
             footer {
                 flex: 0 20px;
                 text-align: center;
+                font-size: 13px;
             }
 
             @font-face {
-                font-family: "Twinkle Stars";
-                src: url("TwinkleStar-Regular.ttf");
+                font-family: "Cinzel";
+                src: url("../assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
+            }
+
+            @keyframes glow {
+                from {
+	                text-shadow: 0 0 10px rgb(255, 255, 255), 0 0 20px rgb(255, 255, 255), 0 0 30px rgb(255, 255, 255), 0 0 40px #0ff,0 0 50px #0ff;
+	            }
+
+	            to {
+	                text-shadow: 0 0 60px rgb(255, 255, 255), 0 0 70px rgb(255, 255, 255);
+	            }
             }
         </style>
     </head>
@@ -101,6 +134,7 @@
             <link rel="icon" href="https://media.istockphoto.com/id/1124719195/vector/cartoon-golden-star-vector-illustration-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=loPyRa0CPMiSLAEhFAkr39IpkWkK6f_Jhrf1plur438=" type="image/x-icon" />
         </head>
         <header>
+            <image src="../assets/images/StarCluster.png" height="54px" width="54px"></image>
             <h1>Ratings</h1>
             <nav>
                 <div><a href="https://simon.cs260.click/">Simon</a></div>
@@ -115,11 +149,9 @@
             <input type="text" placeholder="Username"><br>
             <input type="password" placeholder="Password"><br>
             <button>Sumbit</button>
-            <video width="100%" height="auto" autoplay loop mute>
+            <video width="100%" height="auto" autoplay loop muted>
                 <source src="../assets/videos/StarsFalling.mp4" type="video/mp4"/>
             </video><br>
-            <h4>Quote of the Day</h4>
-            <p>"I think that all people are bananas" -Banana</p>
         </main>
         <footer>
             Benjamin Bethers<br>
