@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="assets/images/StarCluster.png" type="image/x-icon"/>
         <style>
             * {
                 text-decoration: none;
@@ -66,6 +67,14 @@
                 height: 50%;
             }
 
+            main video {
+                position: fixed;
+                top: 0;
+                left: 0;
+                margin: 0;
+                z-index: -1;
+            }
+
             main h2 {
                 height: 12px;
                 margin: 17px;
@@ -96,14 +105,6 @@
                     box-shadow: 0 0 10px 0 white inset, 0 0 10px 3px white;
                     background-color: rgb(255, 255, 255, 0);
                 }
-            }
-
-            main video {
-                position: fixed;
-                top: 0;
-                left: 0;
-                margin: 0;
-                z-index: -1;
             }
 
             footer {
@@ -145,13 +146,13 @@
             </nav>
         </header>
         <main>
+            <video width="100%" height="auto" autoplay loop muted>
+                <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
+            </video><br>
             <h2>Login</h2>
             <input type="text" placeholder="Username"><br>
             <input type="password" placeholder="Password"><br>
             <button>Sumbit</button>
-            <video width="100%" height="auto" autoplay loop muted>
-                <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
-            </video><br>
         </main>
         <footer>
             Benjamin Bethers<br>

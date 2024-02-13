@@ -18,7 +18,6 @@
                 display: flex;
                 flex-direction: column;
                 margin: 0px;
-                background: rgb(0, 0, 0);
             }
 
             header {
@@ -67,15 +66,31 @@
                 min-height: 87vh;
             }
 
-            main table {
-                text-align: center;
-                background-color: white;
-                box-radius: 10px;
+            main video {
+                position: fixed;
+                top: 0;
+                left: 0;
+                margin: 0;
+                z-index: -1;
             }
 
-            main table tr:nth-child(1) {
-                font-size: 20px;
-                background-color: darkcyan;
+            .card {
+                box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.3);
+                transition: 0.3s;
+                width: 250px;
+                height: 350px;
+                border-radius: 12px;
+                text-align: center;
+                background-color: white;
+                margin: 10px;
+            }
+
+            .card * {
+                color: black;
+            }
+
+            .card:hover {
+                box-shadow: 0 8px 16px 0 rgba(255, 255, 255, 0.6);
             }
 
             footer {
@@ -112,73 +127,28 @@
             </nav>
         </header>
         <main>
-            <h2>Ratings Database</h2><br>
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Average Rating</th>
-                    <th>Rating Count</th>
-                    <th>Ratings</th>
-                    <th>Type</th>
-                </tr>
-                <tr>
-                    <th><a href="example.html">Sarah Richards</a></th>
-                    <th>4 stars</th>
-                    <th>243 ratings</th>
-                    <th>
-                        <li>
-                            John Doe<br>
-                            Five Stars<br>
-                            "I love this person"
-                        </li>
-                        <li>
-                            Fidgetty Phil<br>
-                            Four Stars<br>
-                            "I hate this person but they are still cool"
-                        </li>
-                        <li>...</li>
-                    </th>
-                    <th>Teacher</th>
-                </tr>
-                <tr>
-                    <th><a href="example.html">Johnny Peoples</a></th>
-                    <th>2 stars</th>
-                    <th>23 ratings</th>
-                    <th>
-                        <li>
-                            John Doe<br>
-                            Five Stars<br>
-                            "I love this person"
-                        </li>
-                        <li>
-                            Fidgetty Phil<br>
-                            Four Stars<br>
-                            "I hate this person but they are still cool"
-                        </li>
-                        <li>...</li>
-                    </th>
-                    <th>Business</th>
-                </tr>
-                <tr>
-                    <th><a href="example.html">John Doe</a></th>
-                    <th>4.5 stars</th>
-                    <th>5 ratings</th>
-                    <th>
-                        <li>
-                            John Doe<br>
-                            Five Stars<br>
-                            "I love this person"
-                        </li>
-                        <li>
-                            Fidgetty Phil<br>
-                            Four Stars<br>
-                            "I hate this person but they are still cool"
-                        </li>
-                        <li>...</li>
-                    </th>
-                    <th>Student</th>
-                </tr>
-            </table>
+            <video width="100%" height="auto" autoplay loop muted>
+                <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
+            </video><br>
+            <section>  
+                <h2>Ratings Database</h2><br>
+            </section>
+            <section>
+                <div class="card">
+                    <image src="assets/images/MaleAvatar.png" alt="Avatar"/>
+                    <div class="container">
+                      <h4><b>John Doe</b></h4>
+                      <p>Professor</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
+                    <div class="container">
+                        <h4><b>Megan Turner</b></h4>
+                        <p>Professor</p>
+                    </div>
+                </div>
+            </section>
         </main>
         <footer>
             Benjamin Bethers<br>
