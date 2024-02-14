@@ -93,6 +93,7 @@
 
             #description {
                 height: 80px;
+                word-break: break-all;
             }
 
             main button {
@@ -114,7 +115,7 @@
 
             div input {
                 color: orange;
-                
+
             }
 
             footer {
@@ -160,13 +161,7 @@
             <button>Student</button>
             <button>Teacher</button>
             <button>Business</button><br>
-            <div class="rating-box">
-                <input type="radio" name="clr1"/>
-                <input type="radio" name="clr2"/>
-                <input type="radio" name="clr3"/>
-                <input type="radio" name="clr4"/>
-                <input type="radio" name="clr5"/>
-            </div>
+            <input type="number" placeholder="Rating value" min="1" step= ".1" max="5"><br>
             <input id="description" type="text" placeholder="Description"><br>
             <button>Sumbit</button>
         </main>
