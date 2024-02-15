@@ -48,3 +48,13 @@ For this deliverable I built out the structure of my application using HTML.
 - Images - Image of friends displayed at the login page for a warm welcome.
 - DB/Login - Select dropdown menu for inputting star ratings. Each user has their own catalog of reviews and information.
 - WebSocket - Each user can see the users submitted by other users, updated in real time
+
+## CSS Deliverable
+For this deliverable I applied the rendering code for my application using HTML
+- For this deliverable I properly styled the application into its final appearance.
+- Header, footer, and main content body
+- Navigation elements - I dropped the underlines and changed the color for anchor elements and furthermore added animation to all header animations
+- Responsive to window resizing - My application looks good on all device layouts, use of flex and grid and inline block displays to make sure everything fits reasonably
+- Application elements - Everything is readable and is contrasted
+- Application text content - Consistent fonts, the header being an imported font from Google fonts and the rest is sans serif 
+- Application images - There is an image imported for the logo and a video imported from the background white is muted, looped, and autoplays upon arriving in a page

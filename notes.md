@@ -16,4 +16,10 @@ This assignment taught me the following important and interesting points:
 
 ## CSS Deliverable
 This assignment taught me many interesting and valuable things that offered deeper insight on those things we learned in class and new things that were not covered in class, this is what I learned:
-- 
+- How to use functions properly in CSS
+- How to effectively use classes and ID tags in the combination of CSS and HTML
+- Use of linear gradients
+- Better use of animation and transition
+- Use of autoplay, mute, and loop
+- Responsive design and better use of grid and flex
+- Where to get good information for if I want to learn a new functionality of CSS
