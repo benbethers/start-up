@@ -31,16 +31,17 @@
             button {
                 background-color: rgba(255, 255, 255, 0);
                 width: 100px;
-                border: 2px solid red;
+                border: 2px solid rgb(0, 68, 255);
                 border-radius: 15px;
                 margin: 10px;
                 color: red;
                 box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
+                transition: all 150ms ease-in-out;
                 padding: 2px;
             }
 
             button:hover {
-                box-shadow: 0 0 2px 0 red inset, 0 0 2px 1px red;
+                box-shadow: 0 0 2px 0 rgb(0, 68, 255) inset, 0 0 2px 1px rgb(0, 68, 255);
                 background-color: rgb(255, 0, 0, 0);
             }
             
@@ -106,25 +107,30 @@
             }
 
             .card {
-                box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.3);
+                box-shadow: 0 4px 8px 0 rgba(56, 122, 255, 0.3);
                 transition: 0.3s;
                 width: wrap;
                 height: wrap;
                 border-radius: 12px;
                 text-align: center;
-                background-color: white;
+                background-color: rgba(0, 46, 80, 0.603);
                 margin: 10px;
                 display: inline-block;
                 cursor: pointer;
             }
 
             .card * {
-                color: black;
+                color: white;
                 text-align: center;
             }
 
+            .card p {
+                margin-top: 6px;
+                margin-bottom: 2px;
+            }
+
             .card:hover {
-                box-shadow: 0 8px 16px 0 rgba(255, 255, 255, 0.7);
+                box-shadow: 0 8px 16px 0 rgba(13, 60, 168, 0.7);
             }
 
             footer {
@@ -147,6 +153,16 @@
 	            }
             }
         </style>
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                const deleteButtons = document.querySelectorAll('.deleteCard');
+                deleteButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    alert("Button clicked!");
+                });
+            });
+        });
+        </script>
     </head>
     <body>
         <header>
@@ -169,126 +185,22 @@
                 <input type="text" placeholder="Search database"/>
             </section>
             <section>
-                <a href="example.html">
                     <div class="card">
                         <image src="assets/images/MaleAvatar.png" alt="Avatar"/>
                         <div class="container">
-                            <h4><b>John Doe</b></h4>
+                            <b>John Doe</b>
                             <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
+                            <button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button>
                         </div>
                     </div>
-                </a>
-                <a href="example.html">
                     <div class="card">
                         <img src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
                         <div class="container">
-                            <h4><b>Megan Turner</b></h4>
+                            <b>Megan Turner</b style="margin-bottom: 2px">
                             <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
+                            <button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button>
                         </div>
                     </div>
-                </a>
-                <a href="example.html">
-                    <div class="card">
-                        <image src="assets/images/MaleAvatar.png" alt="Avatar"/>
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
-                        </div>
-                    </div>
-                </a>
-                <a href="example.html">
-                    <div class="card">
-                        <img src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
-                        <div class="container">
-                            <h4><b>Megan Turner</b></h4>
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
-                        </div>
-                    </div>
-                </a>
-                <a href="example.html">
-                    <div class="card">
-                        <image src="assets/images/MaleAvatar.png" alt="Avatar"/>
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
-                        </div>
-                    </div>
-                </a>
-                <a href="example.html">
-                    <div class="card">
-                        <img src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
-                        <div class="container">
-                            <h4><b>Megan Turner</b></h4>
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
-                        </div>
-                    </div>
-                </a>
-                <a href="example.html">
-                    <div class="card">
-                        <image src="assets/images/MaleAvatar.png" alt="Avatar"/>
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
-                        </div>
-                    </div>
-                </a>
-                <a href="example.html">
-                    <div class="card">
-                        <img src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
-                        <div class="container">
-                            <h4><b>Megan Turner</b></h4>
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
-                        </div>
-                    </div>
-                </a>
-                <a href="example.html">
-                    <div class="card">
-                        <image src="assets/images/MaleAvatar.png" alt="Avatar"/>
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
-                        </div>
-                    </div>
-                </a>
-                <a href="example.html">
-                    <div class="card">
-                        <img src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
-                        <div class="container">
-                            <h4><b>Megan Turner</b></h4>
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
-                        </div>
-                    </div>
-                </a>
-                <a href="example.html">
-                    <div class="card">
-                        <image src="assets/images/MaleAvatar.png" alt="Avatar"/>
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
-                        </div>
-                    </div>
-                </a>
-                <a href="example.html">
-                    <div class="card">
-                        <img src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
-                        <div class="container">
-                            <h4><b>Megan Turner</b></h4>
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
-                        </div>
-                    </div>
-                </a>
             </section>
         </main>
         <footer>
