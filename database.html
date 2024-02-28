@@ -233,11 +233,15 @@
                         const databaseSearch = databaseInput.value;
                         databaseInput.value = '';
                         cardDisplay.innerHTML = '';
+                        const resultsFound = false;
                         people.forEach(function(person) {
-                            if (person.name.includes(databaseSearch)) {
+                            if (caseIgnore(person.name).includes(databaseSearch)) {
                                 cardDisplay.innerHTML += person.createPersonCard();
+                                resultsFound = true;
                             }
-                        });
+                        if (resultsFound === false) {
+                            mainCardDisplay();
+                        }});
                     }
                 });
 
