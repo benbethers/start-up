@@ -159,14 +159,14 @@
         </style>
         <script type="text/javascript">
             class Person {
-                constructor(name, sex, type, receivedReviews, average, givenReviews, image) {
+                constructor(name, sex, type, receivedReviews, average, givenReviews) {
                     this.name = name;
                     this.type = type;
                     this.sex = sex;
                     this.receivedReviews = receivedReviews;
                     this.average = average;
                     this.givenReviews = givenReviews;
-                    if (person.sex === 'Female') {
+                    if (this.sex === 'Female') {
                         this.image = 'assets/images/FemaleAvatar.png';
                     } else {
                         this.image = 'assets/images/MaleAvatar.png';
@@ -174,8 +174,7 @@
                 }
 
                 createPersonCard() {
-
-                    return '<div class="card" id="' + this.name + '"><image src="assets/images/MaleAvatar.png" alt="Avatar"/><div class="container"><b>' + this.name + '</b><p>' + this.type + '<br>4.5 Stars<br>(' + this.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
+                    return '<div class="card" id="' + this.name + '"><image src="' + this.image + '" alt="Avatar"/><div class="container"><b>' + this.name + '</b><p>' + this.type + '<br>4.5 Stars<br>(' + this.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
                 }
             }
 
@@ -205,9 +204,9 @@
                 new Person('Samwise Gangi', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
                 new Person('Frodo Baggins', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
                 new Person('George Weesley', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
-                new Person('Fred Weesley', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Ginny Weesley', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
                 new Person('Ron Weesley', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
-                new Person('Hermine Ganger', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Hermine Ganger', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
                 new Person('Harry Potter', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
                 new Person('Horrass Slughorn', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
                 new Person('Joey Fender', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
@@ -219,9 +218,13 @@
             document.addEventListener('DOMContentLoaded', function() {
                 //load card display
                 const cardDisplay = document.getElementById('cardsDisplay');
-                people.forEach(function(person) {
-                    cardDisplay.innerHTML += person.createPersonCard();
-                });
+                function mainCardDisplay() {
+                    people.forEach(function(person) {
+                        cardDisplay.innerHTML += person.createPersonCard();
+                    });
+                }
+                
+                mainCardDisplay();
 
                 //search functionality
                 const databaseInput = document.getElementById('databaseSearch');
@@ -231,7 +234,7 @@
                         databaseInput.value = '';
                         cardDisplay.innerHTML = '';
                         people.forEach(function(person) {
-                            if (person.name === databaseSearch) {
+                            if (person.name.includes(databaseSearch)) {
                                 cardDisplay.innerHTML += person.createPersonCard();
                             }
                         });
