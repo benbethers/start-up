@@ -4,6 +4,11 @@
         <title>Database</title>
         <link rel="icon" href="assets/images/StarCluster.png" type="image/x-icon"/>
         <style>
+            input[type="search"]::-webkit-search-decoration,
+            input[type="search"]::-webkit-search-cancel-button,
+            input[type="search"]::-webkit-search-results-button,
+            input[type="search"]::-webkit-search-results-decoration { display: none; }
+
             * {
                 text-decoration: none;
                 color: white;
@@ -34,7 +39,6 @@
                 border: 2px solid rgb(0, 68, 255);
                 border-radius: 15px;
                 margin: 10px;
-                color: red;
                 box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
                 transition: all 150ms ease-in-out;
                 padding: 2px;
@@ -154,14 +158,94 @@
             }
         </style>
         <script type="text/javascript">
+            class Person {
+                constructor(name, sex, type, receivedReviews, average, givenReviews, image) {
+                    this.name = name;
+                    this.type = type;
+                    this.sex = sex;
+                    this.receivedReviews = receivedReviews;
+                    this.average = average;
+                    this.givenReviews = givenReviews;
+                    if (person.sex === 'Female') {
+                        this.image = 'assets/images/FemaleAvatar.png';
+                    } else {
+                        this.image = 'assets/images/MaleAvatar.png';
+                    }
+                }
+
+                createPersonCard() {
+
+                    return '<div class="card" id="' + this.name + '"><image src="assets/images/MaleAvatar.png" alt="Avatar"/><div class="container"><b>' + this.name + '</b><p>' + this.type + '<br>4.5 Stars<br>(' + this.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
+                }
+            }
+
+            let people = [
+                new Person('Megan Turner', 'Female', 'Professor', ["I love this person", "I hate this person"], 4.5, ['I dont like this person'], 'male'),
+                new Person('Jay Peg', 'Male', 'Professor', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('David Mercy', 'Male', 'Professor', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Jane Doe', 'Female', 'Professor', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Fiona Kenna', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Braxton Caldwell', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Steven Wonders', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Alex Commet', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Alexander Pigleton', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('John James', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Larry Bird', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Hanna Red', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Jaylin McMan', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Joanna White', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Eleanor Chip', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Emily Ghandi', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Justin Temmors', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Kay Smith', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('John Rockwell', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Lenard Hickman', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Tyler Commet', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Mercy Johnson', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Samwise Gangi', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Frodo Baggins', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('George Weesley', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Fred Weesley', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Ron Weesley', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Hermine Ganger', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Harry Potter', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Horrass Slughorn', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Joey Fender', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Leela Coney', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Juan Do', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+            ];
+
+            const databaseSearch = '';
             document.addEventListener('DOMContentLoaded', function() {
+                //load card display
+                const cardDisplay = document.getElementById('cardsDisplay');
+                people.forEach(function(person) {
+                    cardDisplay.innerHTML += person.createPersonCard();
+                });
+
+                //search functionality
+                const databaseInput = document.getElementById('databaseSearch');
+                databaseInput.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        const databaseSearch = databaseInput.value;
+                        databaseInput.value = '';
+                        cardDisplay.innerHTML = '';
+                        people.forEach(function(person) {
+                            if (person.name === databaseSearch) {
+                                cardDisplay.innerHTML += person.createPersonCard();
+                            }
+                        });
+                    }
+                });
+
+                //delete button functionality
                 const deleteButtons = document.querySelectorAll('.deleteCard');
                 deleteButtons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    alert("Button clicked!");
+                    button.addEventListener('click', function() {
+                        this.parentNode.parentNode.remove();
+                    });
                 });
             });
-        });
         </script>
     </head>
     <body>
@@ -182,26 +266,9 @@
             </video><br>
             <section>  
                 <h2>Ratings Database</h2><br>
-                <input type="text" placeholder="Search database"/>
+                <input id="databaseSearch" type="search" placeholder="Search database"/>
             </section>
-            <section>
-                    <div class="card">
-                        <image src="assets/images/MaleAvatar.png" alt="Avatar"/>
-                        <div class="container">
-                            <b>John Doe</b>
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <img src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
-                        <div class="container">
-                            <b>Megan Turner</b style="margin-bottom: 2px">
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button>
-                        </div>
-                    </div>
-            </section>
+            <section id="cardsDisplay"></section>
         </main>
         <footer>
             Benjamin Bethers<br>
