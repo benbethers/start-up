@@ -116,6 +116,7 @@
                 color: red;
                 font-style: italic;
                 margin: 5px;
+                font-size: 10px;
             }
 
             footer {
@@ -171,6 +172,10 @@
                         }
                     });
                 });
+                signUpButton.addEventListener('click', function() {
+                    logins.push(new Login (usernameInput.value, passwordInput.value));
+                    window.location.replace('database.html');
+                })
             });
         </script>
     </head>
