@@ -178,6 +178,14 @@
                 }
             }
 
+            class Review {
+                constructuor(raterName, rating, description) {
+                    this.raterName = raterName;
+                    this.rating = rating;
+                    this.description = description;
+                }
+            }
+
             let people = [
                 new Person('Megan Turner', 'Female', 'Professor', ["I love this person", "I hate this person"], 4.5, ['I dont like this person'], 'male'),
                 new Person('Jay Peg', 'Male', 'Professor', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
@@ -243,11 +251,24 @@
 
                 //delete button functionality
                 const deleteButtons = document.querySelectorAll('.deleteCard');
-                deleteButtons.forEach(function(button) {
-                    button.addEventListener('click', function() {
-                        this.parentNode.parentNode.remove();
+                const adminUsername = 'benbethers';
+                const username = 'benbethers5';
+                if (username === adminUsername) {
+                    deleteButtons.forEach(function(button) {
+                        button.addEventListener('click', function() {
+                            this.parentNode.parentNode.remove();
+                            people.forEach(function(person) {
+                                if (person.name === this.parentNode.parentNote.getAttribute('id')) {
+                                    people.remove(person);
+                                }
+                            });
+                        });
                     });
-                });
+                } else {
+                    deleteButtons.forEach(function(button) {
+                        button.style.display="none";
+                    });
+                }
             });
         </script>
     </head>
@@ -258,7 +279,7 @@
             <nav>
                 <div><a href="https://simon.cs260.click/">Simon</a></div>
                 <div><a href="search-ratings.html">Search Ratings</a></div>
-                <div><a href="my-ratings.html">My Ratings</a></div>
+                <div><a href="my-ratings.html">My Account</a></div>
                 <div><a href="index.html">Sign Out</a></div>
                 <div><a href="database.html">Database</a></div>
             </nav>
@@ -268,7 +289,7 @@
                 <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
             </video><br>
             <section>  
-                <h2>Ratings Database</h2><br>
+                <h2>Ratings Database</h2>
                 <input id="databaseSearch" type="search" placeholder="Search database"/>
             </section>
             <section id="cardsDisplay"></section>

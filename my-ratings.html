@@ -116,14 +116,13 @@
                 box-shadow: 0 8px 16px 0 rgba(13, 60, 168, 0.7);
             }
 
-            main button {
+            button {
                 background-color: rgba(255, 255, 255, 0);
                 width: 100px;
                 padding: 7px;
                 border: 2px solid white;
                 border-radius: 15px;
                 margin: 10px;
-                color: #fff;
                 box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
                 transition: all 150ms ease-in-out;
   
@@ -133,22 +132,20 @@
                 }
             }
 
-            div a button {
+            div button {
                 background-color: rgba(255, 255, 255, 0);
                 width: 100px;
-                padding: 7px;
-                border: 2px solid red;
+                border: 2px solid rgb(0, 68, 255);
                 border-radius: 15px;
                 margin: 10px;
-                color: red;
                 box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
                 transition: all 150ms ease-in-out;
                 padding: 2px;
-  
-                &:hover {
-                    box-shadow: 0 0 6px 0 red inset, 0 0 6px 1px red;
-                    background-color: rgb(255, 255, 255, 0);
-                }
+            }
+
+            div button:hover {
+                box-shadow: 0 0 2px 0 rgb(0, 68, 255) inset, 0 0 2px 1px rgb(0, 68, 255);
+                background-color: rgb(255, 0, 0, 0);
             }
 
             footer {
@@ -171,6 +168,99 @@
 	            }
             }
         </style>
+        <script>
+            class Person {
+                constructor(name, sex, type, receivedReviews, average, givenReviews) {
+                    this.name = name;
+                    this.type = type;
+                    this.sex = sex;
+                    this.receivedReviews = receivedReviews;
+                    this.average = average;
+                    this.givenReviews = givenReviews;
+                    if (this.sex === 'Female') {
+                        this.image = 'assets/images/FemaleAvatar.png';
+                    } else {
+                        this.image = 'assets/images/MaleAvatar.png';
+                    }
+                }
+
+                createPersonCard() {
+                    return '<div class="card" id="' + this.name + '"><image src="' + this.image + '" alt="Avatar"/><div class="container"><b>' + this.name + '</b><p>' + this.type + '<br>4.5 Stars<br>(' + this.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
+                }
+            }
+
+            let people = [
+                new Person('Megan Turner', 'Female', 'Professor', ["I love this person", "I hate this person"], 4.5, ['I dont like this person'], 'male'),
+                new Person('Jay Peg', 'Male', 'Professor', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('David Mercy', 'Male', 'Professor', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Jane Doe', 'Female', 'Professor', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Fiona Kenna', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Braxton Caldwell', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Steven Wonders', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Alex Commet', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Alexander Pigleton', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('John James', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Larry Bird', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Hanna Red', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Jaylin McMan', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Joanna White', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Eleanor Chip', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Emily Ghandi', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Justin Temmors', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Kay Smith', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('John Rockwell', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Lenard Hickman', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Tyler Commet', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Mercy Johnson', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Samwise Gangi', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Frodo Baggins', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('George Weesley', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Ginny Weesley', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Ron Weesley', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Hermine Ganger', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Harry Potter', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Horrass Slughorn', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Joey Fender', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Leela Coney', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Juan Do', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+            ];
+
+            const databaseSearch = '';
+            document.addEventListener('DOMContentLoaded', function() {
+                //load card display
+                const cardDisplay = document.getElementById('cardsDisplay');
+                function mainCardDisplay() {
+                    people.forEach(function(person) {
+                        cardDisplay.innerHTML += person.createPersonCard();
+                    });
+                }
+                
+                mainCardDisplay();
+
+                //search functionality
+                const databaseInput = document.getElementById('databaseSearch');
+                databaseInput.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                    const databaseSearch = databaseInput.value;
+                    databaseInput.value = '';
+                    cardDisplay.innerHTML = '';
+                    people.forEach(function(person) {
+                        if (person.name.includes(databaseSearch)) {
+                            cardDisplay.innerHTML += person.createPersonCard();
+                        }
+                    }); // <-- Add closing parenthesis here
+                }
+            });
+
+                //delete button functionality
+                const deleteButtons = document.querySelectorAll('.deleteCard');
+                deleteButtons.forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        this.parentNode.parentNode.remove();
+                    });
+                });
+            });
+        </script>
     </head>
     <body>
         <header>
@@ -192,28 +282,7 @@
                 <h2>My Ratings</h2>
                 <input type="text" placeholder="Search my ratings"/>
             </section>
-            <section>
-                <a href="example.html">
-                    <div class="card">
-                        <image src="assets/images/MaleAvatar.png" alt="Avatar"/>
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
-                        </div>
-                    </div>
-                </a>
-                <a href="example.html">
-                    <div class="card">
-                        <img src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
-                        <div class="container">
-                            <h4><b>Megan Turner</b></h4>
-                            <p>Professor<br>4.5 Stars<br>(452 reviews)</p>
-                            <a href="index.html"><button style="color:red">Delete</button></a>
-                        </div>
-                    </div>
-                </a>
-            </section>
+            <section id="cardDisplay"></section>
             <a href="new-rating.html"><button>New Rating</button></a>
         <footer>
             Benjamin Bethers<br>
