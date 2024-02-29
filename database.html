@@ -230,20 +230,16 @@
                 const databaseInput = document.getElementById('databaseSearch');
                 databaseInput.addEventListener('keydown', (event) => {
                     if (event.key === 'Enter') {
-                        const databaseSearch = databaseInput.value;
-                        databaseInput.value = '';
-                        cardDisplay.innerHTML = '';
-                        const resultsFound = false;
-                        people.forEach(function(person) {
-                            if (caseIgnore(person.name).includes(databaseSearch)) {
-                                cardDisplay.innerHTML += person.createPersonCard();
-                                resultsFound = true;
-                            }
-                        if (resultsFound === false) {
-                            mainCardDisplay();
-                        }});
-                    }
-                });
+                    const databaseSearch = databaseInput.value;
+                    databaseInput.value = '';
+                    cardDisplay.innerHTML = '';
+                    people.forEach(function(person) {
+                        if (person.name.includes(databaseSearch)) {
+                            cardDisplay.innerHTML += person.createPersonCard();
+                        }
+                    }); // <-- Add closing parenthesis here
+                }
+            });
 
                 //delete button functionality
                 const deleteButtons = document.querySelectorAll('.deleteCard');
