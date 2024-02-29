@@ -168,11 +168,10 @@
                             let login = logins[i];
                             if (usernameInput.value === login.username && passwordInput.value === login.password) {
                                 window.location.replace('database.html');
-                                break; // Exit the loop early on success
+                                break;
                             }
                         }
                         if (!found) {
-                            // Only display failure message if no login found
                             passwordInput.value = '';
                             failure.innerHTML = 'Could not find username or password, please try again or make a new account.';
                         }
