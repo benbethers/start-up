@@ -162,12 +162,19 @@
                 const signUpButton = document.getElementById('sign up');
                 const failure = document.getElementById('failure');
                 loginButton.addEventListener('click', function() {
-                    logins.forEach(function(login) {
-                        if (usernameInput === login.username && passwordInput.value == login.password) {
-                            window.location.replace('database.html');
-                        } else {
+                    loginButton.addEventListener('click', function() {
+                        let found = false;
+                        for (let i = 0; i < logins.length; i++) {
+                            let login = logins[i];
+                            if (usernameInput.value === login.username && passwordInput.value === login.password) {
+                                window.location.replace('database.html');
+                                break; // Exit the loop early on success
+                            }
+                        }
+                        if (!found) {
+                            // Only display failure message if no login found
                             passwordInput.value = '';
-                            failure.innerHTML = 'Could not find username or password, please try again or make new account';
+                            failure.innerHTML = 'Could not find username or password, please try again or make a new account.';
                         }
                     });
                 });
@@ -199,7 +206,7 @@
                 <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
             </video><br>
             <h2>Login</h2>
-            <input id="username" type="text" placeholder="Username" pattern="[A-Za-z0-9]" maxlength="30"><br>
+            <input id="username" type="text" placeholder="Username" pattern="[A-Za-z0-9]+" maxlength="30"><br>
             <input id="password" type="password" placeholder="Password" minlength="10" maxlength="40"><br>
             <button id="login">Login</button>
             <button id="sign up">Sign Up</button>
