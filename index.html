@@ -155,7 +155,6 @@
                 new Login ('harrypotter', 'iamatroll')
             ];
 
-            const loggedInUsername = '';
             document.addEventListener('DOMContentLoaded', function() {
                 const usernameInput = document.getElementById('username');
                 const passwordInput = document.getElementById('password');
@@ -173,9 +172,13 @@
                     });
                 });
                 signUpButton.addEventListener('click', function() {
-                    logins.push(new Login (usernameInput.value, passwordInput.value));
-                    window.location.replace('database.html');
-                })
+                    if (passwordInput.value.length >= 10) {
+                        logins.push(new Login (usernameInput.value, passwordInput.value));
+                        window.location.replace('database.html');
+                    } else {
+                        failure.innerHTML = 'Password must be at least ten characters long';
+                    }
+                });
             });
         </script>
     </head>
@@ -196,8 +199,8 @@
                 <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
             </video><br>
             <h2>Login</h2>
-            <input id="username" type="text" placeholder="Username"><br>
-            <input id="password" type="password" placeholder="Password"><br>
+            <input id="username" type="text" placeholder="Username" pattern="[A-Za-z0-9]" maxlength="30"><br>
+            <input id="password" type="password" placeholder="Password" minlength="10" maxlength="40"><br>
             <button id="login">Login</button>
             <button id="sign up">Sign Up</button>
             <p id="failure"></p>
