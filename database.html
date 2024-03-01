@@ -15,6 +15,16 @@
                 font-family: sans-serif;
             }
 
+            #profile-picture {
+                margin-top: 20px;
+                margin-right: 40px;
+                margin-left: 40px;
+            }
+
+            p, b, h1, h2, h3, h4, h5, h6:hover {
+                cursor: default;
+            }
+
             button, a {
                 cursor: pointer;
             }
@@ -120,7 +130,6 @@
                 background-color: rgba(0, 46, 80, 0.603);
                 margin: 10px;
                 display: inline-block;
-                cursor: pointer;
             }
 
             .card * {
@@ -208,15 +217,16 @@
                 }
 
                 createPersonCard() {
-                    return '<a href="example.html"><div class="card" id="' + this.name + '"><image src="' + this.image + '" alt="Avatar"/><div class="container"><b>' + this.name + '</b><p>' + this.type + '<br>4.5 Stars<br>(' + this.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div></a>';
+                    return '<div class="card" id="' + this.name + '"><image id="profile-picture" src="' + this.image + '" alt="Avatar"/><div class="container"><b><a href="example.html">' + this.name + '</a></b><p>' + this.type + '<br>4.5 Stars<br>(' + this.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
                 }
             }
 
             class Review {
                 constructuor(raterName, rating, description) {
-                    this.raterName = raterName;
+                    this.raterName = new Person;
                     this.rating = rating;
                     this.description = description;
+                    Object.seal(this);
                 }
             }
 
