@@ -265,19 +265,26 @@
                 let databaseInput = document.getElementById('databaseSearch');
                 databaseInput.addEventListener('keydown', (event) => {
                     if (event.key === 'Enter') {
-                        cardDisplay = document.getElementById('cardsDisplay');
+                        let cardDisplay = document.getElementById('cardsDisplay');
                         let found = false;
                         let databaseSearch = databaseInput.value;
+                        let searchResults = document.getElementById('searchResults');
+                        let searchNumbers = 0;
                         databaseInput.value = '';
+                        searchResults.innerHTML = '';
                         cardDisplay.innerHTML = '';
                         people.forEach(function(person) {
                             if (person.name.toLowerCase().includes(databaseSearch.toLowerCase())) {
+                                searchNumbers++;
                                 cardDisplay.innerHTML += person.createPersonCard();
                                 found = true;
                             }
-                            loadDeleteButtons();
                         });
-                        if (!found) {
+                        if (found) {
+                            loadDeleteButtons();
+                        } else {
+                            let searchResults = document.getElementById('searchResults');
+                            searchResults.innerHTML = 'No results found';
                             mainCardDisplay();
                         }
                     }
@@ -304,6 +311,7 @@
             <section>  
                 <h2>Ratings Database</h2>
                 <input id="databaseSearch" type="search" placeholder="Search database"/>
+                <p id="searchResults"></p>
             </section>
             <section id="cardsDisplay"></section>
         </main>
