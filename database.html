@@ -166,11 +166,13 @@
                 if (username === adminUsername) {
                     deleteButtons.forEach(function(button) {
                         button.addEventListener('click', function() {
-                            this.parentNode.parentNode.remove();
+                            button.parentNode.parentNode.remove();
                             for (let i = 0; i < people.length; i++) {
                                 let person = people[i];
-                                if (person.name === this.parentNode.parentNote.getAttribute('id')) {
+                                if (person.name === button.parentNode.parentNode.getAttribute('id')) {
                                     people.splice(i, 1);
+                                    i--;
+                                    console.log(people);
                                 }
                             }
                         });
@@ -187,8 +189,8 @@
                 people.forEach(function(person) {
                     cardDisplay.innerHTML += person.createPersonCard();
                 });
-                    loadDeleteButtons();
-                }
+                loadDeleteButtons();
+            }
 
             class Person {
                 constructor(name, sex, type, receivedReviews, average, givenReviews) {
@@ -264,16 +266,20 @@
                 databaseInput.addEventListener('keydown', (event) => {
                     if (event.key === 'Enter') {
                         cardDisplay = document.getElementById('cardsDisplay');
+                        let found = false;
                         let databaseSearch = databaseInput.value;
                         databaseInput.value = '';
                         cardDisplay.innerHTML = '';
                         people.forEach(function(person) {
-                            if (person.name.includes(databaseSearch)) {
+                            if (person.name.toLowerCase().includes(databaseSearch.toLowerCase())) {
                                 cardDisplay.innerHTML += person.createPersonCard();
                                 found = true;
                             }
                             loadDeleteButtons();
                         });
+                        if (!found) {
+                            mainCardDisplay();
+                        }
                     }
                 });
             });
