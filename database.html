@@ -158,6 +158,38 @@
             }
         </style>
         <script type="text/javascript">
+            function loadDeleteButtons() {
+                let cardDisplay = document.getElementById('cardsDisplay');
+                let deleteButtons = document.querySelectorAll('.deleteCard');
+                let adminUsername = 'benbethers';
+                let username = 'benbethers';
+                if (username === adminUsername) {
+                    deleteButtons.forEach(function(button) {
+                        button.addEventListener('click', function() {
+                            this.parentNode.parentNode.remove();
+                            for (let i = 0; i < people.length; i++) {
+                                let person = people[i];
+                                if (person.name === this.parentNode.parentNote.getAttribute('id')) {
+                                    people.splice(i, 1);
+                                }
+                            }
+                        });
+                    });
+                } else {
+                    deleteButtons.forEach(function(button) {
+                        button.style.display="none";
+                    });
+                }
+            }
+
+            function mainCardDisplay() {
+                let cardDisplay = document.getElementById('cardsDisplay');
+                people.forEach(function(person) {
+                    cardDisplay.innerHTML += person.createPersonCard();
+                });
+                    loadDeleteButtons();
+                }
+
             class Person {
                 constructor(name, sex, type, receivedReviews, average, givenReviews) {
                     this.name = name;
@@ -191,7 +223,7 @@
                 new Person('Jay Peg', 'Male', 'Professor', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
                 new Person('David Mercy', 'Male', 'Professor', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
                 new Person('Jane Doe', 'Female', 'Professor', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
-                new Person('Fiona Kenna', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
+                new Person('Fiona Kenna', 'Female', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
                 new Person('Braxton Caldwell', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
                 new Person('Steven Wonders', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
                 new Person('Alex Commet', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
@@ -222,53 +254,28 @@
                 new Person('Juan Do', 'Male', 'Roommate', ["I love this person", "I hate this person"], 4.5, ['I dont like this person']),
             ];
 
-            const databaseSearch = '';
+            let databaseSearch = '';
             document.addEventListener('DOMContentLoaded', function() {
-                //load card display
-                const cardDisplay = document.getElementById('cardsDisplay');
-                function mainCardDisplay() {
-                    people.forEach(function(person) {
-                        cardDisplay.innerHTML += person.createPersonCard();
-                    });
-                }
                 
                 mainCardDisplay();
 
                 //search functionality
-                const databaseInput = document.getElementById('databaseSearch');
+                let databaseInput = document.getElementById('databaseSearch');
                 databaseInput.addEventListener('keydown', (event) => {
                     if (event.key === 'Enter') {
-                    const databaseSearch = databaseInput.value;
-                    databaseInput.value = '';
-                    cardDisplay.innerHTML = '';
-                    people.forEach(function(person) {
-                        if (person.name.includes(databaseSearch)) {
-                            cardDisplay.innerHTML += person.createPersonCard();
-                        }
-                    }); // <-- Add closing parenthesis here
-                }
-            });
-
-                //delete button functionality
-                const deleteButtons = document.querySelectorAll('.deleteCard');
-                const adminUsername = 'benbethers';
-                const username = 'benbethers5';
-                if (username === adminUsername) {
-                    deleteButtons.forEach(function(button) {
-                        button.addEventListener('click', function() {
-                            this.parentNode.parentNode.remove();
-                            people.forEach(function(person) {
-                                if (person.name === this.parentNode.parentNote.getAttribute('id')) {
-                                    people.remove(person);
-                                }
-                            });
+                        cardDisplay = document.getElementById('cardsDisplay');
+                        let databaseSearch = databaseInput.value;
+                        databaseInput.value = '';
+                        cardDisplay.innerHTML = '';
+                        people.forEach(function(person) {
+                            if (person.name.includes(databaseSearch)) {
+                                cardDisplay.innerHTML += person.createPersonCard();
+                                found = true;
+                            }
+                            loadDeleteButtons();
                         });
-                    });
-                } else {
-                    deleteButtons.forEach(function(button) {
-                        button.style.display="none";
-                    });
-                }
+                    }
+                });
             });
         </script>
     </head>
