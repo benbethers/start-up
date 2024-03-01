@@ -208,7 +208,7 @@
                 }
 
                 createPersonCard() {
-                    return '<div class="card" id="' + this.name + '"><image src="' + this.image + '" alt="Avatar"/><div class="container"><b>' + this.name + '</b><p>' + this.type + '<br>4.5 Stars<br>(' + this.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
+                    return '<a href="example.html"><div class="card" id="' + this.name + '"><image src="' + this.image + '" alt="Avatar"/><div class="container"><b>' + this.name + '</b><p>' + this.type + '<br>4.5 Stars<br>(' + this.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div></a>';
                 }
             }
 
@@ -277,13 +277,17 @@
                             if (person.name.toLowerCase().includes(databaseSearch.toLowerCase())) {
                                 searchNumbers++;
                                 cardDisplay.innerHTML += person.createPersonCard();
+                                if (searchNumbers === 1) {
+                                    searchResults.innerHTML = searchNumbers + ' result found';
+                                } else {
+                                    searchResults.innerHTML = searchNumbers + ' results found';
+                                }
                                 found = true;
                             }
                         });
                         if (found) {
                             loadDeleteButtons();
                         } else {
-                            let searchResults = document.getElementById('searchResults');
                             searchResults.innerHTML = 'No results found';
                             mainCardDisplay();
                         }
