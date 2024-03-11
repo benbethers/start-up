@@ -171,6 +171,25 @@
                 }
             }
 
+            let people = [
+                {
+                    'name': 'Jeff Summers',
+                    'sex': 'Male',
+                    'type': 'Professor',
+                    'receivedReviews': [
+                        {
+                            'rating': 5,
+                            'description': 'I love this guy'
+                        }
+                    ],
+                    'image': assignImage(this.sex),
+                    'login': {
+                        'username': 'jeffsummers',
+                        'password': 'programmingishard'
+                    }
+                }
+            ]
+
             class Login {
                 constructor(username, password) {
                     this.username = username;
@@ -186,8 +205,6 @@
                     this.reviewedName = reviewedName;
                 }
             }
-
-            let people = []
             
             document.addEventListener('DOMContentLoaded', function() {
                 let usernameInput = document.getElementById('username');

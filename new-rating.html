@@ -143,6 +143,52 @@
 	            }
             }
         </style>
+        <script>
+            visitedUser = localStorage.getItem('visitedUser');
+            console.log(localStorage.getItem('visitedUser'));
+            people = [
+                {
+                    'name': 'Jeff Summers',
+                    'sex': 'Male',
+                    'type': 'Professor',
+                    'receivedReviews': [
+                        {
+                            'rating': 5,
+                            'description': 'I love this guy'
+                        }
+                    ],
+                    'image': assignImage(this.sex),
+                    'login': {
+                        'username': 'jeffsummers',
+                        'password': 'programmingishard'
+                    }
+                }
+            ] 
+
+            function assignImage(sex) {
+                if (sex === 'Female') {
+                    return './assets/images/FemaleAvatar.png'
+                } else {
+                    return './assets/images/MaleAvatar.png'
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                rating = document.getElementById('rating');
+                description = document.getElementById('description');
+                submitButton = document.getElementById('sumbit');
+                submitButton.addEventListener('click', () => {
+                    people.forEach((person) => {
+                        if (person.name === visitedUser) {
+                            if (rating.value != '' && description.value != '' && rating.value >= 1 && rating.value <= 5) {
+                                person.receivedReviews.push({'rating': rating.value, 'description': description})
+                                window.location.replace('example.html');
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
     </head>
     <body>  
         <header>
@@ -161,9 +207,9 @@
                 <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
             </video><br>
             <h2>New Rating</h2>
-            <input type="number" placeholder="Rating value" min="1" step= ".5" max="5"><br>
+            <input id="rating" type="number" placeholder="Rating value" min="1" step= ".5" max="5"><br>
             <input id="description" type="text" placeholder="Description"><br>
-            <button>Sumbit</button>
+            <button id='sumbit'>Sumbit</button>
         </main>
         <footer>
             Benjamin Bethers<br>
