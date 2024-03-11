@@ -167,27 +167,8 @@
             }
         </style>
         <script type="text/javascript">
-            //people = JSON.parse(localStorage.getItem("people") || "[]");
+            people = JSON.parse(localStorage.getItem("people") || "[]");
             adminUsername = 'benbethers';
-            localStorage.setItem('username', 'benbethers');
-            people = [
-                {
-                    'name': 'Jeff Summers',
-                    'sex': 'Male',
-                    'type': 'Professor',
-                    'receivedReviews': [
-                        {
-                            'rating': 5,
-                            'description': 'I love this guy'
-                        }
-                    ],
-                    'image': assignImage(this.sex),
-                    'login': {
-                        'username': 'jeffsummers',
-                        'password': 'programmingishard'
-                    }
-                }
-            ]
 
             function assignImage(sex) {
                 if (sex === 'Female') {

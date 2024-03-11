@@ -173,36 +173,46 @@
 
             let people = [
                 {
-                    'name': 'Jeff Summers',
+                    'name': 'Ben Bethers',
                     'sex': 'Male',
-                    'type': 'Professor',
+                    'type': 'Student',
                     'receivedReviews': [
                         {
+                            'ownerUsername': 'jeffsommers',
                             'rating': 5,
                             'description': 'I love this guy'
                         }
                     ],
                     'image': assignImage(this.sex),
                     'login': {
-                        'username': 'jeffsummers',
+                        'username': 'benbethers',
+                        'password': 'programmingishard'
+                    }
+                },
+                {
+                    'name': 'Jeff Sommers',
+                    'sex': 'Male',
+                    'type': 'Professor',
+                    'receivedReviews': [
+                        {
+                            'ownerUsername': 'benbethers',
+                            'rating': 5,
+                            'description': 'I love this guy'
+                        }
+                    ],
+                    'image': assignImage(this.sex),
+                    'login': {
+                        'username': 'jeffsommers',
                         'password': 'programmingishard'
                     }
                 }
             ]
 
-            class Login {
-                constructor(username, password) {
-                    this.username = username;
-                    this.password = password;
-                }
-            }
-
-            class Review {
-                constructuor(raterName, rating, description, reviewedName) {
-                    this.raterName = raterName;
-                    this.rating = rating;
-                    this.description = description;
-                    this.reviewedName = reviewedName;
+            function assignImage(sex) {
+                if (sex === 'Female') {
+                    return './assets/images/FemaleAvatar.png'
+                } else {
+                    return './assets/images/MaleAvatar.png'
                 }
             }
             
@@ -214,20 +224,18 @@
                 let failure = document.getElementById('failure');
                 let loggedInUser = '';
                 loginButton.addEventListener('click', function() {
-                    loginButton.addEventListener('click', function() {
-                        let found = false;
-                        people.forEach((person) => {
-                            if (usernameInput.value === person.login.username && passwordInput.value === person.login.password) {
-                                let loggedInUser = usernameInput.value;
-                                localStorage.setItem('username', loggedInUser);
-                                window.location.replace('database.html');
-                            }
-                        });
-                        if (!found) {
-                            passwordInput.value = '';
-                            failure.innerHTML = 'Could not find username or password, please try again or make a new account.';
+                    let found = false;
+                    people.forEach((person) => {
+                        if (usernameInput.value === person.login.username && passwordInput.value === person.login.password) {
+                            localStorage.setItem('username', usernameInput.value);
+                            window.location.replace('database.html');
+                            found = true;
                         }
                     });
+                    if (!found) {
+                        passwordInput.value = '';
+                        failure.innerHTML = 'Could not find username or password, please try again or make a new account.';
+                    }
                 });
                 signUpButton.addEventListener('click', function() {
                     if (passwordInput.value.length >= 10) {

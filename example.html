@@ -157,6 +157,15 @@
                 }
             }
 
+            #failure {
+                color: red;
+                font-style: italic;
+                margin: 2px;
+                display: none;
+                font-size: 10px;
+                margin-bottom: 5px;
+            }
+
             @font-face {
                 font-family: "Cinzel";
                 src: url("assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
@@ -173,28 +182,11 @@
             }
         </style>
         <script>
-            //people = JSON.parse(localStorage.getItem("people") || "[]");
+            people = JSON.parse(localStorage.getItem("people") || "[]");
             adminUsername = 'benbethers';
-            localStorage.setItem('username', 'benbethers');
+            username = localStorage.getItem('username');
             visitedUser = localStorage.getItem('visitedUser');
-            people = [
-                {
-                    'name': 'Jeff Summers',
-                    'sex': 'Male',
-                    'type': 'Professor',
-                    'receivedReviews': [
-                        {
-                            'rating': 5,
-                            'description': 'I love this guy'
-                        }
-                    ],
-                    'image': assignImage(this.sex),
-                    'login': {
-                        'username': 'jeffsummers',
-                        'password': 'programmingishard'
-                    }
-                }
-            ]
+            console.log(username);
 
             function assignImage(sex) {
                 if (sex === 'Female') {
@@ -205,7 +197,34 @@
             }
 
             function constructReview(review) {
-                return '<div class="card"><div style="color: black; font-weight: bold;">Anonymous<br></div>' + review.rating + ' Stars<br>"' + review.description + '"</div>';
+                return '<div class="card"><div style="color: black; font-weight: bold;">' + review.ownerUsername + '<br></div>' + review.rating + ' Stars<br>"' + review.description + '"</div>';
+            }
+
+            function submitButtonListener() {
+                let submitButton = document.getElementById('add rating');
+                submitButton.addEventListener('click', () => {
+                    people.forEach((person) => {
+                        if (person.name === visitedUser) {
+                            if (person.login.username === username) {
+                                let failure = document.getElementById('failure');
+                                submitButton.style.marginBottom = '2px';
+                                failure.innerHTML = 'You cannot rate yourself.';
+                                failure.style.display = 'block';
+                            } else {
+                                person.receivedReviews.forEach((review) => {
+                                    if (review.ownerUsername === username) {
+                                        let failure = document.getElementById('failure');
+                                        submitButton.style.marginBottom = '2px';
+                                        failure.innerHTML = 'You have already rated this person, you must delete or edit your current review.';
+                                        failure.style.display = 'block';
+                                    } else {
+                                        window.location.replace('new-rating.html');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                });
             }
             
             function setUpPage(person) {
@@ -219,19 +238,20 @@
                 people.forEach((person) => {
                     if (person.name === visitedUser) {
                         document.getElementById('profile-picture').setAttribute('src', person.image)
+                        name.innerHTML = person.name;
+                        type.innerHTML = person.type;
+                        sex.innerHTML = person.sex;
+                        averageRating.innerHTML = person.receivedReviews[0].rating + ' Stars';
+                        if (person.receivedReviews.length === 1) {
+                            receivedReviews.innerHTML = '(' + person.receivedReviews.length + ' review)';
+                        } else {
+                            receivedReviews.innerHTML = '(' + person.receivedReviews.length + ' reviews)';
+                        }
+                        person.receivedReviews.forEach((review) => {
+                            reviewSection.innerHTML += constructReview(review);
+                        });
+                        submitButtonListener();
                     }
-                    name.innerHTML = person.name;
-                    type.innerHTML = person.type;
-                    sex.innerHTML = person.sex;
-                    averageRating.innerHTML = person.receivedReviews[0].rating + ' Stars';
-                    if (person.receivedReviews.length === 1) {
-                        receivedReviews.innerHTML = '(' + person.receivedReviews.length + ' review)';
-                    } else {
-                        receivedReviews.innerHTML = '(' + person.receivedReviews.length + ' reviews)';
-                    }
-                    person.receivedReviews.forEach((review) => {
-                        reviewSection.innerHTML += constructReview(review);
-                    });
                 });
             }
 
@@ -267,7 +287,8 @@
                 </section>
                 <section id = "reviews">
                 </section>
-                <a href="new-rating.html"><button id="add rating" style="color: white; margin-top: 0px">Add Rating</button></a>
+                <button id="add rating" style="color: white; margin-top: 0px">Add Rating</button>
+                <p id="failure"></p>
             </div>
         <footer>
             Benjamin Bethers<br>

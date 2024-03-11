@@ -145,25 +145,7 @@
         </style>
         <script>
             visitedUser = localStorage.getItem('visitedUser');
-            console.log(localStorage.getItem('visitedUser'));
-            people = [
-                {
-                    'name': 'Jeff Summers',
-                    'sex': 'Male',
-                    'type': 'Professor',
-                    'receivedReviews': [
-                        {
-                            'rating': 5,
-                            'description': 'I love this guy'
-                        }
-                    ],
-                    'image': assignImage(this.sex),
-                    'login': {
-                        'username': 'jeffsummers',
-                        'password': 'programmingishard'
-                    }
-                }
-            ] 
+            people = people = JSON.parse(localStorage.getItem("people") || "[]");
 
             function assignImage(sex) {
                 if (sex === 'Female') {
@@ -182,6 +164,7 @@
                         if (person.name === visitedUser) {
                             if (rating.value != '' && description.value != '' && rating.value >= 1 && rating.value <= 5) {
                                 person.receivedReviews.push({'rating': rating.value, 'description': description})
+                                localStorage.setItem('people', JSON.stringify(people));
                                 window.location.replace('example.html');
                             }
                         }
