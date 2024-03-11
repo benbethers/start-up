@@ -209,7 +209,7 @@
                                 if (person.name === button.parentNode.parentNode.getAttribute('id')) {
                                     people.splice(i, 1);
                                     i--;
-                                    console.log(people);
+                                    localStorage.setItem('people', JSON.stringify(people));
                                 }
                             }
                         });
@@ -223,7 +223,7 @@
 
 
             function createPersonCard(person) {
-                return '<div class="card" id="' + person.name + '"><image id="profile-picture" src="' + person.image + '" alt="Avatar"/><div class="container"><b><a href="example.html">' + person.name + '</a></b><p>' + person.type + '<br>4.5 Stars<br>(' + person.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
+                return '<div class="card" id="' + person.name + '"><image id="profile-picture" src="' + person.image + '" alt="Avatar"/><div class="container"><b><a class="hyperlink">' + person.name + '</a></b><p>' + person.type + '<br>4.5 Stars<br>(' + person.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
             }
 
             function mainCardDisplay() {
@@ -232,6 +232,17 @@
                     cardDisplay.innerHTML += createPersonCard(person);
                 });
                 loadDeleteButtons();
+                setVisitedUserListener();
+            }
+
+            function setVisitedUserListener() {
+                let hyperlinks = document.querySelectorAll('.hyperlink');
+                hyperlinks.forEach(hyperlink => {
+                    hyperlink.addEventListener('click', function() {
+                        localStorage.setItem('visitedUser', this.closest('.card').getAttribute('id'));
+                        window.location.replace('example.html');
+                    });
+                });
             }
 
             function findPerson(list, username) {
@@ -274,6 +285,7 @@
                         });
                         if (found) {
                             loadDeleteButtons();
+                            setVisitedUserListener();
                         } else {
                             searchResults.innerHTML = 'No results found';
                             mainCardDisplay();

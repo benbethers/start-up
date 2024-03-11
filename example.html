@@ -140,6 +140,23 @@
                 text-align: center;
             }
 
+            button {
+                background-color: rgba(255, 255, 255, 0);
+                width: 100px;
+                padding: 7px;
+                border: 2px solid white;
+                border-radius: 15px;
+                margin: 10px;
+                color: #fff;
+                box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
+                transition: all 150ms ease-in-out;
+  
+                &:hover {
+                    box-shadow: 0 0 10px 0 white inset, 0 0 10px 3px white;
+                    background-color: rgb(255, 255, 255, 0);
+                }
+            }
+
             @font-face {
                 font-family: "Cinzel";
                 src: url("assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
@@ -156,24 +173,71 @@
             }
         </style>
         <script>
-            function layoutReviews(person) {
-                
-            }
+            //people = JSON.parse(localStorage.getItem("people") || "[]");
+            adminUsername = 'benbethers';
+            localStorage.setItem('username', 'benbethers');
+            visitedUser = localStorage.getItem('visitedUser');
+            console.log(localStorage.getItem('visitedUser'));
+            people = [
+                {
+                    'name': 'Jeff Summers',
+                    'sex': 'Male',
+                    'type': 'Professor',
+                    'receivedReviews': [
+                        {
+                            'rating': 5,
+                            'description': 'I love this guy'
+                        }
+                    ],
+                    'image': assignImage(this.sex),
+                    'login': {
+                        'username': 'jeffsummers',
+                        'password': 'programmingishard'
+                    }
+                }
+            ]
 
-            console.log(localStorage.getItem('people'));
-
-            class Review {
-                constructuor(raterName, rating, description) {
-                    this.rater = rater;
-                    this.rating = rating;
-                    this.description = description;
+            function assignImage(sex) {
+                if (sex === 'Female') {
+                    return './assets/images/FemaleAvatar.png'
+                } else {
+                    return './assets/images/MaleAvatar.png'
                 }
             }
 
-            let people = localStorage.getItem('people');
+            function constructReview(review) {
+                return '<div class="card"><div style="color: black; font-weight: bold;">Anonymous<br></div>' + review.rating + ' Stars<br>"' + review.description + '"</div>';
+            }
+            
+            function setUpPage(person) {
+                let name = document.getElementById('name');
+                let type = document.getElementById('type');
+                let sex = document.getElementById('sex');
+                let averageRating = document.getElementById('average rating');
+                let receivedReviews = document.getElementById('reviews received');
+                let reviewSection = document.getElementById('reviews');
+                reviewSection.innerHTML = '';
+                people.forEach((person) => {
+                    if (person.name === visitedUser) {
+                        document.getElementById('profile-picture').setAttribute('src', person.image)
+                    }
+                    name.innerHTML = person.name;
+                    type.innerHTML = person.type;
+                    sex.innerHTML = person.sex;
+                    averageRating.innerHTML = person.receivedReviews[0].rating + ' Stars';
+                    if (person.receivedReviews.length === 1) {
+                        receivedReviews.innerHTML = '(' + person.receivedReviews.length + ' review)';
+                    } else {
+                        receivedReviews.innerHTML = '(' + person.receivedReviews.length + ' reviews)';
+                    }
+                    person.receivedReviews.forEach((review) => {
+                        reviewSection.innerHTML += constructReview(review);
+                    });
+                });
+            }
 
             document.addEventListener('DOMContentLoaded', function() {
-                let people = 'bruh';
+                setUpPage();
             });
         </script>
     </head>
@@ -197,10 +261,10 @@
                 <section id="identification">
                     <p><b id="name" style="color: white">Megan Turner</b></p>
                     <img id="profile-picture" src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
-                    <p style="color: white">Professor<p>
-                    <p>Female</p>
-                    <p>4.5 Stars</p>
-                    <p>(452 reviews)</p>
+                    <p id="type" style="color: white">Professor<p>
+                    <p id="sex">Female</p>
+                    <p id="average rating">4.5 Stars</p>
+                    <p id="reviews received">(452 reviews)</p>
                 </section>
                 <section id = "reviews">
                     <div class="card">
@@ -217,8 +281,9 @@
                         <div style="color: black; font-weight: bold;">John Doe<br></div>
                         4.5 Stars<br>
                         "I think that this person is pretty cool but I think that they have some problems."
-                        </div>
+                    </div>
                 </section>
+                <a href="new-rating.html"><button id="add rating" style="color: white; margin-top: 0px">Add Rating</button></a>
             </div>
         <footer>
             Benjamin Bethers<br>
