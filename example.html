@@ -186,7 +186,7 @@
             adminUsername = 'benbethers';
             username = localStorage.getItem('username');
             visitedUser = localStorage.getItem('visitedUser');
-            console.log(username);
+            console.log(visitedUser);
 
             function assignImage(sex) {
                 if (sex === 'Female') {
@@ -198,6 +198,27 @@
 
             function constructReview(review) {
                 return '<div class="card"><div style="color: black; font-weight: bold;">' + review.ownerUsername + '<br></div>' + review.rating + ' Stars<br>"' + review.description + '"</div>';
+            }
+
+            function reviewCheck(review) {
+                people.forEach((person) => {
+                    if (review.ownerUsername === person.login.username) {
+                        return contructReview(review);
+                    }
+                });
+                people.forEach((person) => {
+                    if (person.name === visitedUser) {
+                        for (let i = 0; i < person.receivedReviews.length; i++) {
+                            let givenReview = person.receivedReviews[i];
+                            if (review.ownerUsername === givenReview.ownerUsername) {
+                                person.receivedReviews.splice(i, 1);
+                                localStorage.setItem('people', JSON.stringify(people));
+                                console.log(person.receivedReviews);
+                                return ' ';
+                            }
+                        }
+                    }
+                });
             }
 
             function submitButtonListener() {
@@ -237,19 +258,23 @@
                 reviewSection.innerHTML = '';
                 people.forEach((person) => {
                     if (person.name === visitedUser) {
+                        person.receivedReviews.forEach((review) => {
+                            reviewSection.innerHTML += reviewCheck(review);
+                        });
                         document.getElementById('profile-picture').setAttribute('src', person.image)
                         name.innerHTML = person.name;
                         type.innerHTML = person.type;
                         sex.innerHTML = person.sex;
-                        averageRating.innerHTML = person.receivedReviews[0].rating + ' Stars';
+                        if (person.receivedReviews.length > 0) {
+                            averageRating.innerHTML = person.receivedReviews[0].rating + ' Stars';
+                        } else {
+                            averageRating.innerHTML = '2.5 stars';
+                        }
                         if (person.receivedReviews.length === 1) {
                             receivedReviews.innerHTML = '(' + person.receivedReviews.length + ' review)';
                         } else {
                             receivedReviews.innerHTML = '(' + person.receivedReviews.length + ' reviews)';
                         }
-                        person.receivedReviews.forEach((review) => {
-                            reviewSection.innerHTML += constructReview(review);
-                        });
                         submitButtonListener();
                     }
                 });

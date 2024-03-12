@@ -148,6 +148,21 @@
                 background-color: rgb(255, 0, 0, 0);
             }
 
+            .card {
+                margin: 10px;
+                padding: 5px;
+                border-radius: 10px;
+                min-width: 90vw;
+                height: wrap;
+                background-color: white;
+                color: black;
+                display: inline-block;
+            }
+
+            .card:hover {
+                box-shadow: 0 8px 16px 0 rgba(255, 255, 255, 0.7);
+            }
+
             footer {
                 flex: 0 20px;
                 text-align: center;
@@ -169,47 +184,85 @@
             }
         </style>
         <script>
-            let people = localStorage.getItem('people');
+            let people = JSON.parse(localStorage.getItem("people") || "[]");
             let username = localStorage.getItem('username');
-
-            function constructReview(review) {
-                return '<div class="card"><div style="color: black; font-weight: bold;">' + review.ownerUsername + '<br></div>' + review.rating + ' Stars<br>"' + review.description + '"</div>';
-            }
 
             function mainReviewDisplay() {
                 let reviewDisplay = document.getElementById('reviewsDisplay');
+                reviewDisplay.innerHTML = '';
                 people.forEach((person) => {
                     person.receivedReviews.forEach((review) => {
                         if (review.ownerUsername === username) {
-                            constructReview(review);
+                            reviewDisplay.innerHTML += '<div class="card" id="' + person.name + '"><div class="name" style="color: black; font-weight: bold;">' + person.name + '<br></div>' + review.rating + ' Stars<br>"' + review.description + '"<br><button class="deleteReview" style="color: blue; margin: 5px">Delete</button></div>';
                         }
+                    });
+                });
+                loadDeleteButtons();
+            }
+
+            function loadDeleteButtons() {
+                let reviewDisplay = document.getElementById('reviewsDisplay');
+                let deleteButtons = document.querySelectorAll('.deleteReview');
+                deleteButtons.forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        people.forEach((person) => {
+                            if (button.parentNode.getAttribute('id') === person.name) {
+                                for (let i = 0; i < person.receivedReviews.length; i++) {
+                                    let review = person.receivedReviews[i];
+                                    if (review.ownerUsername === username) {
+                                        person.receivedReviews.splice(i, 1);
+                                        i--;
+                                        localStorage.setItem('people', JSON.stringify(people));
+                                    }
+                                }
+                            }
+                        });
+                        button.parentNode.remove();
                     });
                 });
             }
 
-            const databaseSearch = '';
+            let databaseSearch = '';
             document.addEventListener('DOMContentLoaded', function() {
+                let reviewDisplay = document.getElementById('reviewsDisplay');
+                let searchResults = document.getElementById('searchResults');
                 mainReviewDisplay();
 
+                if (reviewDisplay.innerHTML === '') {
+                    searchResults.innerHTML = 'You have no ratings'
+                }
+
                 //search functionality
-                const reviewInput = document.getElementById('reviewSearch');
+                let reviewInput = document.getElementById('reviewSearch');
                 reviewInput.addEventListener('keydown', (event) => {
                     if (event.key === 'Enter') {
-                        const reviewSearch = databaseInput.value;
+                        let found = false;
+                        let reviewSearch = reviewInput.value;
+                        let searchNumbers = 0;
                         reviewInput.value = '';
+                        searchResults.innerHTML = '';
                         reviewDisplay.innerHTML = '';
                         people.forEach(function(person) {
-                            let bruh = 'bruh';
+                            person.receivedReviews.forEach((review) => {
+                                if (person.name.toLowerCase().includes(reviewSearch.toLowerCase()) && review.ownerUsername === username) {
+                                    searchNumbers++;
+                                    reviewDisplay.innerHTML += '<div class="card"><div style="color: black; font-weight: bold;">' + person.name + '<br></div>' + review.rating + ' Stars<br>"' + review.description + '"<br><button class="deleteReview" style="color: blue; margin: 5px">Delete</button></div>';
+                                    if (searchNumbers === 1) {
+                                        searchResults.innerHTML = searchNumbers + ' result found';
+                                    } else {
+                                        searchResults.innerHTML = searchNumbers + ' results found';
+                                    }
+                                    found = true;
+                                }
+                            });
                         });
+                        if (found) {
+                            loadDeleteButtons();
+                        } else {
+                            searchResults.innerHTML = 'No results found';
+                            mainReviewDisplay();
+                        }
                     }
-                });
-
-                //delete button functionality
-                const deleteButtons = document.querySelectorAll('.deleteCard');
-                deleteButtons.forEach(function(button) {
-                    button.addEventListener('click', function() {
-                        this.parentNode.parentNode.remove();
-                    });
                 });
             });
         </script>
@@ -233,6 +286,7 @@
             <section>  
                 <h2>My Ratings</h2>
                 <input id="reviewSearch" type="text" placeholder="Search my ratings"/>
+                <p id="searchResults"></p>
             </section>
             <section id="reviewsDisplay"></section>
             <a href="new-rating.html"><button>New Rating</button></a>
