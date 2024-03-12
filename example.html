@@ -203,7 +203,7 @@
             function reviewCheck(review) {
                 people.forEach((person) => {
                     if (review.ownerUsername === person.login.username) {
-                        return contructReview(review);
+                        return constructReview(review);
                     }
                 });
                 people.forEach((person) => {
@@ -214,7 +214,7 @@
                                 person.receivedReviews.splice(i, 1);
                                 localStorage.setItem('people', JSON.stringify(people));
                                 console.log(person.receivedReviews);
-                                return ' ';
+                                return;
                             }
                         }
                     }
@@ -291,7 +291,6 @@
             <h1>Ratings</h1>
             <nav>
                 <div><a href="https://simon.cs260.click/">Simon</a></div>
-                <div><a href="search-ratings.html">Search Ratings</a></div>
                 <div><a href="my-ratings.html">My Ratings</a></div>
                 <div><a href="index.html">Sign Out</a></div>
                 <div><a href="database.html">Database</a></div>

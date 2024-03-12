@@ -144,33 +144,6 @@
             }
         </style>
         <script>
-            visitedUser = localStorage.getItem('visitedUser');
-            people = people = JSON.parse(localStorage.getItem("people") || "[]");
-
-            function assignImage(sex) {
-                if (sex === 'Female') {
-                    return './assets/images/FemaleAvatar.png'
-                } else {
-                    return './assets/images/MaleAvatar.png'
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', () => {
-                rating = document.getElementById('rating');
-                description = document.getElementById('description');
-                submitButton = document.getElementById('sumbit');
-                submitButton.addEventListener('click', () => {
-                    people.forEach((person) => {
-                        if (person.name === visitedUser) {
-                            if (rating.value != '' && description.value != '' && rating.value >= 1 && rating.value <= 5) {
-                                person.receivedReviews.push({'rating': rating.value, 'description': description})
-                                localStorage.setItem('people', JSON.stringify(people));
-                                window.location.replace('example.html');
-                            }
-                        }
-                    });
-                });
-            });
         </script>
     </head>
     <body>  
@@ -189,9 +162,12 @@
                 <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
             </video><br>
             <h2>New Rating</h2>
-            <input id="rating" type="number" placeholder="Rating value" min="1" step= ".5" max="5"><br>
-            <input id="description" type="text" placeholder="Description"><br>
-            <button id='sumbit'>Sumbit</button>
+            <form>
+                <input id="name" type="text" placeholder="Name"><br>
+                <button id='professor-option'>Professor</button><button id='student-option'>Student</button><button id='business-option'>Business</button><br>
+                <button id='male-option'>Male</button><button id='female-option'>Female</button>
+                <button id='sumbit'>Sumbit</button>
+            </form>
         </main>
         <footer>
             Benjamin Bethers<br>

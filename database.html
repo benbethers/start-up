@@ -188,6 +188,15 @@
                             for (let i = 0; i < people.length; i++) {
                                 let person = people[i];
                                 if (person.name === button.parentNode.parentNode.getAttribute('id')) {
+                                    people.forEach((reviewedPerson) => {
+                                        for (let j = 0; j < reviewedPerson.receivedReviews.length; j++) {
+                                            let review = reviewedPerson.receivedReviews[j];
+                                            if (review.ownerUsername === person.login.username) {
+                                                reviewedPerson.receivedReviews.splice(i, 1);
+                                                j--;
+                                            }
+                                        }
+                                    });
                                     people.splice(i, 1);
                                     i--;
                                     localStorage.setItem('people', JSON.stringify(people));
@@ -282,7 +291,6 @@
             <h1>Ratings</h1>
             <nav>
                 <div><a href="https://simon.cs260.click/">Simon</a></div>
-                <div><a href="search-ratings.html">Search Ratings</a></div>
                 <div><a href="my-ratings.html">My Account</a></div>
                 <div><a href="index.html">Sign Out</a></div>
                 <div><a href="database.html">Database</a></div>
