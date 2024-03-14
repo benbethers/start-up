@@ -23,3 +23,13 @@ This assignment taught me many interesting and valuable things that offered deep
 - Use of autoplay, mute, and loop
 - Responsive design and better use of grid and flex
 - Where to get good information for if I want to learn a new functionality of CSS
+
+## JavaScript Deliverable
+This start up has taught me by far the most so far in this class, through trial and error I have become aware of different ways to make my code more efficient and how to stay organized and to troubleshoot, here are the things I have learned:
+- Efficient use of the for each loop
+- How to manipulate the DOM
+- How to provide user feedback
+- How to use local storage to store variables across pages
+- Using JSON to store arrays and objects within the local storage
+- Importance of organizing your work and creating comments on functions
+- Creating a smooth and user friendly application
