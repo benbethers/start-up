@@ -184,9 +184,11 @@
             }
         </style>
         <script>
+            //Declare variable
             let people = JSON.parse(localStorage.getItem("people") || "[]");
             let username = localStorage.getItem('username');
 
+            //Main display
             function mainReviewDisplay() {
                 let reviewDisplay = document.getElementById('reviewsDisplay');
                 reviewDisplay.innerHTML = '';
@@ -200,40 +202,37 @@
                 loadDeleteButtons();
             }
 
+            //Remove rating functionality
+            function removeRating(personName, ownerUsername) {
+                people.forEach((person) => {
+                    if (person.name === personName) {
+                        person.receivedReviews = person.receivedReviews.filter(review => review.ownerUsername !== ownerUsername);
+                        localStorage.setItem('people', JSON.stringify(people));
+                    }
+                });
+            }
+
+            //Delete button functionality
             function loadDeleteButtons() {
                 let reviewDisplay = document.getElementById('reviewsDisplay');
                 let deleteButtons = document.querySelectorAll('.deleteReview');
-                deleteButtons.forEach(function(button) {
+
+                deleteButtons.forEach((button) => {
                     button.addEventListener('click', function() {
-                        people.forEach((person) => {
-                            if (button.parentNode.getAttribute('id') === person.name) {
-                                for (let i = 0; i < person.receivedReviews.length; i++) {
-                                    let review = person.receivedReviews[i];
-                                    if (review.ownerUsername === username) {
-                                        person.receivedReviews.splice(i, 1);
-                                        i--;
-                                        localStorage.setItem('people', JSON.stringify(people));
-                                    }
-                                }
-                            }
-                        });
-                        button.parentNode.remove();
+                        person = people.find(person => person.name === button.parentNode.getAttribute('id'));
+                        if (person) {
+                            person.receivedReviews = person.receivedReviews.filter(review => review.ownerUsername !== username);
+                            localStorage.setItem('people', JSON.stringify(people));
+                            button.parentNode.remove();
+                        }
                     });
                 });
             }
 
-            let databaseSearch = '';
-            document.addEventListener('DOMContentLoaded', function() {
-                let reviewDisplay = document.getElementById('reviewsDisplay');
-                let searchResults = document.getElementById('searchResults');
-                mainReviewDisplay();
-
-                if (reviewDisplay.innerHTML === '') {
-                    searchResults.innerHTML = 'You have no ratings'
-                }
-
-                //search functionality
+            //Search functionality
+            function searchFunctionality() {
                 let reviewInput = document.getElementById('reviewSearch');
+
                 reviewInput.addEventListener('keydown', (event) => {
                     if (event.key === 'Enter') {
                         let found = false;
@@ -256,6 +255,7 @@
                                 }
                             });
                         });
+
                         if (found) {
                             loadDeleteButtons();
                         } else {
@@ -264,6 +264,18 @@
                         }
                     }
                 });
+            }
+
+            let databaseSearch = '';
+            document.addEventListener('DOMContentLoaded', function() {
+                let reviewDisplay = document.getElementById('reviewsDisplay');
+                let searchResults = document.getElementById('searchResults');
+
+                mainReviewDisplay();
+
+                if (reviewDisplay.innerHTML === '') {
+                    searchResults.innerHTML = 'You have no ratings';
+                }
             });
         </script>
     </head>
@@ -273,9 +285,9 @@
             <h1>Ratings</h1>
             <nav>
                 <div><a href="https://simon.cs260.click/">Simon</a></div>
-                <div><a href="my-ratings.html">My Ratings</a></div>
-                <div><a href="index.html">Sign Out</a></div>
                 <div><a href="database.html">Database</a></div>
+                <div><a href="my-ratings.html">My Account</a></div>
+                <div><a href="index.html">Sign Out</a></div>
             </nav>
         </header>
         <main>

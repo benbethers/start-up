@@ -167,9 +167,12 @@
             }
         </style>
         <script type="text/javascript">
+            //Declare variables
             people = JSON.parse(localStorage.getItem("people") || "[]");
+            username = localStorage.getItem('username');
             adminUsername = 'benbethers';
 
+            //Assign image to declared people
             function assignImage(sex) {
                 if (sex === 'Female') {
                     return './assets/images/FemaleAvatar.png'
@@ -178,28 +181,39 @@
                 }
             }
 
+            //Find average rating for a person
+            function averageRating(person) {
+                if (person.receivedReviews.length > 0) {
+                    let total = 0;
+                    person.receivedReviews.forEach((review) => {
+                        total += parseFloat(review.rating);
+                    });
+                    return (total/person.receivedReviews.length).toFixed(1);
+                } else {
+                    return 0;
+                }
+            }
+
+            //Delete button functionality
             function loadDeleteButtons() {
                 let cardDisplay = document.getElementById('cardsDisplay');
                 let deleteButtons = document.querySelectorAll('.deleteCard');
-                if (localStorage.getItem('username') === adminUsername) {
-                    deleteButtons.forEach(function(button) {
-                        button.addEventListener('click', function() {
-                            button.parentNode.parentNode.remove();
-                            for (let i = 0; i < people.length; i++) {
-                                let person = people[i];
-                                if (person.name === button.parentNode.parentNode.getAttribute('id')) {
-                                    people.forEach((reviewedPerson) => {
-                                        for (let j = 0; j < reviewedPerson.receivedReviews.length; j++) {
-                                            let review = reviewedPerson.receivedReviews[j];
-                                            if (review.ownerUsername === person.login.username) {
-                                                reviewedPerson.receivedReviews.splice(i, 1);
-                                                j--;
-                                            }
-                                        }
-                                    });
-                                    people.splice(i, 1);
-                                    i--;
-                                    localStorage.setItem('people', JSON.stringify(people));
+
+                if (username === 'benbethers') {
+                    deleteButtons.forEach((button) => {
+                        button.addEventListener('click', () => {
+                            let personIndex = people.findIndex(person => person.name === button.parentNode.parentNode.getAttribute('id'));
+                            if (personIndex !== -1) {
+                                let deletedPerson = people[personIndex];
+                                people.forEach((person) => {
+                                    person.receivedReviews = person.receivedReviews.filter(review => review.ownerUsername !== deletedPerson.login.username);
+                                });
+                                people.splice(personIndex, 1);
+                                localStorage.setItem('people', JSON.stringify(people));
+                                button.parentNode.parentNode.remove();
+                                console.log(JSON.stringify(people));
+                                if (deletedPerson.login.username === username) {
+                                    window.location.replace('index.html');
                                 }
                             }
                         });
@@ -211,56 +225,47 @@
                 }
             }
 
-
+            //Create HTML for person object
             function createPersonCard(person) {
-                return '<div class="card" id="' + person.name + '"><image id="profile-picture" src="' + person.image + '" alt="Avatar"/><div class="container"><b><a class="hyperlink">' + person.name + '</a></b><p>' + person.type + '<br>4.5 Stars<br>(' + person.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
+                return '<div class="card" id="' + person.name + '"><image id="profile-picture" src="' + person.image + '" alt="Avatar"/><div class="container"><b><a class="hyperlink">' + person.name + '</a></b><p>' + person.type + '<br>' + averageRating(person) + ' Stars<br>(' + person.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
             }
 
+            //Display all cards
             function mainCardDisplay() {
                 let cardDisplay = document.getElementById('cardsDisplay');
                 people.forEach(function(person) {
                     cardDisplay.innerHTML += createPersonCard(person);
                 });
                 loadDeleteButtons();
-                setVisitedUserListener();
+                setVisitedNameListener();
             }
 
-            function setVisitedUserListener() {
+            //Set visited name to name if selected
+            function setVisitedNameListener() {
                 let hyperlinks = document.querySelectorAll('.hyperlink');
                 hyperlinks.forEach(hyperlink => {
                     hyperlink.addEventListener('click', function() {
-                        localStorage.setItem('visitedUser', this.closest('.card').getAttribute('id'));
+                        localStorage.setItem('visitedName', this.closest('.card').getAttribute('id'));
                         window.location.replace('example.html');
                     });
                 });
             }
 
-            function findPerson(list, username) {
-                let found = false;
-                list.forEach(person => {
-                    if (person.login.username === username) {
-                        return person;
-                    }
-                });
-            }
-
-            let databaseSearch = '';
-            document.addEventListener('DOMContentLoaded', function() {
-                
-                mainCardDisplay();
-
-                //search functionality
+            //Search functionality
+            function searchFunctionality() {
                 let databaseInput = document.getElementById('databaseSearch');
                 databaseInput.addEventListener('keydown', (event) => {
                     if (event.key === 'Enter') {
                         let cardDisplay = document.getElementById('cardsDisplay');
-                        let found = false;
-                        let databaseSearch = databaseInput.value;
                         let searchResults = document.getElementById('searchResults');
+                        let databaseSearch = databaseInput.value;
                         let searchNumbers = 0;
+                        let found = false;
+
                         databaseInput.value = '';
                         searchResults.innerHTML = '';
                         cardDisplay.innerHTML = '';
+
                         people.forEach(function(person) {
                             if (person.name.toLowerCase().includes(databaseSearch.toLowerCase())) {
                                 searchNumbers++;
@@ -275,13 +280,19 @@
                         });
                         if (found) {
                             loadDeleteButtons();
-                            setVisitedUserListener();
+                            setVisitedNameListener();
                         } else {
                             searchResults.innerHTML = 'No results found';
                             mainCardDisplay();
                         }
                     }
                 });
+            }
+
+            //Load content 
+            document.addEventListener('DOMContentLoaded', function() {
+                mainCardDisplay();
+                searchFunctionality();
             });
         </script>
     </head>
@@ -291,9 +302,9 @@
             <h1>Ratings</h1>
             <nav>
                 <div><a href="https://simon.cs260.click/">Simon</a></div>
+                <div><a href="database.html">Database</a></div>
                 <div><a href="my-ratings.html">My Account</a></div>
                 <div><a href="index.html">Sign Out</a></div>
-                <div><a href="database.html">Database</a></div>
             </nav>
         </header>
         <main>

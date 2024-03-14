@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>John Doe</title>
+        <title id="title"></title>
         <link rel="icon" href="assets/images/StarCluster.png" type="image/x-icon"/>
         <style>
             * {
@@ -182,12 +182,14 @@
             }
         </style>
         <script>
+            //Declare variables
             people = JSON.parse(localStorage.getItem("people") || "[]");
             adminUsername = 'benbethers';
             username = localStorage.getItem('username');
-            visitedUser = localStorage.getItem('visitedUser');
-            console.log(visitedUser);
+            visitedName = localStorage.getItem('visitedName');
+            console.log(visitedName);
 
+            //Assign image to person
             function assignImage(sex) {
                 if (sex === 'Female') {
                     return './assets/images/FemaleAvatar.png'
@@ -196,44 +198,30 @@
                 }
             }
 
+            //Construct review HTML
             function constructReview(review) {
                 return '<div class="card"><div style="color: black; font-weight: bold;">' + review.ownerUsername + '<br></div>' + review.rating + ' Stars<br>"' + review.description + '"</div>';
             }
 
-            function reviewCheck(review) {
-                people.forEach((person) => {
-                    if (review.ownerUsername === person.login.username) {
-                        return constructReview(review);
-                    }
-                });
-                people.forEach((person) => {
-                    if (person.name === visitedUser) {
-                        for (let i = 0; i < person.receivedReviews.length; i++) {
-                            let givenReview = person.receivedReviews[i];
-                            if (review.ownerUsername === givenReview.ownerUsername) {
-                                person.receivedReviews.splice(i, 1);
-                                localStorage.setItem('people', JSON.stringify(people));
-                                console.log(person.receivedReviews);
-                                return;
-                            }
-                        }
-                    }
-                });
-            }
-
+            //Submit button listener
             function submitButtonListener() {
                 let submitButton = document.getElementById('add rating');
                 submitButton.addEventListener('click', () => {
                     people.forEach((person) => {
-                        if (person.name === visitedUser) {
+                        if (person.name === visitedName) {
                             if (person.login.username === username) {
                                 let failure = document.getElementById('failure');
                                 submitButton.style.marginBottom = '2px';
                                 failure.innerHTML = 'You cannot rate yourself.';
                                 failure.style.display = 'block';
                             } else {
+                                if (person.receivedReviews.length === 0) {
+                                    window.location.replace('new-rating.html');
+                                } 
                                 person.receivedReviews.forEach((review) => {
+                                    console.log('here' + review.ownerUsername + username)
                                     if (review.ownerUsername === username) {
+                                        console.log('here' + review.ownerUsername + username)
                                         let failure = document.getElementById('failure');
                                         submitButton.style.marginBottom = '2px';
                                         failure.innerHTML = 'You have already rated this person, you must delete or edit your current review.';
@@ -248,6 +236,7 @@
                 });
             }
             
+            //Set up page
             function setUpPage(person) {
                 let name = document.getElementById('name');
                 let type = document.getElementById('type');
@@ -257,18 +246,22 @@
                 let reviewSection = document.getElementById('reviews');
                 reviewSection.innerHTML = '';
                 people.forEach((person) => {
-                    if (person.name === visitedUser) {
+                    if (person.name === visitedName) {
                         person.receivedReviews.forEach((review) => {
-                            reviewSection.innerHTML += reviewCheck(review);
+                            reviewSection.innerHTML += constructReview(review);
                         });
                         document.getElementById('profile-picture').setAttribute('src', person.image)
                         name.innerHTML = person.name;
                         type.innerHTML = person.type;
                         sex.innerHTML = person.sex;
                         if (person.receivedReviews.length > 0) {
-                            averageRating.innerHTML = person.receivedReviews[0].rating + ' Stars';
+                            let total = 0;
+                            person.receivedReviews.forEach((review) => {
+                                total += parseFloat(review.rating);
+                            });
+                            averageRating.innerHTML = (total/person.receivedReviews.length).toFixed(1) + ' Stars';
                         } else {
-                            averageRating.innerHTML = '2.5 stars';
+                            averageRating.innerHTML = '0 Stars';
                         }
                         if (person.receivedReviews.length === 1) {
                             receivedReviews.innerHTML = '(' + person.receivedReviews.length + ' review)';
@@ -280,7 +273,15 @@
                 });
             }
 
-            document.addEventListener('DOMContentLoaded', function() {
+            //Make tab name that of the visited user
+            function makeTitleName() {
+                let title = document.getElementById('title');
+                title.innerHTML = visitedName;
+            }
+
+            //Load content then set up page
+            document.addEventListener('DOMContentLoaded', (event) => {
+                makeTitleName()
                 setUpPage();
             });
         </script>
@@ -291,9 +292,9 @@
             <h1>Ratings</h1>
             <nav>
                 <div><a href="https://simon.cs260.click/">Simon</a></div>
-                <div><a href="my-ratings.html">My Ratings</a></div>
-                <div><a href="index.html">Sign Out</a></div>
                 <div><a href="database.html">Database</a></div>
+                <div><a href="my-ratings.html">My Account</a></div>
+                <div><a href="index.html">Sign Out</a></div>
             </nav>
         </header>
         <main>

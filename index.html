@@ -141,48 +141,13 @@
             }
         </style>
         <script>
-            class Person {
-                constructor(name, sex, type, receivedReviews, average, givenReviews, login) {
-                    this.name = name;
-                    this.type = type;
-                    this.sex = sex;
-                    this.receivedReviews = receivedReviews;
-                    this.average = average;
-                    this.givenReviews = givenReviews;
-                    if (this.sex === 'Female') {
-                        this.image = 'assets/images/FemaleAvatar.png';
-                    } else {
-                        this.image = 'assets/images/MaleAvatar.png';
-                    }
-                    this.login = login;
-                }
-
-                createPersonCard() {
-                    return '<div class="card" id="' + this.name + '"><image id="profile-picture" src="' + this.image + '" alt="Avatar"/><div class="container"><b><a href="example.html">' + this.name + '</a></b><p>' + this.type + '<br>4.5 Stars<br>(' + this.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
-                }
-
-                findPerson(list, username) {
-                    let found = false;
-                    list.forEach(person => {
-                        if (person.login.username === username) {
-                            return person;
-                        }
-                    });
-                }
-            }
-
+            //Declare people and commit to local storage
             let people = [
                 {
                     'name': 'Ben Bethers',
                     'sex': 'Male',
                     'type': 'Student',
-                    'receivedReviews': [
-                        {
-                            'ownerUsername': 'jeffsommers',
-                            'rating': 5,
-                            'description': 'I love this guy'
-                        }
-                    ],
+                    'receivedReviews': [],
                     'image': assignImage(this.sex),
                     'login': {
                         'username': 'benbethers',
@@ -193,21 +158,18 @@
                     'name': 'Jeff Sommers',
                     'sex': 'Male',
                     'type': 'Professor',
-                    'receivedReviews': [
-                        {
-                            'ownerUsername': 'benbethers',
-                            'rating': 5,
-                            'description': 'I love this guy'
-                        }
-                    ],
+                    'receivedReviews': [],
                     'image': assignImage(this.sex),
                     'login': {
                         'username': 'jeffsommers',
                         'password': 'programmingishard'
                     }
                 }
-            ]
+            ];
+            localStorage.setItem('people', JSON.stringify(people));
+            console.log(JSON.stringify(JSON.parse(localStorage.getItem("people") || "[]")));
 
+            //Assign image to declared people
             function assignImage(sex) {
                 if (sex === 'Female') {
                     return './assets/images/FemaleAvatar.png'
@@ -216,13 +178,14 @@
                 }
             }
             
-            document.addEventListener('DOMContentLoaded', function() {
+            //Sign in functionality
+            function signInFunctionality() {
                 let usernameInput = document.getElementById('username');
                 let passwordInput = document.getElementById('password');
                 let loginButton = document.getElementById('login');
                 let signUpButton = document.getElementById('sign up');
                 let failure = document.getElementById('failure');
-                let loggedInUser = '';
+
                 loginButton.addEventListener('click', function() {
                     let found = false;
                     people.forEach((person) => {
@@ -238,19 +201,14 @@
                     }
                 });
                 signUpButton.addEventListener('click', function() {
-                    if (passwordInput.value.length >= 10) {
-                        logins.push(new Login (usernameInput.value, passwordInput.value));
-                        let loggedInUser = usernameInput.value;
-                        localStorage.setItem('username', loggedInUser);
-                        window.location.replace('database.html');
-                    } else {
-                        failure.innerHTML = 'Password must be at least ten characters long.';
-                    }
+                    window.location.replace('new-person.html');
                 });
+            }
+
+            //Load content
+            document.addEventListener('DOMContentLoaded', function() {
+                signInFunctionality();
             });
-            console.log(people.toString())
-            localStorage.setItem('people', JSON.stringify(people));
-            localStorage.setItem('visitedUser', '');
         </script>
     </head>
     <body>  

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>New Rating</title>
+        <title>New Person</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" href="assets/images/StarCluster.png" type="image/x-icon"/>
         <style>
@@ -110,16 +110,10 @@
                 color: #fff;
                 box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
                 transition: all 150ms ease-in-out;
-  
-                &:hover {
-                    box-shadow: 0 0 10px 0 white inset, 0 0 10px 3px white;
-                    background-color: rgb(255, 255, 255, 0);
-                }
             }
 
-            div input {
-                color: orange;
-
+            main button:hover {
+                box-shadow: 0 0 10px 0 white inset, 0 0 10px 3px white;
             }
 
             footer {
@@ -142,32 +136,105 @@
 	                text-shadow: 0 0 60px rgb(255, 255, 255), 0 0 70px rgb(255, 255, 255);
 	            }
             }
+
+            select {
+                color: black;
+                width: 20%;
+                padding: 10px;
+                margin: 6px;
+                border: 0;
+                border-radius: 10px;
+                background: rgba(255, 255, 225, 0.25);
+            }
+
+            option {
+                color: black;
+            }
+
+            #failure {
+                font-style: italic;
+                color: red;
+                font-size: 10px;
+            }
         </style>
         <script>
+            //Declare variables
+            people = JSON.parse(localStorage.getItem("people") || "[]");
+
+            function assignImage(sex) {
+                if (sex === 'Female') {
+                    return './assets/images/FemaleAvatar.png'
+                } else {
+                    return './assets/images/MaleAvatar.png'
+                }
+            }
+
+            //Check username
+            function checkUsername(inputUsername) {
+                for (let i = 0; i < people.length; i++) {
+                    if (inputUsername === people[i].login.username) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            //Submit form
+            function formSubmit() {
+                let name = document.getElementById('name');
+                let typeSelector = document.getElementById('type-selector');
+                let sexSelector = document.getElementById('sex-selector');
+                let usernameInput = document.getElementById('username');
+                let password = document.getElementById('password');
+                let submitButton = document.getElementById('submit');
+                let failure = document.getElementById('failure');
+
+                submitButton.addEventListener('click', () => {
+                    if (name.value.includes(' ') !== true) {
+                        failure.innerHTML = 'You must have your first and last name in the name field';
+                    } else if (password.value.length < 9) {
+                        failure.innerHTML = 'Your password must be at least ten characters long';
+                    } else if (checkUsername(usernameInput.value) === false) {
+                        failure.innerHTML = 'The username ' + usernameInput.value + ' has already been taken';
+                    } else {
+                        people.push({'name': name.value, 'type': typeSelector.value, 'sex': sexSelector.value, 'receivedReviews': [], 'login': {'username': usernameInput.value, 'password': password.value}, 'image': assignImage(this.sex)});
+                        localStorage.setItem('people', JSON.stringify(people));
+                        localStorage.setItem('username', username.value);
+                        window.location.replace('database.html')
+                    }
+                });
+            }
+
+            //Load content
+            document.addEventListener('DOMContentLoaded', (event) => {
+                formSubmit();
+            });
         </script>
     </head>
     <body>  
         <header>
             <image src="assets/images/StarCluster.png" height="54px" width="54px"></image>
             <h1>Ratings</h1>
-            <nav>
-                <div><a href="https://simon.cs260.click/">Simon</a></div>
-                <div><a href="my-ratings.html">My Ratings</a></div>
-                <div><a href="index.html">Sign Out</a></div>
-                <div><a href="database.html">Database</a></div>
-            </nav>
         </header>
         <main>
             <video width="100%" height="auto" autoplay loop muted>
                 <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
             </video><br>
-            <h2>New Rating</h2>
-            <form>
-                <input id="name" type="text" placeholder="Name"><br>
-                <button id='professor-option'>Professor</button><button id='student-option'>Student</button><button id='business-option'>Business</button><br>
-                <button id='male-option'>Male</button><button id='female-option'>Female</button>
-                <button id='sumbit'>Sumbit</button>
-            </form>
+            <h2>New Person</h2>
+            <input id="name" type="text" placeholder="Name" pattern="[A-Za-z]+" maxlength="30"><br>
+            <select id="type-selector">
+                <option>Student</option>
+                <option>Professor</option>
+                <option>Business</option>
+            </select><br>
+            <select id="sex-selector">
+                <option>Male</option>
+                <option>Female</option>
+            </select><br>
+            <input id="username" type="text" placeholder="Username" pattern="[A-Za-z0-9]+" maxlength="30"><br>
+            <input id="password" type="password" placeholder="Password" minlength="10" maxlength="40"><br>
+            <button id='submit'>Sumbit</button>
+            <p id="failure"></p>
         </main>
         <footer>
             Benjamin Bethers<br>

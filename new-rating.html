@@ -144,31 +144,30 @@
             }
         </style>
         <script>
-            visitedUser = localStorage.getItem('visitedUser');
-            people = people = JSON.parse(localStorage.getItem("people") || "[]");
+            //Declare variables
+            let people = JSON.parse(localStorage.getItem("people") || "[]");
+            let visitedName = localStorage.getItem('visitedName');
+            let username = localStorage.getItem('username');
+            let user = people.find(person => person.login.username === username);
 
-            function assignImage(sex) {
-                if (sex === 'Female') {
-                    return './assets/images/FemaleAvatar.png'
-                } else {
-                    return './assets/images/MaleAvatar.png'
-                }
-            }
-
+            //Load content
             document.addEventListener('DOMContentLoaded', () => {
                 rating = document.getElementById('rating');
                 description = document.getElementById('description');
-                submitButton = document.getElementById('sumbit');
+                submitButton = document.getElementById('submit');
+
+                //Add rating
                 submitButton.addEventListener('click', () => {
-                    people.forEach((person) => {
-                        if (person.name === visitedUser) {
-                            if (rating.value != '' && description.value != '' && rating.value >= 1 && rating.value <= 5) {
-                                person.receivedReviews.push({'rating': rating.value, 'description': description})
-                                localStorage.setItem('people', JSON.stringify(people));
-                                window.location.replace('example.html');
+                    if (rating.value != '' && description.value != '' && rating.value >= 1 && rating.value <= 5) {
+                        people.forEach((person) => {
+                            if (person.name == visitedName) {
+                                person.receivedReviews.push({'ownerUsername': username, 'rating': rating.value, 'description': description.value});
                             }
-                        }
-                    });
+                        });
+                        localStorage.setItem('people', JSON.stringify(people));
+                        console.log(JSON.stringify(people));
+                        window.location.replace('example.html');
+                    }
                 });
             });
         </script>
@@ -179,9 +178,9 @@
             <h1>Ratings</h1>
             <nav>
                 <div><a href="https://simon.cs260.click/">Simon</a></div>
-                <div><a href="my-ratings.html">My Ratings</a></div>
-                <div><a href="index.html">Sign Out</a></div>
                 <div><a href="database.html">Database</a></div>
+                <div><a href="my-ratings.html">My Account</a></div>
+                <div><a href="index.html">Sign Out</a></div>
             </nav>
         </header>
         <main>
@@ -191,7 +190,7 @@
             <h2>New Rating</h2>
             <input id="rating" type="number" placeholder="Rating value" min="1" step= ".5" max="5"><br>
             <input id="description" type="text" placeholder="Description"><br>
-            <button id='sumbit'>Sumbit</button>
+            <button id='submit'>Submit</button>
         </main>
         <footer>
             Benjamin Bethers<br>
