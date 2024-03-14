@@ -76,9 +76,8 @@
             }
 
             main {
-                flex: 1;
+                flex: 0 87vh;
                 text-align: center;
-                min-height: 87vh;
             }
 
             main video {
@@ -166,6 +165,7 @@
             footer {
                 flex: 0 20px;
                 text-align: center;
+                font-size: 13px;
             }
 
             @font-face {
@@ -187,6 +187,12 @@
             //Declare variable
             let people = JSON.parse(localStorage.getItem("people") || "[]");
             let username = localStorage.getItem('username');
+
+            //Set logged in username in footer
+            function setLoggedInUser() {
+                let usernameNotification = document.getElementById('loggedInUser');
+                loggedInUser.innerHTML = 'Logged In User: ' + username;
+            } 
 
             //Main display
             function mainReviewDisplay() {
@@ -271,6 +277,7 @@
                 let reviewDisplay = document.getElementById('reviewsDisplay');
                 let searchResults = document.getElementById('searchResults');
 
+                setLoggedInUser();
                 mainReviewDisplay();
 
                 if (reviewDisplay.innerHTML === '') {
@@ -300,8 +307,9 @@
                 <p id="searchResults"></p>
             </section>
             <section id="reviewsDisplay"></section>
-            <a href="new-rating.html"><button>New Rating</button></a>
+        </main>
         <footer>
+            <p id="loggedInUser" style="margin: 0px; font-size: 13px"></p>
             Benjamin Bethers<br>
             <a href="https://github.com/benbethers/start-up">GitHub</a>
         </footer>

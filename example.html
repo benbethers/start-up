@@ -138,6 +138,7 @@
             footer {
                 flex: 0 20px;
                 text-align: center;
+                font-size: 13px;
             }
 
             button {
@@ -187,8 +188,13 @@
             adminUsername = 'benbethers';
             username = localStorage.getItem('username');
             visitedName = localStorage.getItem('visitedName');
-            console.log(visitedName);
 
+            //Set logged in username in footer
+            function setLoggedInUser() {
+                let usernameNotification = document.getElementById('loggedInUser');
+                loggedInUser.innerHTML = 'Logged In User: ' + username;
+            } 
+            
             //Assign image to person
             function assignImage(sex) {
                 if (sex === 'Female') {
@@ -281,6 +287,7 @@
 
             //Load content then set up page
             document.addEventListener('DOMContentLoaded', (event) => {
+                setLoggedInUser()
                 makeTitleName()
                 setUpPage();
             });
@@ -316,6 +323,7 @@
                 <p id="failure"></p>
             </div>
         <footer>
+            <p id="loggedInUser" style="margin: 0px; font-size: 13px"></p>
             Benjamin Bethers<br>
             <a href="https://github.com/benbethers/start-up">GitHub</a>
         </footer>

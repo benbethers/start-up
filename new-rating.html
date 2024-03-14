@@ -150,8 +150,16 @@
             let username = localStorage.getItem('username');
             let user = people.find(person => person.login.username === username);
 
+            //Set logged in username in footer
+            function setLoggedInUser() {
+                let usernameNotification = document.getElementById('loggedInUser');
+                loggedInUser.innerHTML = 'Logged In User: ' + username;
+            } 
+
             //Load content
             document.addEventListener('DOMContentLoaded', () => {
+                setLoggedInUser();
+
                 rating = document.getElementById('rating');
                 description = document.getElementById('description');
                 submitButton = document.getElementById('submit');
@@ -193,6 +201,7 @@
             <button id='submit'>Submit</button>
         </main>
         <footer>
+            <p id="loggedInUser" style="margin: 0px; font-size: 13px"></p>
             Benjamin Bethers<br>
             <a href="https://github.com/benbethers/start-up">GitHub</a>
         </footer>

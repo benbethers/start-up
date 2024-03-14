@@ -149,6 +149,7 @@
             footer {
                 flex: 0 20px;
                 text-align: center;
+                font-size: 13px;
             }
 
             @font-face {
@@ -159,7 +160,9 @@
             @keyframes glow {
                 from {
 	                text-shadow: 0 0 10px rgb(255, 255, 255), 0 0 20px rgb(255, 255, 255), 0 0 30px rgb(255, 255, 255), 0 0 40px #0ff,0 0 50px #0ff;
-	            } to {
+	            } 
+                
+                to {
 	                text-shadow: 0 0 60px rgb(255, 255, 255), 0 0 70px rgb(255, 255, 255);
 	            }
             }
@@ -169,6 +172,12 @@
             people = JSON.parse(localStorage.getItem("people") || "[]");
             username = localStorage.getItem('username');
             adminUsername = 'benbethers';
+
+            //Set logged in user at the footer
+            function setLoggedInUser() {
+                let usernameNotification = document.getElementById('loggedInUser');
+                loggedInUser.innerHTML = 'Logged In User: ' + username;
+            }
 
             //Assign image to declared people
             function assignImage(sex) {
@@ -289,6 +298,7 @@
 
             //Load content 
             document.addEventListener('DOMContentLoaded', function() {
+                setLoggedInUser();
                 mainCardDisplay();
                 searchFunctionality();
             });
@@ -317,6 +327,7 @@
             <section id="cardsDisplay"></section>
         </main>
         <footer>
+            <p id="loggedInUser" style="margin: 0px; font-size: 13px"></p>
             Benjamin Bethers<br>
             <a href="https://github.com/benbethers/start-up">GitHub</a>
         </footer>
