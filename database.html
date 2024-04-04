@@ -169,23 +169,32 @@
         </style>
         <script type="text/javascript">
             //Declare variables
-            people = JSON.parse(localStorage.getItem("people") || "[]");
-            username = localStorage.getItem('username');
-            adminUsername = 'benbethers';
+            let people;
+            let username;
+            let adminUsername;
+            async function fetchData() {
+                try {
+                    let usersResponse = await fetch('http://localhost:4001api/users', { method: 'GET' });
+                    people = await usersResponse.json() || [];
+
+                    let usernameResponse = await fetch('http://localhost:4001/api/users/loggedInUsername', { method: 'GET' });
+                    username = await usernameResponse.text(); // Assuming it returns plain text.
+
+                    let adminUsernameResponse = await fetch('http://localhost:4001/api/users/admins', { method: 'GET' });
+                    adminUsername = await adminUsernameResponse.text(); // Adjust based on the response type.
+
+                    // Now you can work with `users`, `username`, and `adminUsername`.
+                    console.log(username);
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                }
+                return;
+            }
 
             //Set logged in user at the footer
             function setLoggedInUser() {
                 let usernameNotification = document.getElementById('loggedInUser');
                 loggedInUser.innerHTML = 'Logged In User: ' + username;
-            }
-
-            //Assign image to declared people
-            function assignImage(sex) {
-                if (sex === 'Female') {
-                    return './assets/images/FemaleAvatar.png'
-                } else {
-                    return './assets/images/MaleAvatar.png'
-                }
             }
 
             //Find average rating for a person
@@ -206,19 +215,15 @@
                 let cardDisplay = document.getElementById('cardsDisplay');
                 let deleteButtons = document.querySelectorAll('.deleteCard');
 
-                if (username === 'benbethers') {
+                if (username === adminUsername) {
                     deleteButtons.forEach((button) => {
                         button.addEventListener('click', () => {
                             let personIndex = people.findIndex(person => person.name === button.parentNode.parentNode.getAttribute('id'));
                             if (personIndex !== -1) {
                                 let deletedPerson = people[personIndex];
-                                people.forEach((person) => {
-                                    person.receivedReviews = person.receivedReviews.filter(review => review.ownerUsername !== deletedPerson.login.username);
-                                });
-                                people.splice(personIndex, 1);
-                                localStorage.setItem('people', JSON.stringify(people));
+                                fetch(`http://localhost:4001/api/users/delete/${personIndex}`, { method: 'PUT' });
+                                fetchData();
                                 button.parentNode.parentNode.remove();
-                                console.log(JSON.stringify(people));
                                 if (deletedPerson.login.username === username) {
                                     window.location.replace('index.html');
                                 }
@@ -297,11 +302,15 @@
             }
 
             //Load content 
-            document.addEventListener('DOMContentLoaded', function() {
-                setLoggedInUser();
-                mainCardDisplay();
-                searchFunctionality();
-            });
+            async function main() {
+                await fetchData();
+                await setLoggedInUser();
+                await mainCardDisplay();
+                await searchFunctionality();
+                console.log('finished');
+            }
+
+            main();
         </script>
     </head>
     <body>
