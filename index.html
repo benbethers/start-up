@@ -141,41 +141,16 @@
             }
         </style>
         <script>
-            //Declare people and commit to local storage
-            let people = [
-                {
-                    'name': 'Ben Bethers',
-                    'sex': 'Male',
-                    'type': 'Student',
-                    'receivedReviews': [],
-                    'image': assignImage(this.sex),
-                    'login': {
-                        'username': 'benbethers',
-                        'password': 'programmingishard'
-                    }
-                },
-                {
-                    'name': 'Jeff Sommers',
-                    'sex': 'Male',
-                    'type': 'Professor',
-                    'receivedReviews': [],
-                    'image': assignImage(this.sex),
-                    'login': {
-                        'username': 'jeffsommers',
-                        'password': 'programmingishard'
-                    }
+            let logins;
+            async function fetchData() {
+                try {
+                    let loginsResponse = await fetch('http://localhost:4002/logins', { method: 'GET' });
+                    logins = await loginsResponse.json() || [];
+                    console.log(JSON.stringify(logins));
+                } catch (error) {
+                    console.error('Fetch error:', error);
                 }
-            ];
-            localStorage.setItem('people', JSON.stringify(people));
-            console.log(JSON.stringify(JSON.parse(localStorage.getItem("people") || "[]")));
-
-            //Assign image to declared people
-            function assignImage(sex) {
-                if (sex === 'Female') {
-                    return './assets/images/FemaleAvatar.png'
-                } else {
-                    return './assets/images/MaleAvatar.png'
-                }
+                return;
             }
             
             //Sign in functionality
@@ -188,9 +163,9 @@
 
                 loginButton.addEventListener('click', function() {
                     let found = false;
-                    people.forEach((person) => {
-                        if (usernameInput.value === person.login.username && passwordInput.value === person.login.password) {
-                            localStorage.setItem('username', usernameInput.value);
+                    logins.forEach((login) => {
+                        if (usernameInput.value === login.linkedUsername && passwordInput.value === login.password) {
+                            fetch(`http://localhost:4001/users/set/${usernameInput.value}`, { method: 'PUT' });
                             window.location.replace('database.html');
                             found = true;
                         }
@@ -206,9 +181,12 @@
             }
 
             //Load content
-            document.addEventListener('DOMContentLoaded', function() {
-                signInFunctionality();
-            });
+            async function main() {
+                await fetchData();
+                await signInFunctionality();
+            }
+
+            main();
         </script>
     </head>
     <body>  

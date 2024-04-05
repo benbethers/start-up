@@ -174,17 +174,14 @@
             let adminUsername;
             async function fetchData() {
                 try {
-                    let usersResponse = await fetch('http://localhost:4001api/users', { method: 'GET' });
+                    let usersResponse = await fetch('http://localhost:4001/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    let usernameResponse = await fetch('http://localhost:4001/api/users/loggedInUsername', { method: 'GET' });
-                    username = await usernameResponse.text(); // Assuming it returns plain text.
+                    let usernameResponse = await fetch('http://localhost:4001/users/loggedInUsername', { method: 'GET' });
+                    username = await usernameResponse.text();
 
-                    let adminUsernameResponse = await fetch('http://localhost:4001/api/users/admins', { method: 'GET' });
-                    adminUsername = await adminUsernameResponse.text(); // Adjust based on the response type.
-
-                    // Now you can work with `users`, `username`, and `adminUsername`.
-                    console.log(username);
+                    let adminUsernameResponse = await fetch('http://localhost:4001/users/admins', { method: 'GET' });
+                    adminUsername = await adminUsernameResponse.text();
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
@@ -221,10 +218,11 @@
                             let personIndex = people.findIndex(person => person.name === button.parentNode.parentNode.getAttribute('id'));
                             if (personIndex !== -1) {
                                 let deletedPerson = people[personIndex];
-                                fetch(`http://localhost:4001/api/users/delete/${personIndex}`, { method: 'PUT' });
+                                fetch(`http://localhost:4001/users/delete/${personIndex}`, { method: 'PUT' });
                                 fetchData();
                                 button.parentNode.parentNode.remove();
                                 if (deletedPerson.login.username === username) {
+                                    fetch('http://localhost:4001/users/set/', { method: 'PUT' })
                                     window.location.replace('index.html');
                                 }
                             }
@@ -257,7 +255,7 @@
                 let hyperlinks = document.querySelectorAll('.hyperlink');
                 hyperlinks.forEach(hyperlink => {
                     hyperlink.addEventListener('click', function() {
-                        localStorage.setItem('visitedName', this.closest('.card').getAttribute('id'));
+                        fetch(`http://localhost:4001/users/setVisited/${this.closest('.card').getAttribute('id')}`, { method: 'PUT' });
                         window.location.replace('example.html');
                     });
                 });

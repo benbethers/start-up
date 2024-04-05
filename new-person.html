@@ -159,14 +159,15 @@
         </style>
         <script>
             //Declare variables
-            people = JSON.parse(localStorage.getItem("people") || "[]");
-
-            function assignImage(sex) {
-                if (sex === 'Female') {
-                    return './assets/images/FemaleAvatar.png'
-                } else {
-                    return './assets/images/MaleAvatar.png'
+            let people;
+            async function fetchData() {
+                try {
+                    let usersResponse = await fetch('http://localhost:4001/users', { method: 'GET' });
+                    people = await usersResponse.json() || [];
+                } catch (error) {
+                    console.error('Fetch error:', error);
                 }
+                return;
             }
 
             //Check username
@@ -197,18 +198,21 @@
                     } else if (checkUsername(usernameInput.value) === false) {
                         failure.innerHTML = 'The username ' + usernameInput.value + ' has already been taken';
                     } else {
-                        people.push({'name': name.value, 'type': typeSelector.value, 'sex': sexSelector.value, 'receivedReviews': [], 'login': {'username': usernameInput.value, 'password': password.value}, 'image': assignImage(this.sex)});
-                        localStorage.setItem('people', JSON.stringify(people));
-                        localStorage.setItem('username', username.value);
-                        window.location.replace('database.html')
+                        fetch(`http://localhost:4001/users/add/${usernameInput.value}/${name.value}/${password.value}/${sexSelector.value}/${typeSelector.value}`, { method: 'PUT' });
+                        fetch(`http://localhost:4001/users/set/${usernameInput.value}`, { method: 'PUT'});
+                        fetchData();
+                        window.location.replace('database.html');
                     }
                 });
             }
 
             //Load content
-            document.addEventListener('DOMContentLoaded', (event) => {
-                formSubmit();
-            });
+            async function main() {
+                await fetchData();
+                await formSubmit();
+            }
+
+            main();
         </script>
     </head>
     <body>  
@@ -233,7 +237,7 @@
             </select><br>
             <input id="username" type="text" placeholder="Username" pattern="[A-Za-z0-9]+" maxlength="30"><br>
             <input id="password" type="password" placeholder="Password" minlength="10" maxlength="40"><br>
-            <button id='submit'>Sumbit</button>
+            <button id='submit'>Submit</button>
             <p id="failure"></p>
         </main>
         <footer>

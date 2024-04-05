@@ -4,6 +4,8 @@ const app = express();
 const PORT = 4001;
 
 let adminUsername = 'benbethers';
+let loggedInUsername = '';
+let visitedName = '';
 let users = [
     {
         'name': 'Ben Bethers',
@@ -50,18 +52,28 @@ app.get('/users/admins', (req, res, next) => {
 });
 
 app.get('/users/loggedInUsername', (req, res, next) => {
-    res.send(adminUsername);
+    res.send(loggedInUsername);
+});
+
+app.get('/users/visitedName', (req, res, next) => {
+    res.send(visitedName);
+});
+
+app.put('/users/setVisited/:visited', (req, res) => {
+    visitedName = req.params.visited;
 });
 
 app.put('/users/delete/:index', (req, res) => {
     let index = parseInt(req.params.index);
-
     try {
         console.log(users[index].name + ' successfully deleted');
         let deletedUser = users[index];
         users.forEach((user) => {
             user.receivedReviews = user.receivedReviews.filter(review => review.ownerUsername !== deletedUser.login.username);
         });
+        logins = fetch(`http://localhost:4002/logins`, { method: 'GET' });
+        let loginIndex = logins.findIndex(login => login.linkedUsername === deletedUser.login.username);
+        fetch(`http://localhost:4002/delete/${loginIndex}`, { method: 'PUT' });
         users.splice(index, 1);
         res.sendStatus(200);
     } catch {
@@ -70,6 +82,28 @@ app.put('/users/delete/:index', (req, res) => {
     }
 });
 
+app.put('/users/add/:username/:name/:password/:sex/:type', (req, res) => {
+    let username = req.params.username;
+    let name = req.params.name;
+    let password = req.params.password;
+    let sex = req.params.sex;
+    let type = req.params.type;
+    try {
+        users.push({'name': name, 'type': type, 'sex': sex, 'receivedReviews': [], 'login': {'username': username, 'password': password}, 'image': assignImage(sex)});
+    } catch {
+        console.log('Failed')
+    }
+});
+
+app.put('/users/deleteReview/:deleter/:deleted', (req, res) => {
+
+});
+
+app.put('/users/set/:username', (req, res) => {
+    loggedInUsername = req.params.username;
+    res.sendStatus(200);
+});
+
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

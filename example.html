@@ -184,15 +184,27 @@
         </style>
         <script>
             //Declare variables
-            fetch('http://localhost:5500/api/users', {
-                method: 'GET'
-            }).then(function(response) {
+            let people;
+            let username;
+            let adminUsername;
+            async function fetchData() {
+                try {
+                    let usersResponse = await fetch('http://localhost:4001/users', { method: 'GET' });
+                    people = await usersResponse.json() || [];
 
-            });
-            people = JSON.parse(localStorage.getItem("people") || "[]");
-            adminUsername = 'benbethers';
-            username = localStorage.getItem('username');
-            visitedName = localStorage.getItem('visitedName');
+                    let usernameResponse = await fetch('http://localhost:4001/users/loggedInUsername', { method: 'GET' });
+                    username = await usernameResponse.text();
+
+                    let adminUsernameResponse = await fetch('http://localhost:4001/users/admins', { method: 'GET' });
+                    adminUsername = await adminUsernameResponse.text();
+
+                    let visitedNameResponse = await fetch('http://localhost:4001/users/visitedName', { method: 'GET' });
+                    visitedName = await visitedNameResponse.text();
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                }
+                return;
+            }
 
             //Set logged in username in footer
             function setLoggedInUser() {
