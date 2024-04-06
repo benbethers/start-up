@@ -238,8 +238,7 @@
                     button.addEventListener('click', function() {
                         person = people.find(person => person.name === button.parentNode.getAttribute('id'));
                         if (person) {
-                            person.receivedReviews = person.receivedReviews.filter(review => review.ownerUsername !== username);
-                            localStorage.setItem('people', JSON.stringify(people)); fetch();
+                            fetch(`http://localhost:4001/users/delete/rating/${person.name}`);
                             button.parentNode.remove();
                         }
                     });
@@ -284,7 +283,7 @@
             }
 
             let databaseSearch = '';
-            document.addEventListener('DOMContentLoaded', function() {
+            function main() {
                 let reviewDisplay = document.getElementById('reviewsDisplay');
                 let searchResults = document.getElementById('searchResults');
 
@@ -294,7 +293,9 @@
                 if (reviewDisplay.innerHTML === '') {
                     searchResults.innerHTML = 'You have no ratings';
                 }
-            });
+            }
+
+            main();
         </script>
     </head>
     <body>

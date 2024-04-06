@@ -95,8 +95,12 @@ app.put('/users/add/:username/:name/:password/:sex/:type', (req, res) => {
     }
 });
 
-app.put('/users/deleteReview/:deleter/:deleted', (req, res) => {
-
+app.put('/users/delete/rating/:reviewee', (req, res) => {
+    let reviewee = req.params.reviewee;
+    user = users.find(user => user.name === reviewee);
+    if (person) {
+        user.receivedReviews = person.receivedReviews.filter(review => review.ownerUsername !== username);
+    }
 });
 
 app.put('/users/set/:username', (req, res) => {
