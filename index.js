@@ -1,8 +1,19 @@
 //Declare express variables
 const express = require('express');
-const cors = require('cors')
 const app = express();
-const PORT = 4001;
+
+//Declare port
+const port = process.argv.length > 2 ? process.argv[2] : 4000;
+
+// JSON body parsing
+app.use(express.json());
+
+// Serve up the front-end
+app.use(express.static('public'));
+
+// Router for service endpoints
+var apiRouter = express.Router();
+app.use(`/api`, apiRouter);
 
 //Declare rating and user variables
 let adminUsername = 'benbethers';
@@ -32,18 +43,48 @@ let users = [
         }
     }
 ];
+logins = [
+    {
+        linkedUsername: 'benbethers',
+        password: 'programmingishard',
+    },
+    {
+        linkedUsername: 'jeffsommers',
+        password: 'programmingishard'
+    }
+]
+
+//Return users
+app.get('/logins', (req, res, next) => {
+    res.send(JSON.stringify(logins));
+});
+
+//Add user to login list
+app.put('/logins/add/:username/:password', (req, res) => {
+    logins.push({linkedUsername: req.params.username, password: req.params.password});
+});
+
+//Delete user from list
+app.delete('/logins/delete/:username', (req, res) => {
+    let deletedUsername = req.params.username;
+    let index = logins.findIndex(login => login.linkedUsername === deletedUsername);
+    try {
+        logins.splice(index, 1);
+        res.sendStatus(200);
+    } catch {
+        console.log('Invalid request');
+        res.sendStatus(400);
+    }
+});
 
 //Assign image to person
 function assignImage(sex) {
     if (sex === 'Female') {
-        return './assets/images/FemaleAvatar.png'
+        return '../assets/images/FemaleAvatar.png'
     } else {
-        return './assets/images/MaleAvatar.png'
+        return '../assets/images/MaleAvatar.png'
     }
 }
-
-//Use cors
-app.use(cors());
 
 // Redirect function as middleware
 app.get('/users', (req, res, next) => {
@@ -115,7 +156,7 @@ app.delete('/users/delete/:index', (req, res) => {
         users.forEach((user) => {
             user.receivedReviews = user.receivedReviews.filter(review => review.ownerUsername !== deletedUser.login.username);
         });
-        fetch(`http://benbethers.click/delete/${deletedUser.login.username}`, { method: 'DELETE' });
+        fetch(`https://localhost:4000/logins/delete/${deletedUser.login.username}`, { method: 'DELETE' });
         users.splice(index, 1);
         res.sendStatus(200);
     } catch {
@@ -136,7 +177,10 @@ app.delete('/users/delete/rating/:reviewee', (req, res) => {
     person.receivedReviews = person.receivedReviews.filter(review => review.ownerUsername !== loggedInUsername);
 });
 
+//Deliver public html files
+app.use(express.static('public'));
+
 //Set app to listen at port
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running on https://startup.benbethers.click:${PORT}`);
 });

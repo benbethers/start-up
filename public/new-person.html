@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Login</title>
+        <title>New Person</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" href="assets/images/StarCluster.png" type="image/x-icon"/>
+        <link rel="icon" href="./assets/images/StarCluster.png" type="image/x-icon"/>
         <style>
             * {
                 text-decoration: none;
@@ -95,6 +95,11 @@
                 color: white;
             }
 
+            #description {
+                height: 80px;
+                word-break: break-all;
+            }
+
             main button {
                 background-color: rgba(255, 255, 255, 0);
                 width: 100px;
@@ -105,18 +110,10 @@
                 color: #fff;
                 box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
                 transition: all 150ms ease-in-out;
-  
-                &:hover {
-                    box-shadow: 0 0 10px 0 white inset, 0 0 10px 3px white;
-                    background-color: rgb(255, 255, 255, 0);
-                }
             }
 
-            #failure {
-                color: red;
-                font-style: italic;
-                margin: 5px;
-                font-size: 10px;
+            main button:hover {
+                box-shadow: 0 0 10px 0 white inset, 0 0 10px 3px white;
             }
 
             footer {
@@ -127,7 +124,7 @@
 
             @font-face {
                 font-family: "Cinzel";
-                src: url("assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
+                src: url("./assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
             }
 
             @keyframes glow {
@@ -139,52 +136,91 @@
 	                text-shadow: 0 0 60px rgb(255, 255, 255), 0 0 70px rgb(255, 255, 255);
 	            }
             }
+
+            select {
+                color: black;
+                width: 20%;
+                padding: 10px;
+                margin: 6px;
+                border: 0;
+                border-radius: 10px;
+                background: rgba(255, 255, 225, 0.25);
+            }
+
+            option {
+                color: black;
+            }
+
+            #failure {
+                font-style: italic;
+                color: red;
+                font-size: 10px;
+            }
         </style>
         <script>
             //Declare variables
-            let logins;
+            let people;
+            let username;
             async function fetchData() {
                 try {
-                    let loginsResponse = await fetch('http://benbethers.click:4002/logins', { method: 'GET' });
-                    logins = await loginsResponse.json() || [];
-                    fetch('http://benbethers.click:4001/users/reset/username', { method: 'PUT' });
+                    let usersResponse = await fetch('https://startup.benbethers.click/api/users', { method: 'GET' });
+                    people = await usersResponse.json() || [];
+
+                    let usernameResponse = await fetch('https://startup.benbethers.click/api/users/loggedInUsername', { method: 'GET' });
+                    username = await usernameResponse.text();
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
                 return;
             }
-            
-            //Sign in functionality
-            function signInFunctionality() {
+
+            //Check login
+            function checkLogin() {
+                if (username === '') {
+                    window.location.replace('index.html');
+                }
+            }
+
+            //Check username
+            function checkUsername(inputUsername) {
+                for (let i = 0; i < people.length; i++) {
+                    if (inputUsername === people[i].login.username) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            //Submit form
+            function formSubmit() {
+                let name = document.getElementById('name');
+                let typeSelector = document.getElementById('type-selector');
+                let sexSelector = document.getElementById('sex-selector');
                 let usernameInput = document.getElementById('username');
-                let passwordInput = document.getElementById('password');
-                let loginButton = document.getElementById('login');
-                let signUpButton = document.getElementById('sign up');
+                let password = document.getElementById('password');
+                let submitButton = document.getElementById('submit');
                 let failure = document.getElementById('failure');
 
-                loginButton.addEventListener('click', () => {
-                    let found = false;
-                    logins.forEach((login) => {
-                        if (usernameInput.value === login.linkedUsername && passwordInput.value === login.password) {
-                            fetch(`http://benbethers.click:4001/users/set/${usernameInput.value}`, { method: 'PUT' });
-                            window.location.replace('database.html');
-                            found = true;
-                        }
-                    });
-                    if (!found) {
-                        passwordInput.value = '';
-                        failure.innerHTML = 'Could not find username or password, please try again or make a new account.';
+                submitButton.addEventListener('click', () => {
+                    if (name.value.includes(' ') !== true) {
+                        failure.innerHTML = 'You must have your first and last name in the name field';
+                    } else if (password.value.length < 9) {
+                        failure.innerHTML = 'Your password must be at least ten characters long';
+                    } else if (checkUsername(usernameInput.value) === false) {
+                        failure.innerHTML = 'The username ' + usernameInput.value + ' has already been taken';
+                    } else {
+                        fetch(`https://startup.benbethers.click/api/users/add/${usernameInput.value}/${name.value}/${password.value}/${sexSelector.value}/${typeSelector.value}`, { method: 'PUT' });
+                        fetch(`https://startup.benbethers.click/api/users/set/${usernameInput.value}`, { method: 'PUT'});
+                        fetchData();
+                        window.location.replace('database.html');
                     }
-                });
-                signUpButton.addEventListener('click', function() {
-                    window.location.replace('new-person.html');
                 });
             }
 
             //Load content
             async function main() {
                 await fetchData();
-                await signInFunctionality();
+                await formSubmit();
             }
 
             main();
@@ -192,27 +228,32 @@
     </head>
     <body>  
         <header>
-            <image src="assets/images/StarCluster.png" height="54px" width="54px"></image>
+            <image src="./assets/images/StarCluster.png" height="54px" width="54px"></image>
             <h1>Ratings</h1>
         </header>
         <main>
             <video width="100%" height="auto" autoplay loop muted>
-                <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
+                <source src="./assets/videos/StarsFalling.mp4" type="video/mp4"/>
             </video><br>
-            <h2>Login</h2>
+            <h2>New Person</h2>
+            <input id="name" type="text" placeholder="Name" pattern="[A-Za-z]+" maxlength="30"><br>
+            <select id="type-selector">
+                <option>Student</option>
+                <option>Professor</option>
+                <option>Business</option>
+            </select><br>
+            <select id="sex-selector">
+                <option>Male</option>
+                <option>Female</option>
+            </select><br>
             <input id="username" type="text" placeholder="Username" pattern="[A-Za-z0-9]+" maxlength="30"><br>
             <input id="password" type="password" placeholder="Password" minlength="10" maxlength="40"><br>
-            <button id="login">Login</button>
-            <button id="sign up">Sign Up</button>
+            <button id='submit'>Submit</button>
             <p id="failure"></p>
-            <br>
-            <h4>Quote of the Day</h4>
-            "You can't win an argument. If you lose it, you lose it; and if you win it, you lose it."<br>
-            Dale Carnegie
         </main>
         <footer>
             Benjamin Bethers<br>
-            <a href="https://github.com/benbethers/start-up">GitHub</a>
+            <a href="http://github.com/benbethers/start-up">GitHub</a>
         </footer>
     </body>
 </html>

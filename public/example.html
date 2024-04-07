@@ -2,7 +2,7 @@
 <html>
     <head>
         <title id="title"></title>
-        <link rel="icon" href="assets/images/StarCluster.png" type="image/x-icon"/>
+        <link rel="icon" href="./assets/images/StarCluster.png" type="image/x-icon"/>
         <style>
             * {
                 text-decoration: none;
@@ -169,7 +169,7 @@
 
             @font-face {
                 font-family: "Cinzel";
-                src: url("assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
+                src: url("./assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
             }
 
             @keyframes glow {
@@ -190,16 +190,16 @@
             let visitedName;
             async function fetchData() {
                 try {
-                    let usersResponse = await fetch('http://benbethers.click:4001/users', { method: 'GET' });
+                    let usersResponse = await fetch('https://startup.benbethers.click/api/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    let usernameResponse = await fetch('http://benbethers.click:4001/users/loggedInUsername', { method: 'GET' });
+                    let usernameResponse = await fetch('https://startup.benbethers.click/api/users/loggedInUsername', { method: 'GET' });
                     username = await usernameResponse.text();
 
-                    let adminUsernameResponse = await fetch('http://benbethers.click:4001/users/admins', { method: 'GET' });
+                    let adminUsernameResponse = await fetch('https://startup.benbethers.click/api/users/admins', { method: 'GET' });
                     adminUsername = await adminUsernameResponse.text();
 
-                    let visitedNameResponse = await fetch('http://benbethers.click:4001/users/visitedName', { method: 'GET' });
+                    let visitedNameResponse = await fetch('https://startup.benbethers.click/api/users/visitedName', { method: 'GET' });
                     visitedName = await visitedNameResponse.text();
                 } catch (error) {
                     console.error('Fetch error:', error);
@@ -315,10 +315,10 @@
     </head>
     <body>
         <header>
-            <image src="assets/images/StarCluster.png" height="54px" width="54px"></image>
+            <image src="./assets/images/StarCluster.png" height="54px" width="54px"></image>
             <h1>Ratings</h1>
             <nav>
-                <div><a href="https://simon.cs260.click/">Simon</a></div>
+                <div><a href="http://simon.cs260.click/">Simon</a></div>
                 <div><a href="database.html">Database</a></div>
                 <div><a href="my-ratings.html">My Account</a></div>
                 <div><a href="index.html">Sign Out</a></div>
@@ -326,12 +326,12 @@
         </header>
         <main>
             <video width="100%" height="auto" autoplay loop muted>
-                <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
+                <source src="./assets/videos/StarsFalling.mp4" type="video/mp4"/>
             </video>
             <div class="main-card">
                 <section id="identification">
                     <p><b id="name" style="color: white"></b></p>
-                    <img id="profile-picture" src="assets/images/FemaleAvatar.png" alt= "Avatar"/>
+                    <img id="profile-picture" src="./assets/images/FemaleAvatar.png" alt= "Avatar"/>
                     <p id="type" style="color: white"><p>
                     <p id="sex"></p>
                     <p id="average rating"></p>
@@ -345,7 +345,7 @@
         <footer>
             <p id="loggedInUser" style="margin: 0px; font-size: 13px"></p>
             Benjamin Bethers<br>
-            <a href="https://github.com/benbethers/start-up">GitHub</a>
+            <a href="http://github.com/benbethers/start-up">GitHub</a>
         </footer>
     </body>
 </html>

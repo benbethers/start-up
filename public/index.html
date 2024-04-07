@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>New Rating</title>
+        <title>Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" href="assets/images/StarCluster.png" type="image/x-icon"/>
+        <link rel="icon" href="./assets/images/StarCluster.png" type="image/x-icon"/>
         <style>
             * {
                 text-decoration: none;
@@ -95,11 +95,6 @@
                 color: white;
             }
 
-            #description {
-                height: 80px;
-                word-break: break-all;
-            }
-
             main button {
                 background-color: rgba(255, 255, 255, 0);
                 width: 100px;
@@ -117,9 +112,11 @@
                 }
             }
 
-            div input {
-                color: orange;
-
+            #failure {
+                color: red;
+                font-style: italic;
+                margin: 5px;
+                font-size: 10px;
             }
 
             footer {
@@ -130,7 +127,7 @@
 
             @font-face {
                 font-family: "Cinzel";
-                src: url("assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
+                src: url("./assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
             }
 
             @keyframes glow {
@@ -145,56 +142,60 @@
         </style>
         <script>
             //Declare variables
+            let logins;
             async function fetchData() {
                 try {
-                    let usersResponse = await fetch('http://benbethers.click:4001/users', { method: 'GET' });
-                    people = await usersResponse.json() || [];
-
-                    let usernameResponse = await fetch('http://benbethers.click:4001/users/loggedInUsername', { method: 'GET' });
-                    username = await usernameResponse.text();
-
-                    let user = people.find(person => person.login.username === username);
+                    let loginsResponse = await fetch('https://startup.benbethers.click/api/logins', { method: 'GET' });
+                    logins = await loginsResponse.json() || [];
+                    fetch('https://startup.benbethers.click/api/users/reset/username', { method: 'PUT' });
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
                 return;
             }
+            
+            //Sign in functionality
+            function signInFunctionality() {
+                let usernameInput = document.getElementById('username');
+                let passwordInput = document.getElementById('password');
+                let loginButton = document.getElementById('login');
+                let signUpButton = document.getElementById('sign up');
+                let failure = document.getElementById('failure');
 
-            //Check login
-            function checkLogin() {
-                console.log(username);
-                if (username === '') {
-                    window.location.replace('index.html');
-                }
-            }
-
-            //Set logged in username in footer
-            function setLoggedInUser() {
-                let usernameNotification = document.getElementById('loggedInUser');
-                loggedInUser.innerHTML = 'Logged In User: ' + username;
-            }
-
-            //Submit button functionality
-            function submitButtonFunctionality() {
-                rating = document.getElementById('rating');
-                description = document.getElementById('description');
-                submitButton = document.getElementById('submit');
-
-                //Add rating
-                submitButton.addEventListener('click', () => {
-                    if (rating.value != '' && description.value != '' && rating.value >= 1 && rating.value <= 5) {
-                        fetch(`http://benbethers.click:4001/users/add/rating/${rating.value}/${description.value}`, { method: 'PUT' });
-                        window.location.replace('example.html');
+                loginButton.addEventListener('click', () => {
+                    let found = false;
+                    logins.forEach((login) => {
+                        if (usernameInput.value === login.linkedUsername && passwordInput.value === login.password) {
+                            fetch(`https://startup.benbethers.click/api/users/set/${usernameInput.value}`, { method: 'PUT' });
+                            window.location.replace('database.html');
+                            found = true;
+                        }
+                    });
+                    if (!found) {
+                        passwordInput.value = '';
+                        failure.innerHTML = 'Could not find username or password, please try again or make a new account.';
                     }
                 });
+                signUpButton.addEventListener('click', function() {
+                    window.location.replace('new-person.html');
+                });
+            }
+            
+            //Load quote of the day
+            function quoteOfTheDay() {
+                let quote = document.getElementById('quote');
+                fetch('https://api.quotable.io/random')
+                    .then((response) => response.json())
+                    .then((set) => {
+                        quote.innerHTML = set.content + '<br>' + set.author;
+                    });
             }
 
             //Load content
             async function main() {
                 await fetchData();
-                await checkLogin();
-                await setLoggedInUser();
-                await submitButtonFunctionality();
+                await signInFunctionality();
+                await quoteOfTheDay();
             }
 
             main();
@@ -202,28 +203,26 @@
     </head>
     <body>  
         <header>
-            <image src="assets/images/StarCluster.png" height="54px" width="54px"></image>
+            <image src="./assets/images/StarCluster.png" height="54px" width="54px"></image>
             <h1>Ratings</h1>
-            <nav>
-                <div><a href="https://simon.cs260.click/">Simon</a></div>
-                <div><a href="database.html">Database</a></div>
-                <div><a href="my-ratings.html">My Account</a></div>
-                <div><a href="index.html">Sign Out</a></div>
-            </nav>
         </header>
         <main>
             <video width="100%" height="auto" autoplay loop muted>
-                <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
+                <source src="./assets/videos/StarsFalling.mp4" type="video/mp4"/>
             </video><br>
-            <h2>New Rating</h2>
-            <input id="rating" type="number" placeholder="Rating value" min="1" step= ".5" max="5"><br>
-            <input id="description" type="text" placeholder="Description"><br>
-            <button id='submit'>Submit</button>
+            <h2>Login</h2>
+            <input id="username" type="text" placeholder="Username" pattern="[A-Za-z0-9]+" maxlength="30"><br>
+            <input id="password" type="password" placeholder="Password" minlength="10" maxlength="40"><br>
+            <button id="login">Login</button>
+            <button id="sign up">Sign Up</button>
+            <p id="failure"></p>
+            <br>
+            <h4>Quote of the Day</h4>
+            <p id="quote"></p>
         </main>
         <footer>
-            <p id="loggedInUser" style="margin: 0px; font-size: 13px"></p>
             Benjamin Bethers<br>
-            <a href="https://github.com/benbethers/start-up">GitHub</a>
+            <a href="http://github.com/benbethers/start-up">GitHub</a>
         </footer>
     </body>
 </html>

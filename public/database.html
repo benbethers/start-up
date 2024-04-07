@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Database</title>
-        <link rel="icon" href="assets/images/StarCluster.png" type="image/x-icon"/>
+        <link rel="icon" href="./assets/images/StarCluster.png" type="image/x-icon"/>
         <style>
             input[type="search"]::-webkit-search-decoration,
             input[type="search"]::-webkit-search-cancel-button,
@@ -154,7 +154,7 @@
 
             @font-face {
                 font-family: "Cinzel";
-                src: url("assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
+                src: url("./assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
             }
 
             @keyframes glow {
@@ -174,13 +174,13 @@
             let adminUsername;
             async function fetchData() {
                 try {
-                    let usersResponse = await fetch('http://benbethers.click:4001/users', { method: 'GET' });
+                    let usersResponse = await fetch('https://startup.benbethers.click/api/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    let usernameResponse = await fetch('http://benbethers.click:4001/users/loggedInUsername', { method: 'GET' });
+                    let usernameResponse = await fetch('https://startup.benbethers.click/api/users/loggedInUsername', { method: 'GET' });
                     username = await usernameResponse.text();
 
-                    let adminUsernameResponse = await fetch('http://benbethers.click:4001/users/admins', { method: 'GET' });
+                    let adminUsernameResponse = await fetch('https://startup.benbethers.click/api/users/admins', { method: 'GET' });
                     adminUsername = await adminUsernameResponse.text();
                 } catch (error) {
                     console.error('Fetch error:', error);
@@ -225,12 +225,12 @@
                             let personIndex = people.findIndex(person => person.name === button.parentNode.parentNode.getAttribute('id'));
                             if (personIndex !== -1) {
                                 let deletedPerson = people[personIndex];
-                                fetch(`http://benbethers.click:4001/users/delete/${deletedPerson.username}`, { method: 'DELETE' });
-                                fetch(`http://benbethers.click:4001/login`);
+                                fetch(`https://startup.benbethers.click/api/users/delete/${deletedPerson.username}`, { method: 'DELETE' });
+                                fetch(`https://startup.benbethers.click/api/login`);
                                 fetchData();
                                 button.parentNode.parentNode.remove();
                                 if (deletedPerson.login.username === username) {
-                                    fetch(`http://benbethers.click:4001/users/reset/username`, { method: 'PUT' })
+                                    fetch(`https://startup.benbethers.click/api/users/reset/username`, { method: 'PUT' })
                                     window.location.replace('index.html');
                                 }
                             }
@@ -263,7 +263,7 @@
                 let hyperlinks = document.querySelectorAll('.hyperlink');
                 hyperlinks.forEach(hyperlink => {
                     hyperlink.addEventListener('click', function() {
-                        fetch(`http://benbethers.click:4001/users/setVisited/${this.closest('.card').getAttribute('id')}`, { method: 'PUT' });
+                        fetch(`https://startup.benbethers.click/api/users/setVisited/${this.closest('.card').getAttribute('id')}`, { method: 'PUT' });
                         window.location.replace('example.html');
                     });
                 });
@@ -322,10 +322,10 @@
     </head>
     <body>
         <header>
-            <image src="assets/images/StarCluster.png" height="54px" width="54px"></image>
+            <image src="./assets/images/StarCluster.png" height="54px" width="54px"></image>
             <h1>Ratings</h1>
             <nav>
-                <div><a href="https://simon.cs260.click/">Simon</a></div>
+                <div><a href="http://simon.cs260.click/">Simon</a></div>
                 <div><a href="database.html">Database</a></div>
                 <div><a href="my-ratings.html">My Account</a></div>
                 <div><a href="index.html">Sign Out</a></div>
@@ -333,7 +333,7 @@
         </header>
         <main>
             <video width="100%" height="auto" autoplay loop muted>
-                <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
+                <source src="./assets/videos/StarsFalling.mp4" type="video/mp4"/>
             </video><br>
             <section>  
                 <h2>Ratings Database</h2>
@@ -345,7 +345,7 @@
         <footer>
             <p id="loggedInUser" style="margin: 0px; font-size: 13px"></p>
             Benjamin Bethers<br>
-            <a href="https://github.com/benbethers/start-up">GitHub</a>
+            <a href="http://github.com/benbethers/start-up">GitHub</a>
         </footer>
     </body>
 </html>

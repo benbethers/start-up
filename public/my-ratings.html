@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>My Ratings</title>
-        <link rel="icon" href="assets/images/StarCluster.png" type="image/x-icon"/>
+        <link rel="icon" href="./assets/images/StarCluster.png" type="image/x-icon"/>
         <style>
             * {
                 text-decoration: none;
@@ -170,7 +170,7 @@
 
             @font-face {
                 font-family: "Cinzel";
-                src: url("assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
+                src: url("./assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
             }
 
             @keyframes glow {
@@ -187,10 +187,10 @@
             //Declare variable
             async function fetchData() {
                 try {
-                    let usersResponse = await fetch('http://benbethers.click:4001/users', { method: 'GET' });
+                    let usersResponse = await fetch('https://startup.benbethers.click/api/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    let usernameResponse = await fetch('http://benbethers.click:4001/users/loggedInUsername', { method: 'GET' });
+                    let usernameResponse = await fetch('https://startup.benbethers.click/api/users/loggedInUsername', { method: 'GET' });
                     username = await usernameResponse.text();
                 } catch (error) {
                     console.error('Fetch error:', error);
@@ -234,7 +234,7 @@
                     button.addEventListener('click', function() {
                         let person = people.find(person => person.name === button.parentNode.getAttribute('id'));
                         if (person) {
-                            fetch(`http://benbethers.click:4001/users/delete/rating/${button.parentNode.getAttribute('id')}`, { method: 'DELETE' });
+                            fetch(`https://startup.benbethers.click/api/users/delete/rating/${button.parentNode.getAttribute('id')}`, { method: 'DELETE' });
                             fetchData();
                             button.parentNode.remove();
                         }
@@ -299,10 +299,10 @@
     </head>
     <body>
         <header>
-            <image src="assets/images/StarCluster.png" height="54px" width="54px"></image>
+            <image src="./assets/images/StarCluster.png" height="54px" width="54px"></image>
             <h1>Ratings</h1>
             <nav>
-                <div><a href="https://simon.cs260.click/">Simon</a></div>
+                <div><a href="http://simon.cs260.click/">Simon</a></div>
                 <div><a href="database.html">Database</a></div>
                 <div><a href="my-ratings.html">My Account</a></div>
                 <div><a href="index.html">Sign Out</a></div>
@@ -310,7 +310,7 @@
         </header>
         <main>
             <video width="100%" height="auto" autoplay loop muted>
-                <source src="assets/videos/StarsFalling.mp4" type="video/mp4"/>
+                <source src="./assets/videos/StarsFalling.mp4" type="video/mp4"/>
             </video>
             <section>  
                 <h2>My Ratings</h2>
@@ -322,7 +322,7 @@
         <footer>
             <p id="loggedInUser" style="margin: 0px; font-size: 13px"></p>
             Benjamin Bethers<br>
-            <a href="https://github.com/benbethers/start-up">GitHub</a>
+            <a href="http://github.com/benbethers/start-up">GitHub</a>
         </footer>
     </body>
 </html>

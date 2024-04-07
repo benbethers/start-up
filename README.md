@@ -70,3 +70,11 @@ For this deliverable, I made all aspects of my deliverable possible with the kno
 - System to view reviews you have given and delete them
 - Limits on multiple reviews or reviewing yourself
 - Admin power to delete people from the review system, wiping all reviews they have left as well
+
+## Startup Service Deliverable
+For this deliverable, I made use of express to change and retrieve important
+- Use fetch to retreive variables from express and node servers
+- Checking the user logged in and redirecting to login page if not logged in
+- Using node and express to create backend servers
+- Creating login and users services listening on different points, all services with thier own endpoint
+- Retreiving and changing reviews and people using fetch and express

@@ -33,3 +33,12 @@ This start up has taught me by far the most so far in this class, through trial 
 - Using JSON to store arrays and objects within the local storage
 - Importance of organizing your work and creating comments on functions
 - Creating a smooth and user friendly application
+
+## Startup Service Deliverable
+This startup was hard for me but it taught me alot of thing including the following:
+- Greater security practices
+- How to use fetch
+- Greater ability in promises and async await
+- Changing and accessing variables on the backend
+- Express functionality
+- Node functionality
