@@ -1,3 +1,14 @@
+const { MongoClient } = require('mongodb');
+const config = require('./dbConfig.json');
+
+const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
+const client = new MongoClient(url);
+const startupDatabase = client.db('startup');
+const logins = startupDatabase.collection('logins');
+const users = startupDatabase.collection('users');
+
+client.connect();
+
 //Declare express variables
 const express = require('express');
 const app = express();
@@ -16,68 +27,32 @@ app.use(`/api`, apiRouter);
 //Declare rating and user variables
 let adminUsername = 'benbethers';
 let loggedInUsername = '';
-let visitedName = '';
-let users = [
-    {
-        'name': 'Ben Bethers',
-        'sex': 'Male',
-        'type': 'Student',
-        'receivedReviews': [],
-        'image': assignImage(this.sex),
-        'login': {
-            'username': 'benbethers',
-            'password': 'programmingishard'
-        }
-    },
-    {
-        'name': 'Jeff Sommers',
-        'sex': 'Male',
-        'type': 'Professor',
-        'receivedReviews': [],
-        'image': assignImage(this.sex),
-        'login': {
-            'username': 'jeffsommers',
-            'password': 'programmingishard'
-        }
-    }
-];
-logins = [
-    {
-        linkedUsername: 'benbethers',
-        password: 'programmingishard',
-    },
-    {
-        linkedUsername: 'jeffsommers',
-        password: 'programmingishard'
-    }
-]
 
 //Return users
-apiRouter.get('/logins', (req, res, next) => {
-    res.send(JSON.stringify(logins));
+apiRouter.get('/logins', async (req, res, next) => {
+    let loginsReturn = await logins.find({}).toArray();
+    res.send(JSON.stringify(loginsReturn));
 });
 
 //Add user to login list
-apiRouter.put('/logins/add/:username/:password', (req, res) => {
+apiRouter.put('/logins/add/:username/:password', async (req, res) => {
     try {
-        logins.push({ linkedUsername: req.params.username, password: req.params.password });
-        res.sendStatus(200); // Sending a success status
+        await logins.insertOne({linkedUsername: req.params.username, password: req.params.password});
+        res.sendStatus(200);
     } catch (error) {
         console.error(error);
-        res.sendStatus(400); // Sending a bad request status
+        res.sendStatus(400);
     }
 });
 
 //Delete user from list
-apiRouter.delete('/logins/delete/:username', (req, res) => {
-    let deletedUsername = req.params.username;
-    let index = logins.findIndex(login => login.linkedUsername === deletedUsername);
+apiRouter.delete('/logins/delete/:username', async (req, res) => {
     try {
-        logins.splice(index, 1);
-        res.sendStatus(200); // Sending a success status
+        await logins.deleteOne({linkedUsername: req.params.username});
+        res.sendStatus(200);
     } catch (error) {
         console.error('Invalid request', error);
-        res.sendStatus(400); // Sending a bad request status
+        res.sendStatus(400);
     }
 });
 
@@ -91,12 +66,14 @@ function assignImage(sex) {
 }
 
 // Redirect function as middleware
-apiRouter.get('/users', (req, res, next) => {
-    res.send(JSON.stringify(users));
+apiRouter.get('/users', async (req, res, next) => {
+    let usersReturn = await users.find({}).toArray();
+    res.send(JSON.stringify(usersReturn));
 });
 
 //Return admin names
 apiRouter.get('/users/admins', (req, res, next) => {
+    let adminUsername = users.find({ adminUsername: 'benbethers' }).json().adminUsername;
     res.send(adminUsername);
 });
 
@@ -124,7 +101,7 @@ apiRouter.put('/users/add/:username/:name/:password/:sex/:type', (req, res) => {
     let sex = req.params.sex;
     let type = req.params.type;
     try {
-        users.push({ 'name': name, 'type': type, 'sex': sex, 'receivedReviews': [], 'login': { 'username': username, 'password': password }, 'image': assignImage(sex) });
+        users.insertOne({ 'name': name, 'type': type, 'sex': sex, 'receivedReviews': [], 'login': { 'username': username, 'password': password }, 'image': assignImage(sex) });
         res.sendStatus(200); // Sending a success status
     } catch (error) {
         console.error('Failed', error);
@@ -133,25 +110,36 @@ apiRouter.put('/users/add/:username/:name/:password/:sex/:type', (req, res) => {
 });
 
 //Create rating
-apiRouter.put('/users/add/rating/:rating/:description', (req, res) => {
-    let rating = req.params.rating;
-    let description = req.params.description;
+apiRouter.put('/users/add/rating/:visitedName/:loggedInUsername/:rating/:description', async (req, res) => {
     try {
-        users.forEach((user) => {
-            if (user.name == visitedName) {
-                user.receivedReviews.push({ 'ownerUsername': loggedInUsername, 'rating': rating, 'description': description });
-            }
-        });
-        res.sendStatus(200); // Sending a success status
+        const visitedName = req.params.visitedName;
+        const loggedInUsername = req.params.loggedInUsername;
+        const rating = req.params.rating;
+        const description = req.params.description;
+
+        //Find the user with the visitedName
+        const person = await users.findOne({ name: visitedName });
+
+        if (!person) {
+            return res.sendStatus(404); //User not found
+        }
+
+        //Update the receivedReviews array
+        await users.updateOne(
+            { name: visitedName },
+            { $push: { receivedReviews: { ownerUsername: loggedInUsername, rating: rating, description: description } } }
+        );
+
+        res.sendStatus(200);
     } catch (error) {
         console.error(error);
-        res.sendStatus(400); // Sending a bad request status
+        res.sendStatus(500);
     }
 });
 
 //Reset username and log out user
 apiRouter.put('/users/reset/username', (req, res) => {
-    loggedInUsername = '';
+    localStorage.setItem(loggedInUsername, '');
     res.sendStatus(200); // Sending a success status
 });
 
@@ -180,20 +168,25 @@ apiRouter.delete('/users/delete/:index', (req, res) => {
 });
 
 //Delete rating
-apiRouter.delete('/users/delete/rating/:reviewee', (req, res) => {
-    let person;
-    let reviewee = req.params.reviewee;
+apiRouter.delete('/users/delete/rating/:reviewee/:loggedInUsername', async (req, res) => {
     try {
-        users.forEach((user) => {
-            if (user.name === reviewee) {
-                person = user;
-            }
-        });
-        person.receivedReviews = person.receivedReviews.filter(review => review.ownerUsername !== loggedInUsername);
+        const reviewee = req.params.reviewee;
+        const loggedInUsername = req.params.loggedInUsername;
+
+        // Update the document in MongoDB to remove the specified review
+        const result = await users.updateOne(
+            { name: reviewee },
+            { $pull: { receivedReviews: { ownerUsername: loggedInUsername } } }
+        );
+
+        if (result.modifiedCount === 0) {
+            return res.sendStatus(404); // User not found or review not present
+        }
+
         res.sendStatus(200); // Sending a success status
     } catch (error) {
         console.error(error);
-        res.sendStatus(400); // Sending a bad request status
+        res.sendStatus(500); // Sending a server error status
     }
 });
 
