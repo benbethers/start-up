@@ -1,8 +1,6 @@
 //Declare express variables
 const express = require('express');
 const app = express();
-
-//Declare port
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 // JSON body parsing
@@ -55,100 +53,116 @@ logins = [
 ]
 
 //Return users
-app.get('/logins', (req, res, next) => {
+apiRouter.get('/logins', (req, res, next) => {
     res.send(JSON.stringify(logins));
 });
 
 //Add user to login list
-app.put('/logins/add/:username/:password', (req, res) => {
-    logins.push({linkedUsername: req.params.username, password: req.params.password});
+apiRouter.put('/logins/add/:username/:password', (req, res) => {
+    try {
+        logins.push({ linkedUsername: req.params.username, password: req.params.password });
+        res.sendStatus(200); // Sending a success status
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(400); // Sending a bad request status
+    }
 });
 
 //Delete user from list
-app.delete('/logins/delete/:username', (req, res) => {
+apiRouter.delete('/logins/delete/:username', (req, res) => {
     let deletedUsername = req.params.username;
     let index = logins.findIndex(login => login.linkedUsername === deletedUsername);
     try {
         logins.splice(index, 1);
-        res.sendStatus(200);
-    } catch {
-        console.log('Invalid request');
-        res.sendStatus(400);
+        res.sendStatus(200); // Sending a success status
+    } catch (error) {
+        console.error('Invalid request', error);
+        res.sendStatus(400); // Sending a bad request status
     }
 });
 
 //Assign image to person
 function assignImage(sex) {
     if (sex === 'Female') {
-        return '../assets/images/FemaleAvatar.png'
+        return '../assets/images/FemaleAvatar.png';
     } else {
-        return '../assets/images/MaleAvatar.png'
+        return '../assets/images/MaleAvatar.png';
     }
 }
 
 // Redirect function as middleware
-app.get('/users', (req, res, next) => {
+apiRouter.get('/users', (req, res, next) => {
     res.send(JSON.stringify(users));
 });
 
 //Return admin names
-app.get('/users/admins', (req, res, next) => {
+apiRouter.get('/users/admins', (req, res, next) => {
     res.send(adminUsername);
 });
 
 //Return logged in username
-app.get('/users/loggedInUsername', (req, res, next) => {
+apiRouter.get('/users/loggedInUsername', (req, res, next) => {
     res.send(loggedInUsername);
 });
 
 //Return visited name
-app.get('/users/visitedName', (req, res, next) => {
+apiRouter.get('/users/visitedName', (req, res, next) => {
     res.send(visitedName);
 });
 
 //Set visited name
-app.put('/users/setVisited/:visited', (req, res) => {
+apiRouter.put('/users/setVisited/:visited', (req, res) => {
     visitedName = req.params.visited;
+    res.sendStatus(200); // Sending a success status
 });
 
 //Create user
-app.put('/users/add/:username/:name/:password/:sex/:type', (req, res) => {
+apiRouter.put('/users/add/:username/:name/:password/:sex/:type', (req, res) => {
     let username = req.params.username;
     let name = req.params.name;
     let password = req.params.password;
     let sex = req.params.sex;
     let type = req.params.type;
     try {
-        users.push({'name': name, 'type': type, 'sex': sex, 'receivedReviews': [], 'login': {'username': username, 'password': password}, 'image': assignImage(sex)});
-    } catch {
-        console.log('Failed')
+        users.push({ 'name': name, 'type': type, 'sex': sex, 'receivedReviews': [], 'login': { 'username': username, 'password': password }, 'image': assignImage(sex) });
+        res.sendStatus(200); // Sending a success status
+    } catch (error) {
+        console.error('Failed', error);
+        res.sendStatus(400); // Sending a bad request status
     }
 });
 
 //Create rating
-app.put('/users/add/rating/:rating/:description', (req, res) => {
+apiRouter.put('/users/add/rating/:rating/:description', (req, res) => {
     let rating = req.params.rating;
     let description = req.params.description;
-    users.forEach((user) => {
-        if (user.name == visitedName) {
-            user.receivedReviews.push({'ownerUsername': loggedInUsername, 'rating': rating, 'description': description});
-        }
-    });
+    try {
+        users.forEach((user) => {
+            if (user.name == visitedName) {
+                user.receivedReviews.push({ 'ownerUsername': loggedInUsername, 'rating': rating, 'description': description });
+            }
+        });
+        res.sendStatus(200); // Sending a success status
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(400); // Sending a bad request status
+    }
 });
 
 //Reset username and log out user
-app.put('/users/reset/username', (req, res) => {
+apiRouter.put('/users/reset/username', (req, res) => {
     loggedInUsername = '';
+    res.sendStatus(200); // Sending a success status
 });
 
 //Set username
-app.put('/users/set/:username', (req, res) => {
+apiRouter.put('/users/set/:username', (req, res) => {
     loggedInUsername = req.params.username;
-    res.sendStatus(200);
+    res.sendStatus(200); // Sending a success status
 });
 
 //Delete user
-app.delete('/users/delete/:index', (req, res) => {
+apiRouter.delete('/users/delete/:index', (req, res) => {
     let index = parseInt(req.params.index);
     try {
         console.log(users[index].name + ' successfully deleted');
@@ -158,29 +172,32 @@ app.delete('/users/delete/:index', (req, res) => {
         });
         fetch(`https://localhost:4000/logins/delete/${deletedUser.login.username}`, { method: 'DELETE' });
         users.splice(index, 1);
-        res.sendStatus(200);
-    } catch {
-        console.log('Invalid request');
-        res.sendStatus(400);
+        res.sendStatus(200); // Sending a success status
+    } catch (error) {
+        console.error('Invalid request', error);
+        res.sendStatus(400); // Sending a bad request status
     }
 });
 
 //Delete rating
-app.delete('/users/delete/rating/:reviewee', (req, res) => {
+apiRouter.delete('/users/delete/rating/:reviewee', (req, res) => {
     let person;
     let reviewee = req.params.reviewee;
-    users.forEach((user) => {
-        if (user.name === reviewee) {
-            person = user;
-        }
-    });
-    person.receivedReviews = person.receivedReviews.filter(review => review.ownerUsername !== loggedInUsername);
+    try {
+        users.forEach((user) => {
+            if (user.name === reviewee) {
+                person = user;
+            }
+        });
+        person.receivedReviews = person.receivedReviews.filter(review => review.ownerUsername !== loggedInUsername);
+        res.sendStatus(200); // Sending a success status
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(400); // Sending a bad request status
+    }
 });
-
-//Deliver public html files
-app.use(express.static('public'));
 
 //Set app to listen at port
 app.listen(port, () => {
-    console.log(`Server is running on https://startup.benbethers.click:${PORT}`);
+    console.log(`Server is running on :${port}`);
 });

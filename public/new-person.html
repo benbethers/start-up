@@ -163,10 +163,10 @@
             let username;
             async function fetchData() {
                 try {
-                    let usersResponse = await fetch('https://startup.benbethers.click/api/users', { method: 'GET' });
+                    let usersResponse = await fetch('/api/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    let usernameResponse = await fetch('https://startup.benbethers.click/api/users/loggedInUsername', { method: 'GET' });
+                    let usernameResponse = await fetch('/api/users/loggedInUsername', { method: 'GET' });
                     username = await usernameResponse.text();
                 } catch (error) {
                     console.error('Fetch error:', error);
@@ -209,8 +209,8 @@
                     } else if (checkUsername(usernameInput.value) === false) {
                         failure.innerHTML = 'The username ' + usernameInput.value + ' has already been taken';
                     } else {
-                        fetch(`https://startup.benbethers.click/api/users/add/${usernameInput.value}/${name.value}/${password.value}/${sexSelector.value}/${typeSelector.value}`, { method: 'PUT' });
-                        fetch(`https://startup.benbethers.click/api/users/set/${usernameInput.value}`, { method: 'PUT'});
+                        fetch(`/api/users/add/${usernameInput.value}/${name.value}/${password.value}/${sexSelector.value}/${typeSelector.value}`, { method: 'PUT' });
+                        fetch(`/api/users/set/${usernameInput.value}`, { method: 'PUT'});
                         fetchData();
                         window.location.replace('database.html');
                     }

@@ -145,9 +145,9 @@
             let logins;
             async function fetchData() {
                 try {
-                    let loginsResponse = await fetch('https://startup.benbethers.click/api/logins', { method: 'GET' });
+                    let loginsResponse = await fetch('/api/logins', { method: 'GET' });
                     logins = await loginsResponse.json() || [];
-                    fetch('https://startup.benbethers.click/api/users/reset/username', { method: 'PUT' });
+                    fetch('/api/users/reset/username', { method: 'PUT' });
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
@@ -166,7 +166,7 @@
                     let found = false;
                     logins.forEach((login) => {
                         if (usernameInput.value === login.linkedUsername && passwordInput.value === login.password) {
-                            fetch(`https://startup.benbethers.click/api/users/set/${usernameInput.value}`, { method: 'PUT' });
+                            fetch(`/api/users/set/${usernameInput.value}`, { method: 'PUT' });
                             window.location.replace('database.html');
                             found = true;
                         }

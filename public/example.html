@@ -190,16 +190,16 @@
             let visitedName;
             async function fetchData() {
                 try {
-                    let usersResponse = await fetch('https://startup.benbethers.click/api/users', { method: 'GET' });
+                    let usersResponse = await fetch('/api/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    let usernameResponse = await fetch('https://startup.benbethers.click/api/users/loggedInUsername', { method: 'GET' });
+                    let usernameResponse = await fetch('/api/users/loggedInUsername', { method: 'GET' });
                     username = await usernameResponse.text();
 
-                    let adminUsernameResponse = await fetch('https://startup.benbethers.click/api/users/admins', { method: 'GET' });
+                    let adminUsernameResponse = await fetch('/api/users/admins', { method: 'GET' });
                     adminUsername = await adminUsernameResponse.text();
 
-                    let visitedNameResponse = await fetch('https://startup.benbethers.click/api/users/visitedName', { method: 'GET' });
+                    let visitedNameResponse = await fetch('/api/users/visitedName', { method: 'GET' });
                     visitedName = await visitedNameResponse.text();
                 } catch (error) {
                     console.error('Fetch error:', error);

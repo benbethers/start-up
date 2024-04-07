@@ -174,13 +174,13 @@
             let adminUsername;
             async function fetchData() {
                 try {
-                    let usersResponse = await fetch('https://startup.benbethers.click/api/users', { method: 'GET' });
+                    let usersResponse = await fetch('/api/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    let usernameResponse = await fetch('https://startup.benbethers.click/api/users/loggedInUsername', { method: 'GET' });
+                    let usernameResponse = await fetch('/api/users/loggedInUsername', { method: 'GET' });
                     username = await usernameResponse.text();
 
-                    let adminUsernameResponse = await fetch('https://startup.benbethers.click/api/users/admins', { method: 'GET' });
+                    let adminUsernameResponse = await fetch('/api/users/admins', { method: 'GET' });
                     adminUsername = await adminUsernameResponse.text();
                 } catch (error) {
                     console.error('Fetch error:', error);
@@ -225,12 +225,12 @@
                             let personIndex = people.findIndex(person => person.name === button.parentNode.parentNode.getAttribute('id'));
                             if (personIndex !== -1) {
                                 let deletedPerson = people[personIndex];
-                                fetch(`https://startup.benbethers.click/api/users/delete/${deletedPerson.username}`, { method: 'DELETE' });
-                                fetch(`https://startup.benbethers.click/api/login`);
+                                fetch(`/api/users/delete/${deletedPerson.username}`, { method: 'DELETE' });
+                                fetch(`/api/login`);
                                 fetchData();
                                 button.parentNode.parentNode.remove();
                                 if (deletedPerson.login.username === username) {
-                                    fetch(`https://startup.benbethers.click/api/users/reset/username`, { method: 'PUT' })
+                                    fetch(`/api/users/reset/username`, { method: 'PUT' })
                                     window.location.replace('index.html');
                                 }
                             }
@@ -263,7 +263,7 @@
                 let hyperlinks = document.querySelectorAll('.hyperlink');
                 hyperlinks.forEach(hyperlink => {
                     hyperlink.addEventListener('click', function() {
-                        fetch(`https://startup.benbethers.click/api/users/setVisited/${this.closest('.card').getAttribute('id')}`, { method: 'PUT' });
+                        fetch(`/api/users/setVisited/${this.closest('.card').getAttribute('id')}`, { method: 'PUT' });
                         window.location.replace('example.html');
                     });
                 });
