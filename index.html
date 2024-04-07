@@ -141,12 +141,13 @@
             }
         </style>
         <script>
+            //Declare variables
             let logins;
             async function fetchData() {
                 try {
-                    let loginsResponse = await fetch('http://localhost:4002/logins', { method: 'GET' });
+                    let loginsResponse = await fetch('http://benbethers.click:4002/logins', { method: 'GET' });
                     logins = await loginsResponse.json() || [];
-                    fetch('http://localhost:4001/users/reset/username', { method: 'PUT' });
+                    fetch('http://benbethers.click:4001/users/reset/username', { method: 'PUT' });
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
@@ -165,7 +166,7 @@
                     let found = false;
                     logins.forEach((login) => {
                         if (usernameInput.value === login.linkedUsername && passwordInput.value === login.password) {
-                            fetch(`http://localhost:4001/users/set/${usernameInput.value}`, { method: 'PUT' });
+                            fetch(`http://benbethers.click:4001/users/set/${usernameInput.value}`, { method: 'PUT' });
                             window.location.replace('database.html');
                             found = true;
                         }

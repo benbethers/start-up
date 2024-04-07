@@ -190,16 +190,16 @@
             let visitedName;
             async function fetchData() {
                 try {
-                    let usersResponse = await fetch('http://localhost:4001/users', { method: 'GET' });
+                    let usersResponse = await fetch('http://benbethers.click:4001/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    let usernameResponse = await fetch('http://localhost:4001/users/loggedInUsername', { method: 'GET' });
+                    let usernameResponse = await fetch('http://benbethers.click:4001/users/loggedInUsername', { method: 'GET' });
                     username = await usernameResponse.text();
 
-                    let adminUsernameResponse = await fetch('http://localhost:4001/users/admins', { method: 'GET' });
+                    let adminUsernameResponse = await fetch('http://benbethers.click:4001/users/admins', { method: 'GET' });
                     adminUsername = await adminUsernameResponse.text();
 
-                    let visitedNameResponse = await fetch('http://localhost:4001/users/visitedName', { method: 'GET' });
+                    let visitedNameResponse = await fetch('http://benbethers.click:4001/users/visitedName', { method: 'GET' });
                     visitedName = await visitedNameResponse.text();
                 } catch (error) {
                     console.error('Fetch error:', error);
@@ -207,6 +207,7 @@
                 return;
             }
 
+            //Check login
             function checkLogin() {
                 if (username === '') {
                     window.location.replace('index.html');

@@ -147,10 +147,10 @@
             //Declare variables
             async function fetchData() {
                 try {
-                    let usersResponse = await fetch('http://localhost:4001/users', { method: 'GET' });
+                    let usersResponse = await fetch('http://benbethers.click:4001/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    let usernameResponse = await fetch('http://localhost:4001/users/loggedInUsername', { method: 'GET' });
+                    let usernameResponse = await fetch('http://benbethers.click:4001/users/loggedInUsername', { method: 'GET' });
                     username = await usernameResponse.text();
 
                     let user = people.find(person => person.login.username === username);
@@ -160,6 +160,7 @@
                 return;
             }
 
+            //Check login
             function checkLogin() {
                 console.log(username);
                 if (username === '') {
@@ -173,6 +174,7 @@
                 loggedInUser.innerHTML = 'Logged In User: ' + username;
             }
 
+            //Submit button functionality
             function submitButtonFunctionality() {
                 rating = document.getElementById('rating');
                 description = document.getElementById('description');
@@ -181,7 +183,7 @@
                 //Add rating
                 submitButton.addEventListener('click', () => {
                     if (rating.value != '' && description.value != '' && rating.value >= 1 && rating.value <= 5) {
-                        fetch(`http://localhost:4001/users/add/rating/${rating.value}/${description.value}`, { method: 'PUT' });
+                        fetch(`http://benbethers.click:4001/users/add/rating/${rating.value}/${description.value}`, { method: 'PUT' });
                         window.location.replace('example.html');
                     }
                 });

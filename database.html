@@ -174,13 +174,13 @@
             let adminUsername;
             async function fetchData() {
                 try {
-                    let usersResponse = await fetch('http://localhost:4001/users', { method: 'GET' });
+                    let usersResponse = await fetch('http://benbethers.click:4001/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    let usernameResponse = await fetch('http://localhost:4001/users/loggedInUsername', { method: 'GET' });
+                    let usernameResponse = await fetch('http://benbethers.click:4001/users/loggedInUsername', { method: 'GET' });
                     username = await usernameResponse.text();
 
-                    let adminUsernameResponse = await fetch('http://localhost:4001/users/admins', { method: 'GET' });
+                    let adminUsernameResponse = await fetch('http://benbethers.click:4001/users/admins', { method: 'GET' });
                     adminUsername = await adminUsernameResponse.text();
                 } catch (error) {
                     console.error('Fetch error:', error);
@@ -188,6 +188,7 @@
                 return;
             }
 
+            //Check login
             function checkLogin() {
                 if (username === '') {
                     window.location.replace('index.html');
@@ -224,12 +225,12 @@
                             let personIndex = people.findIndex(person => person.name === button.parentNode.parentNode.getAttribute('id'));
                             if (personIndex !== -1) {
                                 let deletedPerson = people[personIndex];
-                                fetch(`http://localhost:4001/users/delete/${deletedPerson.username}`, { method: 'DELETE' });
-                                fetch(`http://localhost:4001/login`);
+                                fetch(`http://benbethers.click:4001/users/delete/${deletedPerson.username}`, { method: 'DELETE' });
+                                fetch(`http://benbethers.click:4001/login`);
                                 fetchData();
                                 button.parentNode.parentNode.remove();
                                 if (deletedPerson.login.username === username) {
-                                    fetch(`http://localhost:4001/users/reset/username`, { method: 'PUT' })
+                                    fetch(`http://benbethers.click:4001/users/reset/username`, { method: 'PUT' })
                                     window.location.replace('index.html');
                                 }
                             }
@@ -262,7 +263,7 @@
                 let hyperlinks = document.querySelectorAll('.hyperlink');
                 hyperlinks.forEach(hyperlink => {
                     hyperlink.addEventListener('click', function() {
-                        fetch(`http://localhost:4001/users/setVisited/${this.closest('.card').getAttribute('id')}`, { method: 'PUT' });
+                        fetch(`http://benbethers.click:4001/users/setVisited/${this.closest('.card').getAttribute('id')}`, { method: 'PUT' });
                         window.location.replace('example.html');
                     });
                 });

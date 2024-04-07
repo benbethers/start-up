@@ -187,10 +187,10 @@
             //Declare variable
             async function fetchData() {
                 try {
-                    let usersResponse = await fetch('http://localhost:4001/users', { method: 'GET' });
+                    let usersResponse = await fetch('http://benbethers.click:4001/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    let usernameResponse = await fetch('http://localhost:4001/users/loggedInUsername', { method: 'GET' });
+                    let usernameResponse = await fetch('http://benbethers.click:4001/users/loggedInUsername', { method: 'GET' });
                     username = await usernameResponse.text();
                 } catch (error) {
                     console.error('Fetch error:', error);
@@ -198,6 +198,7 @@
                 return;
             }
 
+            //Check login functionality
             function checkLogin() {
                 if (username === '') {
                     window.location.replace('index.html');
@@ -233,7 +234,7 @@
                     button.addEventListener('click', function() {
                         let person = people.find(person => person.name === button.parentNode.getAttribute('id'));
                         if (person) {
-                            fetch(`http://localhost:4001/users/delete/rating/${button.parentNode.getAttribute('id')}`, { method: 'DELETE' });
+                            fetch(`http://benbethers.click:4001/users/delete/rating/${button.parentNode.getAttribute('id')}`, { method: 'DELETE' });
                             fetchData();
                             button.parentNode.remove();
                         }
