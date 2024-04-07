@@ -146,7 +146,7 @@
                 try {
                     let loginsResponse = await fetch('http://localhost:4002/logins', { method: 'GET' });
                     logins = await loginsResponse.json() || [];
-                    console.log(JSON.stringify(logins));
+                    fetch('http://localhost:4001/users/reset/username', { method: 'PUT' });
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
@@ -161,7 +161,7 @@
                 let signUpButton = document.getElementById('sign up');
                 let failure = document.getElementById('failure');
 
-                loginButton.addEventListener('click', function() {
+                loginButton.addEventListener('click', () => {
                     let found = false;
                     logins.forEach((login) => {
                         if (usernameInput.value === login.linkedUsername && passwordInput.value === login.password) {

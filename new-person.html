@@ -160,14 +160,24 @@
         <script>
             //Declare variables
             let people;
+            let username;
             async function fetchData() {
                 try {
                     let usersResponse = await fetch('http://localhost:4001/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
+
+                    let usernameResponse = await fetch('http://localhost:4001/users/loggedInUsername', { method: 'GET' });
+                    username = await usernameResponse.text();
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
                 return;
+            }
+
+            function checkLogin() {
+                if (username === '') {
+                    window.location.replace('index.html');
+                }
             }
 
             //Check username

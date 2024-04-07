@@ -207,6 +207,12 @@
                 return;
             }
 
+            function checkLogin() {
+                if (username === '') {
+                    window.location.replace('index.html');
+                }
+            }
+
             //Set logged in username in footer
             function setLoggedInUser() {
                 let usernameNotification = document.getElementById('loggedInUser');
@@ -297,8 +303,9 @@
             //Load content then set up page
             async function main() {
                 await fetchData();
-                await setLoggedInUser()
-                await makeTitleName()
+                await checkLogin();
+                await setLoggedInUser();
+                await makeTitleName();
                 await setUpPage();
             }
 

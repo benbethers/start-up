@@ -184,9 +184,7 @@
             }
         </style>
         <script>
-            //Declare variables
-            let people;
-            let username;
+            //Declare variable
             async function fetchData() {
                 try {
                     let usersResponse = await fetch('http://localhost:4001/users', { method: 'GET' });
@@ -198,6 +196,12 @@
                     console.error('Fetch error:', error);
                 }
                 return;
+            }
+
+            function checkLogin() {
+                if (username === '') {
+                    window.location.replace('index.html');
+                }
             }
 
             //Set logged in username in footer
@@ -220,25 +224,17 @@
                 loadDeleteButtons();
             }
 
-            //Remove rating functionality
-            function removeRating(personName, ownerUsername) {
-                people.forEach((person) => {
-                    if (person.name === personName) {
-                        person.receivedReviews = person.receivedReviews.filter(review => review.ownerUsername !== ownerUsername);
-                        localStorage.setItem('people', JSON.stringify(people));
-                    }
-                });
-            }
-
             //Delete button functionality
             function loadDeleteButtons() {
                 let reviewDisplay = document.getElementById('reviewsDisplay');
                 let deleteButtons = document.querySelectorAll('.deleteReview');
+
                 deleteButtons.forEach((button) => {
                     button.addEventListener('click', function() {
-                        person = people.find(person => person.name === button.parentNode.getAttribute('id'));
+                        let person = people.find(person => person.name === button.parentNode.getAttribute('id'));
                         if (person) {
-                            fetch(`http://localhost:4001/users/delete/rating/${person.name}`);
+                            fetch(`http://localhost:4001/users/delete/rating/${button.parentNode.getAttribute('id')}`, { method: 'DELETE' });
+                            fetchData();
                             button.parentNode.remove();
                         }
                     });
@@ -283,12 +279,14 @@
             }
 
             let databaseSearch = '';
-            function main() {
+            async function main() {
                 let reviewDisplay = document.getElementById('reviewsDisplay');
                 let searchResults = document.getElementById('searchResults');
 
-                setLoggedInUser();
-                mainReviewDisplay();
+                await fetchData();
+                await checkLogin();
+                await setLoggedInUser();
+                await mainReviewDisplay();
 
                 if (reviewDisplay.innerHTML === '') {
                     searchResults.innerHTML = 'You have no ratings';

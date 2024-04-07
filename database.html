@@ -188,6 +188,12 @@
                 return;
             }
 
+            function checkLogin() {
+                if (username === '') {
+                    window.location.replace('index.html');
+                }
+            }
+
             //Set logged in user at the footer
             function setLoggedInUser() {
                 let usernameNotification = document.getElementById('loggedInUser');
@@ -218,11 +224,12 @@
                             let personIndex = people.findIndex(person => person.name === button.parentNode.parentNode.getAttribute('id'));
                             if (personIndex !== -1) {
                                 let deletedPerson = people[personIndex];
-                                fetch(`http://localhost:4001/users/delete/${personIndex}`, { method: 'PUT' });
+                                fetch(`http://localhost:4001/users/delete/${deletedPerson.username}`, { method: 'DELETE' });
+                                fetch(`http://localhost:4001/login`);
                                 fetchData();
                                 button.parentNode.parentNode.remove();
                                 if (deletedPerson.login.username === username) {
-                                    fetch('http://localhost:4001/users/set/', { method: 'PUT' })
+                                    fetch(`http://localhost:4001/users/reset/username`, { method: 'PUT' })
                                     window.location.replace('index.html');
                                 }
                             }
@@ -302,6 +309,7 @@
             //Load content 
             async function main() {
                 await fetchData();
+                await checkLogin();
                 await setLoggedInUser();
                 await mainCardDisplay();
                 await searchFunctionality();

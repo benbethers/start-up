@@ -21,8 +21,9 @@ app.get('/logins', (req, res, next) => {
     res.send(JSON.stringify(logins));
 });
 
-app.put('/logins/delete/:index', (req, res) => {
-    let index = parseInt(req.params.index);
+app.delete('/logins/delete/:username', (req, res) => {
+    let deletedUsername = req.params.username;
+    let index = logins.findIndex(login => login.linkedUsername === deletedUsername);
     try {
         logins.splice(index, 1);
         res.sendStatus(200);

@@ -63,7 +63,7 @@ app.put('/users/setVisited/:visited', (req, res) => {
     visitedName = req.params.visited;
 });
 
-app.put('/users/delete/:index', (req, res) => {
+app.delete('/users/delete/:index', (req, res) => {
     let index = parseInt(req.params.index);
     try {
         console.log(users[index].name + ' successfully deleted');
@@ -71,9 +71,7 @@ app.put('/users/delete/:index', (req, res) => {
         users.forEach((user) => {
             user.receivedReviews = user.receivedReviews.filter(review => review.ownerUsername !== deletedUser.login.username);
         });
-        logins = fetch(`http://localhost:4002/logins`, { method: 'GET' });
-        let loginIndex = logins.findIndex(login => login.linkedUsername === deletedUser.login.username);
-        fetch(`http://localhost:4002/delete/${loginIndex}`, { method: 'PUT' });
+        fetch(`http://localhost:4002/delete/${deletedUser.login.username}`, { method: 'DELETE' });
         users.splice(index, 1);
         res.sendStatus(200);
     } catch {
@@ -95,17 +93,34 @@ app.put('/users/add/:username/:name/:password/:sex/:type', (req, res) => {
     }
 });
 
-app.put('/users/delete/rating/:reviewee', (req, res) => {
-    let reviewee = req.params.reviewee;
-    user = users.find(user => user.name === reviewee);
-    if (person) {
-        user.receivedReviews = person.receivedReviews.filter(review => review.ownerUsername !== username);
-    }
+app.put('/users/add/rating/:rating/:description', (req, res) => {
+    let rating = req.params.rating;
+    let description = req.params.description;
+    users.forEach((user) => {
+        if (user.name == visitedName) {
+            user.receivedReviews.push({'ownerUsername': loggedInUsername, 'rating': rating, 'description': description});
+        }
+    });
+});
+
+app.put('/users/reset/username', (req, res) => {
+    loggedInUsername = '';
 });
 
 app.put('/users/set/:username', (req, res) => {
     loggedInUsername = req.params.username;
     res.sendStatus(200);
+});
+
+app.delete('/users/delete/rating/:reviewee', (req, res) => {
+    let person;
+    let reviewee = req.params.reviewee;
+    users.forEach((user) => {
+        if (user.name === reviewee) {
+            person = user;
+        }
+    });
+    person.receivedReviews = person.receivedReviews.filter(review => review.ownerUsername !== loggedInUsername);
 });
 
 app.listen(PORT, () => {
