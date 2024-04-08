@@ -176,6 +176,7 @@
                 try {
                     let usersResponse = await fetch('/api/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
+                    console.log(JSON.stringify(people));
 
                     let usernameResponse = await fetch('/api/users/loggedInUsername', { method: 'GET' });
                     username = await usernameResponse.text();
@@ -203,12 +204,12 @@
 
             //Find average rating for a person
             function averageRating(person) {
-                if (person.receivedReviews.length > 0) {
+                if (person.receivedReviews && person.receivedReviews.length > 0) {
                     let total = 0;
                     person.receivedReviews.forEach((review) => {
                         total += parseFloat(review.rating);
                     });
-                    return (total/person.receivedReviews.length).toFixed(1);
+                    return (total / person.receivedReviews.length).toFixed(1);
                 } else {
                     return 0;
                 }
@@ -245,7 +246,7 @@
 
             //Create HTML for person object
             function createPersonCard(person) {
-                return '<div class="card" id="' + person.name + '"><image id="profile-picture" src="' + person.image + '" alt="Avatar"/><div class="container"><b><a class="hyperlink">' + person.name + '</a></b><p>' + person.type + '<br>' + averageRating(person) + ' Stars<br>(' + person.receivedReviews.length + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
+                return '<div class="card" id="' + person.name + '"><image id="profile-picture" src="' + person.image + '" alt="Avatar"/><div class="container"><b><a class="hyperlink">' + person.name + '</a></b><p>' + person.type + '<br>' + averageRating(person) + ' Stars<br>(' + (person.receivedReviews ? person.receivedReviews.length : 0) + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
             }
 
             //Display all cards

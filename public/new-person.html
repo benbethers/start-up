@@ -164,12 +164,12 @@
             async function fetchData() {
                 try {
                     let usersResponse = await fetch('/api/users', { method: 'GET' });
-                    people = await usersResponse.json() || [];
-
-                    let usernameResponse = await fetch('/api/users/loggedInUsername', { method: 'GET' });
-                    username = await usernameResponse.text();
+                    people = await usersResponse.json();
+                    console.log(JSON.stringify(people));
                 } catch (error) {
                     console.error('Fetch error:', error);
+                    // Set people to an empty array if fetch fails
+                    people = [];
                 }
                 return;
             }
@@ -184,13 +184,12 @@
             //Check username
             function checkUsername(inputUsername) {
                 for (let i = 0; i < people.length; i++) {
-                    if (inputUsername === people[i].login.username) {
+                    if (people[i].login && inputUsername === people[i].login.username) {
                         return false;
                     }
                 }
                 return true;
             }
-
             //Submit form
             function formSubmit() {
                 let name = document.getElementById('name');
@@ -201,7 +200,9 @@
                 let submitButton = document.getElementById('submit');
                 let failure = document.getElementById('failure');
 
-                submitButton.addEventListener('click', () => {
+                submitButton.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent default form submission behavior
+
                     if (name.value.includes(' ') !== true) {
                         failure.innerHTML = 'You must have your first and last name in the name field';
                     } else if (password.value.length < 9) {
