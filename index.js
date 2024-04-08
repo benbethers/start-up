@@ -4,25 +4,23 @@ const config = require('./dbConfig.json');
 const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
+app.use(express.json());
+app.use(express.static('public'));
+
+await client.connect();
+
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
-let logins;
-let users;
+let startupDatabase = client.db('startup');
+let logins = startupDatabase.collection('logins');
+let users = startupDatabase.collection('users');
+let adminUsername = 'benbethers';
+let loggedInUsername = '';
 
-async function runServer() {
+function runServer() {
     try {
-        await client.connect();
-        const startupDatabase = client.db('startup');
-        logins = startupDatabase.collection('logins');
-        users = startupDatabase.collection('users');
-
-        app.use(express.json());
-        app.use(express.static('public'));
-
         const apiRouter = express.Router();
         app.use(`/api`, apiRouter);
-
-        let loggedInUsername = '';
 
         apiRouter.get('/logins', async (req, res) => {
             try {
@@ -34,7 +32,7 @@ async function runServer() {
                 }
             } catch (error) {
                 console.error('Error fetching logins:', error);
-                res.sendStatus(500); // Internal server error
+                res.sendStatus(500);
             }
         });
 
@@ -81,16 +79,8 @@ async function runServer() {
         });
 
         apiRouter.get('/users/admins', (req, res) => {
-            const adminUsername = users.findOne({ adminUsername: 'benbethers' }).then(result => {
-                if (result) {
-                    res.send(result.adminUsername);
-                } else {
-                    res.sendStatus(404);
-                }
-            }).catch(error => {
-                console.error(error);
-                res.sendStatus(500);
-            });
+            res.send(adminUsername);
+            res.sendStatus(200);
         });
 
         apiRouter.get('/users/loggedInUsername', (req, res) => {

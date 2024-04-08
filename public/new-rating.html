@@ -144,6 +144,8 @@
             }
         </style>
         <script>
+            let people;
+            let username;
             //Declare variables
             async function fetchData() {
                 try {
@@ -170,7 +172,7 @@
 
             //Set logged in username in footer
             function setLoggedInUser() {
-                let usernameNotification = document.getElementById('loggedInUser');
+                let loggedInUser = document.getElementById('loggedInUser');
                 loggedInUser.innerHTML = 'Logged In User: ' + username;
             }
 
