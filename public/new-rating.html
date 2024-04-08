@@ -152,8 +152,7 @@
                     let usersResponse = await fetch('/api/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    let usernameResponse = await fetch('/api/users/loggedInUsername', { method: 'GET' });
-                    username = await usernameResponse.text();
+                    username = localStorage.getItem('username');
 
                     let user = people.find(person => person.username === username);
                 } catch (error) {

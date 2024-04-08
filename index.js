@@ -35,16 +35,6 @@ async function runServer() {
             }
         });
 
-        apiRouter.put('/logins/add/:username/:password', async (req, res) => {
-            try {
-                await logins.insertOne({ linkedUsername: req.params.username, password: req.params.password });
-                res.sendStatus(200);
-            } catch (error) {
-                console.error('Error adding login:', error);
-                res.sendStatus(400);
-            }
-        });
-
         apiRouter.delete('/logins/delete/:username', async (req, res) => {
             try {
                 await logins.deleteOne({ linkedUsername: req.params.username });
@@ -81,8 +71,13 @@ async function runServer() {
         });
 
         apiRouter.put('/users/add/:username/:name/:password/:sex/:type', async (req, res) => {
-            const { username, name, password, sex, type } = req.params;
+            let username = req.params.username;
+            let name = req.params.name;
+            let password = req.params.password;
+            let sex = req.params.sex;
+            let type = req.params.type;
             try {
+                await logins.insertOne({ linkedUsername: username, password: password });
                 await users.insertOne({
                     name: name,
                     type: type,
@@ -114,16 +109,6 @@ async function runServer() {
                 console.error(error);
                 res.sendStatus(500);
             }
-        });
-
-        apiRouter.put('/users/reset/username', (req, res) => {
-            loggedInUsername = '';
-            res.sendStatus(200);
-        });
-
-        apiRouter.put('/users/set/:username', (req, res) => {
-            loggedInUsername = req.params.username;
-            res.sendStatus(200);
         });
 
         apiRouter.delete('/users/delete/:index', async (req, res) => {

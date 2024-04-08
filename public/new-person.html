@@ -165,6 +165,8 @@
                 try {
                     let usersResponse = await fetch('/api/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
+
+                    username = localStorage.getItem('username');
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
@@ -198,7 +200,7 @@
                 let submitButton = document.getElementById('submit');
                 let failure = document.getElementById('failure');
 
-                submitButton.addEventListener('click', async () => {
+                submitButton.addEventListener('click', () => {
                     if (name.value.includes(' ') !== true) {
                         failure.innerHTML = 'You must have your first and last name in the name field';
                     } else if (password.value.length < 9) {
@@ -206,18 +208,9 @@
                     } else if (checkUsername(usernameInput.value) === false) {
                         failure.innerHTML = 'The username ' + usernameInput.value + ' has already been taken';
                     } else {
-                        try {
-                            const response = await fetch(`/api/users/add/${usernameInput.value}/${name.value}/${password.value}/${sexSelector.value}/${typeSelector.value}`, { method: 'PUT' });
-                            if (response.ok) {
-                                localStorage.setItem('username', usernameInput.value);
-                                window.location.replace('database.html');
-                            } else {
-                                throw new Error('Failed to add user');
-                            }
-                        } catch (error) {
-                            console.error('Error adding user:', error);
-                            failure.innerHTML = 'Failed to add user';
-                        }
+                        fetch(`/api/users/add/${usernameInput.value}/${name.value}/${password.value}/${sexSelector.value}/${typeSelector.value}`, { method: 'PUT' });
+                        localStorage.setItem('username', usernameInput.value);
+                        window.location.replace('database.html');
                     }
                 });
             }
