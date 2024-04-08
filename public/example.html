@@ -187,7 +187,7 @@
             let people;
             let username;
             let adminUsername;
-            let visitedName;
+            let visitedUsername;
             async function fetchData() {
                 try {
                     let usersResponse = await fetch('/api/users', { method: 'GET' });
@@ -199,8 +199,11 @@
                     let adminUsernameResponse = await fetch('/api/users/admins', { method: 'GET' });
                     adminUsername = await adminUsernameResponse.text();
 
-                    let visitedNameResponse = await fetch('/api/users/visitedName', { method: 'GET' });
-                    visitedName = await visitedNameResponse.text();
+                    if (sessionStorage.getItem('visitedUser') !== '' || sessionStorage.getItem('visitedUser') !== undefined) {
+                        let visitedUsername = sessionStorage.getItem('visitedUser');
+                    } else {
+                        window.location.replace('database.html');
+                    }
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
@@ -230,8 +233,8 @@
                 let submitButton = document.getElementById('add rating');
                 submitButton.addEventListener('click', () => {
                     people.forEach((person) => {
-                        if (person.name === visitedName) {
-                            if (person.login.username === username) {
+                        if (person.name === visitedUsername) {
+                            if (person.username === username) {
                                 let failure = document.getElementById('failure');
                                 submitButton.style.marginBottom = '2px';
                                 failure.innerHTML = 'You cannot rate yourself.';
@@ -268,7 +271,7 @@
                 let reviewSection = document.getElementById('reviews');
                 reviewSection.innerHTML = '';
                 people.forEach((person) => {
-                    if (person.name === visitedName) {
+                    if (person.name === visitedUsername) {
                         person.receivedReviews.forEach((review) => {
                             reviewSection.innerHTML += constructReview(review);
                         });
@@ -298,7 +301,7 @@
             //Make tab name that of the visited user
             function makeTitleName() {
                 let title = document.getElementById('title');
-                title.innerHTML = visitedName;
+                title.innerHTML = visitedUsername;
             }
 
             //Load content then set up page

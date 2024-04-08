@@ -165,9 +165,6 @@
                 try {
                     let usersResponse = await fetch('/api/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
-
-                    let usernameResponse = await fetch('/api/users/loggedInUsername', { method: 'GET' });
-                    username = await usernameResponse.text();
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
@@ -184,7 +181,7 @@
             //Check username
             function checkUsername(inputUsername) {
                 for (let i = 0; i < people.length; i++) {
-                    if (inputUsername === people[i].login.username) {
+                    if (inputUsername === people[i].username) {
                         return false;
                     }
                 }
@@ -201,7 +198,7 @@
                 let submitButton = document.getElementById('submit');
                 let failure = document.getElementById('failure');
 
-                submitButton.addEventListener('click', () => {
+                submitButton.addEventListener('click', async () => {
                     if (name.value.includes(' ') !== true) {
                         failure.innerHTML = 'You must have your first and last name in the name field';
                     } else if (password.value.length < 9) {
@@ -209,10 +206,18 @@
                     } else if (checkUsername(usernameInput.value) === false) {
                         failure.innerHTML = 'The username ' + usernameInput.value + ' has already been taken';
                     } else {
-                        fetch(`/api/users/add/${usernameInput.value}/${name.value}/${password.value}/${sexSelector.value}/${typeSelector.value}`, { method: 'PUT' });
-                        fetch(`/api/users/set/${usernameInput.value}`, { method: 'PUT'});
-                        fetchData();
-                        window.location.replace('database.html');
+                        try {
+                            const response = await fetch(`/api/users/add/${usernameInput.value}/${name.value}/${password.value}/${sexSelector.value}/${typeSelector.value}`, { method: 'PUT' });
+                            if (response.ok) {
+                                localStorage.setItem('username', usernameInput.value);
+                                window.location.replace('database.html');
+                            } else {
+                                throw new Error('Failed to add user');
+                            }
+                        } catch (error) {
+                            console.error('Error adding user:', error);
+                            failure.innerHTML = 'Failed to add user';
+                        }
                     }
                 });
             }

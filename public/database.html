@@ -172,16 +172,16 @@
             let people;
             let username;
             let adminUsername;
+            sessionStorage.getItem('visitedUsername', '');
             async function fetchData() {
                 let usersResponse = await fetch('/api/users', { method: 'GET' });
                 people = await usersResponse.json() || [];
                 console.log(JSON.stringify(people));
 
-                let usernameResponse = await fetch('/api/users/loggedInUsername', { method: 'GET' });
-                username = await usernameResponse.text();
+                username = localStorage.getItem('username');
 
                 let adminUsernameResponse = await fetch('/api/users/admins', { method: 'GET' });
-                let adminData = await adminUsernameResponse.text();
+                adminUsername = adminUsernameResponse.text();
             }
 
             //Check login
@@ -226,8 +226,8 @@
                                 fetch(`/api/login/${deletedPerson.username}`);
                                 fetchData();
                                 button.parentNode.parentNode.remove();
-                                if (deletedPerson.login.username === username) {
-                                    fetch(`/api/users/reset/username`, { method: 'PUT' })
+                                if (deletedPerson.username === username) {
+                                    localStorage.setItem('username', '')
                                     window.location.replace('index.html');
                                 }
                             }
@@ -242,7 +242,7 @@
 
             //Create HTML for person object
             function createPersonCard(person) {
-                return '<div class="card" id="' + person.name + '"><image id="profile-picture" src="' + person.image + '" alt="Avatar"/><div class="container"><b><a class="hyperlink">' + person.name + '</a></b><p>' + person.type + '<br>' + averageRating(person) + ' Stars<br>(' + (person.receivedReviews ? person.receivedReviews.length : 0) + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
+                return '<div class="card" id="' + person.username + '"><image id="profile-picture" src="' + person.image + '" alt="Avatar"/><div class="container"><b><a class="hyperlink">' + person.name + '</a></b><p>' + person.type + '<br>' + averageRating(person) + ' Stars<br>(' + (person.receivedReviews ? person.receivedReviews.length : 0) + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
             }
 
             //Display all cards
@@ -252,15 +252,15 @@
                     cardDisplay.innerHTML += createPersonCard(person);
                 });
                 loadDeleteButtons();
-                setVisitedNameListener();
+                setvisitedUsernameListener();
             }
 
             //Set visited name to name if selected
-            function setVisitedNameListener() {
+            function setVisitedUsernameListener() {
                 let hyperlinks = document.querySelectorAll('.hyperlink');
                 hyperlinks.forEach(hyperlink => {
                     hyperlink.addEventListener('click', function() {
-                        fetch(`/api/users/setVisited/${this.closest('.card').getAttribute('id')}`, { method: 'PUT' });
+                        sessionStorage.setItem('visitedUsername', this.closest('.card').getAttribute('id'))
                         window.location.replace('example.html');
                     });
                 });
@@ -295,7 +295,7 @@
                         });
                         if (found) {
                             loadDeleteButtons();
-                            setVisitedNameListener();
+                            setvisitedUsernameListener();
                         } else {
                             searchResults.innerHTML = 'No results found';
                             mainCardDisplay();

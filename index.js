@@ -80,26 +80,15 @@ async function runServer() {
             res.send(loggedInUsername);
         });
 
-        let visitedName = '';
-
-        apiRouter.get('/users/visitedName', (req, res) => {
-            res.send(visitedName);
-        });
-
-        apiRouter.put('/users/setVisited/:visited', (req, res) => {
-            visitedName = req.params.visited;
-            res.sendStatus(200);
-        });
-
         apiRouter.put('/users/add/:username/:name/:password/:sex/:type', async (req, res) => {
             const { username, name, password, sex, type } = req.params;
             try {
                 await users.insertOne({
-                    name,
-                    type,
-                    sex,
+                    name: name,
+                    type: type,
+                    sex: sex,
                     receivedReviews: [],
-                    login: { username, password },
+                    username: username,
                     image: assignImage(sex)
                 });
                 res.sendStatus(200);
@@ -109,15 +98,15 @@ async function runServer() {
             }
         });
 
-        apiRouter.put('/users/add/rating/:visitedName/:loggedInUsername/:rating/:description', async (req, res) => {
-            const { visitedName, loggedInUsername, rating, description } = req.params;
+        apiRouter.put('/users/add/rating/:visitedUsername/:loggedInUsername/:rating/:description', async (req, res) => {
+            const { visitedUsername, loggedInUsername, rating, description } = req.params;
             try {
-                const person = await users.findOne({ name: visitedName });
+                const person = await users.findOne({ name: visitedUsername });
                 if (!person) {
                     return res.sendStatus(404);
                 }
                 await users.updateOne(
-                    { name: visitedName },
+                    { name: visitedUsername },
                     { $push: { receivedReviews: { ownerUsername: loggedInUsername, rating, description } } }
                 );
                 res.sendStatus(200);
@@ -144,9 +133,9 @@ async function runServer() {
                 const deletedUser = users[index];
                 await users.updateMany(
                     {},
-                    { $pull: { receivedReviews: { ownerUsername: deletedUser.login.username } } }
+                    { $pull: { receivedReviews: { ownerUsername: deletedUser.username } } }
                 );
-                await logins.deleteOne({ linkedUsername: deletedUser.login.username });
+                await logins.deleteOne({ linkedUsername: deletedUser.username });
                 res.sendStatus(200);
             } catch (error) {
                 console.error('Invalid request', error);

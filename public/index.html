@@ -147,7 +147,7 @@
                 try {
                     let loginsResponse = await fetch('/api/logins', { method: 'GET' });
                     logins = await loginsResponse.json() || [];
-                    fetch('/api/users/reset/username', { method: 'PUT' });
+                    localStorage.setItem('username', '');
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
@@ -166,7 +166,7 @@
                     let found = false;
                     logins.forEach((login) => {
                         if (usernameInput.value === login.linkedUsername && passwordInput.value === login.password) {
-                            fetch(`/api/users/set/${usernameInput.value}`, { method: 'PUT' });
+                            localStorage.setItem('username', usernameInput.value);
                             window.location.replace('database.html');
                             found = true;
                         }
