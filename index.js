@@ -7,29 +7,28 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 app.use(express.json());
 app.use(express.static('public'));
 
-await client.connect();
-
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
-let startupDatabase = client.db('startup');
-let logins = startupDatabase.collection('logins');
-let users = startupDatabase.collection('users');
-let adminUsername = 'benbethers';
-let loggedInUsername = '';
 
-function runServer() {
+async function runServer() {
     try {
+        await client.connect();
+        console.log('Connected to MongoDB');
+
+        const startupDatabase = client.db('startup');
+        const logins = startupDatabase.collection('logins');
+        const users = startupDatabase.collection('users');
+        let adminUsername = 'benbethers';
+        let loggedInUsername = '';
+
         const apiRouter = express.Router();
         app.use(`/api`, apiRouter);
 
+        // Logins routes
         apiRouter.get('/logins', async (req, res) => {
             try {
                 const loginsReturn = await logins.find({}).toArray();
-                if (loginsReturn !== undefined) {
-                    res.send(JSON.stringify(loginsReturn));
-                } else {
-                    res.send([]);
-                }
+                res.send(loginsReturn);
             } catch (error) {
                 console.error('Error fetching logins:', error);
                 res.sendStatus(500);
@@ -41,7 +40,7 @@ function runServer() {
                 await logins.insertOne({ linkedUsername: req.params.username, password: req.params.password });
                 res.sendStatus(200);
             } catch (error) {
-                console.error(error);
+                console.error('Error adding login:', error);
                 res.sendStatus(400);
             }
         });
@@ -56,22 +55,16 @@ function runServer() {
             }
         });
 
+        // Function to assign image based on sex
         function assignImage(sex) {
-            if (sex === 'Female') {
-                return '../assets/images/FemaleAvatar.png'
-            } else {
-                return '../assets/images/MaleAvatar.png';
-            }
+            return sex === 'Female' ? '../assets/images/FemaleAvatar.png' : '../assets/images/MaleAvatar.png';
         }
 
+        // Users routes
         apiRouter.get('/users', async (req, res) => {
             try {
                 const usersReturn = await users.find({}).toArray();
-                if (usersReturn !== undefined) {
-                    res.send(JSON.stringify(usersReturn));
-                } else {
-                    res.send([]);
-                }
+                res.send(usersReturn);
             } catch (error) {
                 console.error('Error fetching users:', error);
                 res.sendStatus(500); // Internal server error
@@ -98,10 +91,10 @@ function runServer() {
             res.sendStatus(200);
         });
 
-        apiRouter.put('/users/add/:username/:name/:password/:sex/:type', (req, res) => {
+        apiRouter.put('/users/add/:username/:name/:password/:sex/:type', async (req, res) => {
             const { username, name, password, sex, type } = req.params;
             try {
-                users.insertOne({
+                await users.insertOne({
                     name,
                     type,
                     sex,
