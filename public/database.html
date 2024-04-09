@@ -172,7 +172,7 @@
             let people;
             let username;
             let adminUsername;
-            sessionStorage.getItem('visitedUsername', '');
+            sessionStorage.setItem('visitedUsername', '');
             async function fetchData() {
                 let usersResponse = await fetch('/api/users', { method: 'GET' });
                 people = await usersResponse.json() || [];
@@ -260,7 +260,7 @@
                 let hyperlinks = document.querySelectorAll('.hyperlink');
                 hyperlinks.forEach(hyperlink => {
                     hyperlink.addEventListener('click', function() {
-                        sessionStorage.setItem('visitedUsername', this.closest('.card').getAttribute('id'))
+                        sessionStorage.setItem('visitedUsername', this.closest('.card').getAttribute('id'));
                         window.location.replace('example.html');
                     });
                 });

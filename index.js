@@ -93,16 +93,15 @@ async function runServer() {
             }
         });
 
-        apiRouter.put('/users/add/rating/:visitedUsername/:loggedInUsername/:rating/:description', async (req, res) => {
-            const { visitedUsername, loggedInUsername, rating, description } = req.params;
+        apiRouter.put('/users/add/rating', async (req, res) => {
+            let visitedUsername = req.body.visitedUsername;
+            let loggedInUsername = req.body.username;
+            let rating = req.body.rating;
+            let description = req.body.description;
             try {
-                const person = await users.findOne({ name: visitedUsername });
-                if (!person) {
-                    return res.sendStatus(404);
-                }
                 await users.updateOne(
-                    { name: visitedUsername },
-                    { $push: { receivedReviews: { ownerUsername: loggedInUsername, rating, description } } }
+                    { username: visitedUsername },
+                    { $push: { receivedReviews: { ownerUsername: loggedInUsername, rating: rating, description: description } } }
                 );
                 res.sendStatus(200);
             } catch (error) {

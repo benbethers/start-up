@@ -193,14 +193,14 @@
                     let usersResponse = await fetch('/api/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    let usernameResponse = await fetch('/api/users/loggedInUsername', { method: 'GET' });
-                    username = await usernameResponse.text();
+                    username = localStorage.getItem('username');
 
                     let adminUsernameResponse = await fetch('/api/users/admins', { method: 'GET' });
                     adminUsername = await adminUsernameResponse.text();
 
-                    if (sessionStorage.getItem('visitedUser') !== '' || sessionStorage.getItem('visitedUser') !== undefined) {
-                        let visitedUsername = sessionStorage.getItem('visitedUser');
+                    if (sessionStorage.getItem('visitedUsername') !== '' && sessionStorage.getItem('visitedUsername') !== undefined) {
+                        visitedUsername = sessionStorage.getItem('visitedUsername');
+                        console.log(visitedUsername);
                     } else {
                         window.location.replace('database.html');
                     }
@@ -233,8 +233,8 @@
                 let submitButton = document.getElementById('add rating');
                 submitButton.addEventListener('click', () => {
                     people.forEach((person) => {
-                        if (person.name === visitedUsername) {
-                            if (person.username === username) {
+                        if (person.username === visitedUsername) {
+                            if (visitedUsername === username) {
                                 let failure = document.getElementById('failure');
                                 submitButton.style.marginBottom = '2px';
                                 failure.innerHTML = 'You cannot rate yourself.';
@@ -271,7 +271,7 @@
                 let reviewSection = document.getElementById('reviews');
                 reviewSection.innerHTML = '';
                 people.forEach((person) => {
-                    if (person.name === visitedUsername) {
+                    if (person.username === visitedUsername) {
                         person.receivedReviews.forEach((review) => {
                             reviewSection.innerHTML += constructReview(review);
                         });

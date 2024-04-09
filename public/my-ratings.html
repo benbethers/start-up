@@ -187,12 +187,13 @@
             //Declare variables
             let people;
             let username;
+            let searchResults = document.getElementById('searchResults');
             async function fetchData() {
                 try {
                     let usersResponse = await fetch('/api/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
 
-                    username = localStorage.getItem(username);
+                    username = localStorage.getItem('username');
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
@@ -283,7 +284,7 @@
             let databaseSearch = '';
             async function main() {
                 let reviewDisplay = document.getElementById('reviewsDisplay');
-                let searchResults = document.getElementById('searchResults');
+                searchResults = document.getElementById('searchResults');
 
                 await fetchData();
                 await checkLogin();

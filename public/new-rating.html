@@ -177,14 +177,33 @@
 
             //Submit button functionality
             function submitButtonFunctionality() {
-                rating = document.getElementById('rating');
-                description = document.getElementById('description');
-                submitButton = document.getElementById('submit');
-
-                //Add rating
+                let rating = document.getElementById('rating');
+                let description = document.getElementById('description');
+                let submitButton = document.getElementById('submit');
                 submitButton.addEventListener('click', () => {
-                    if (rating.value != '' && description.value != '' && rating.value >= 1 && rating.value <= 5) {
-                        fetch(`/api/users/add/rating/${rating.value}/${description.value}`, { method: 'PUT' });
+                    if (rating.value !== '' && description.value !== '' && parseFloat(rating.value) >= 1 && parseFloat(rating.value) <= 5) {
+                        const requestBody = {
+                            visitedUsername: sessionStorage.getItem('visitedUsername'),
+                            username: localStorage.getItem('username'),
+                            rating: rating.value,
+                            description: description.value
+                        };
+                        fetch(`/api/users/add/rating`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(requestBody)
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                        }).catch(error => {
+                            console.error('There was a problem with the fetch operation:', error);
+                        });
+                    } else {
+                        console.log('Invalid rating value or description');
                     }
                 });
             }
