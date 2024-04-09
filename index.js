@@ -57,13 +57,12 @@ async function runServer() {
                 res.send(usersReturn);
             } catch (error) {
                 console.error('Error fetching users:', error);
-                res.sendStatus(500); // Internal server error
+                res.sendStatus(500);
             }
         });
 
         apiRouter.get('/users/admins', (req, res) => {
             res.send(adminUsername);
-            res.sendStatus(200);
         });
 
         apiRouter.get('/users/loggedInUsername', (req, res) => {
@@ -110,6 +109,21 @@ async function runServer() {
             }
         });
 
+        apiRouter.delete('/users/delete/rating', async (req, res) => {
+            let deletedUsername = req.body.deletedUsername;
+            let username = req.body.username;
+            try {
+                await users.updateOne(
+                    { username: deletedUsername },
+                    { $pull: { receivedReviews: { ownerUsername: username } } }
+                );
+                return res.sendStatus(200);
+            } catch (error) {
+                console.error('Error deleting rating:', error);
+                return res.sendStatus(500);
+            }
+        });
+
         apiRouter.delete('/users/delete/:index', async (req, res) => {
             const index = parseInt(req.params.index);
             try {
@@ -120,27 +134,11 @@ async function runServer() {
                     { $pull: { receivedReviews: { ownerUsername: deletedUser.username } } }
                 );
                 await logins.deleteOne({ linkedUsername: deletedUser.username });
+                await users.deleteOne({ username: deletedUser.username });
                 res.sendStatus(200);
             } catch (error) {
                 console.error('Invalid request', error);
                 res.sendStatus(400);
-            }
-        });
-
-        apiRouter.delete('/users/delete/rating/:reviewee/:loggedInUsername', async (req, res) => {
-            const { reviewee, loggedInUsername } = req.params;
-            try {
-                const result = await users.updateOne(
-                    { name: reviewee },
-                    { $pull: { receivedReviews: { ownerUsername: loggedInUsername } } }
-                );
-                if (result.modifiedCount === 0) {
-                    return res.sendStatus(404);
-                }
-                res.sendStatus(200);
-            } catch (error) {
-                console.error(error);
-                res.sendStatus(500);
             }
         });
 

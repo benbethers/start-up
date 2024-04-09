@@ -188,6 +188,7 @@
             let people;
             let username;
             let searchResults = document.getElementById('searchResults');
+            let reviewDisplay = document.getElementById('reviewsDisplay');
             async function fetchData() {
                 try {
                     let usersResponse = await fetch('/api/users', { method: 'GET' });
@@ -215,31 +216,47 @@
 
             //Main display
             function mainReviewDisplay() {
-                let reviewDisplay = document.getElementById('reviewsDisplay');
                 reviewDisplay.innerHTML = '';
                 people.forEach((person) => {
                     person.receivedReviews.forEach((review) => {
                         if (review.ownerUsername === username) {
-                            reviewDisplay.innerHTML += '<div class="card" id="' + person.name + '"><div class="name" style="color: black; font-weight: bold;">' + person.name + '<br></div>' + review.rating + ' Stars<br>"' + review.description + '"<br><button class="deleteReview" style="color: blue; margin: 5px">Delete</button></div>';
+                            reviewDisplay.innerHTML += '<div class="card" id="' + person.username + '"><div class="name" style="color: black; font-weight: bold;">' + person.name + '<br></div>' + review.rating + ' Stars<br>"' + review.description + '"<br><button class="deleteReview" style="color: blue; margin: 5px">Delete</button></div>';
                         }
                     });
                 });
                 loadDeleteButtons();
+                if (reviewDisplay.innerHTML === '') {
+                    searchResults.innerHTML = 'You have no ratings';
+                }
             }
 
             //Delete button functionality
             function loadDeleteButtons() {
-                let reviewDisplay = document.getElementById('reviewsDisplay');
                 let deleteButtons = document.querySelectorAll('.deleteReview');
 
                 deleteButtons.forEach((button) => {
                     button.addEventListener('click', function() {
-                        let person = people.find(person => person.name === button.parentNode.getAttribute('id'));
-                        if (person) {
-                            fetch(`/api/users/delete/rating/${button.parentNode.getAttribute('id')}`, { method: 'DELETE' });
-                            fetchData();
-                            button.parentNode.remove();
-                        }
+                        let reviewCard = button.closest('.card');
+                        let requestBody = {
+                            deletedUsername: button.closest('.card').getAttribute('id'),
+                            username: localStorage.getItem('username'),
+                        };
+                        fetch(`/api/users/delete/rating`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(requestBody)
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            } else {
+                                reviewCard.remove();
+                            }
+                        }).catch(error => {
+                            console.error('There was a problem with the fetch operation:', error);
+                        });
                     });
                 });
             }
@@ -270,7 +287,6 @@
                                 }
                             });
                         });
-
                         if (found) {
                             loadDeleteButtons();
                         } else {
@@ -283,17 +299,10 @@
 
             let databaseSearch = '';
             async function main() {
-                let reviewDisplay = document.getElementById('reviewsDisplay');
-                searchResults = document.getElementById('searchResults');
-
                 await fetchData();
                 await checkLogin();
                 await setLoggedInUser();
                 await mainReviewDisplay();
-
-                if (reviewDisplay.innerHTML === '') {
-                    searchResults.innerHTML = 'You have no ratings';
-                }
             }
 
             main();
