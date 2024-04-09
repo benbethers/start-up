@@ -181,7 +181,7 @@
                 username = localStorage.getItem('username');
 
                 let adminUsernameResponse = await fetch('/api/users/admins', { method: 'GET' });
-                adminUsername = adminUsernameResponse.text();
+                adminUsername = await adminUsernameResponse.text();
             }
 
             //Check login
@@ -216,26 +216,53 @@
                 let deleteButtons = document.querySelectorAll('.deleteCard');
 
                 console.log(adminUsername);
+                console.log(username);
                 if (username === adminUsername) {
                     deleteButtons.forEach((button) => {
                         button.addEventListener('click', () => {
-                            let personIndex = people.findIndex(person => person.name === button.parentNode.parentNode.getAttribute('id'));
+                            let personIndex = people.findIndex(person => person.username === button.parentNode.parentNode.getAttribute('id'));
                             if (personIndex !== -1) {
                                 let deletedPerson = people[personIndex];
-                                fetch(`/api/users/delete/${deletedPerson.username}`, { method: 'DELETE' });
-                                fetch(`/api/login/${deletedPerson.username}`);
-                                fetchData();
-                                button.parentNode.parentNode.remove();
-                                if (deletedPerson.username === username) {
-                                    localStorage.setItem('username', '')
-                                    window.location.replace('index.html');
-                                }
+                                // Delete the user's data from both users and logins collections
+                                fetch(`/api/users/delete`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ username: deletedPerson.username })
+                                }).then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Error deleting user data');
+                                    } else {
+                                        button.parentNode.parentNode.remove();
+                                        if (deletedPerson.username === username) {
+                                            localStorage.setItem('username', '');
+                                            window.location.replace('index.html');
+                                        }
+                                    }
+                                }).catch(error => {
+                                    console.error('Error deleting user data:', error);
+                                });
+                                fetch(`/api/logins/delete`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ username: deletedPerson.username })
+                                }).then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Error deleting login entry');
+                                    }
+                                }).catch(error => {
+                                    console.error('Error deleting login entry:', error);
+                                });
                             }
                         });
                     });
                 } else {
+                    // If the logged-in user is not the admin, hide the delete buttons
                     deleteButtons.forEach(function(button) {
-                        button.style.display="none";
+                        button.style.display = "none";
                     });
                 }
             }
@@ -314,7 +341,9 @@
                 console.log('finished');
             }
 
-            main();
+            document.addEventListener('DOMContentLoaded', function() {
+                main();
+            });
         </script>
     </head>
     <body>

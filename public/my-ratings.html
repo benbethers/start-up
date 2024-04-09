@@ -188,7 +188,6 @@
             let people;
             let username;
             let searchResults = document.getElementById('searchResults');
-            let reviewDisplay = document.getElementById('reviewsDisplay');
             async function fetchData() {
                 try {
                     let usersResponse = await fetch('/api/users', { method: 'GET' });
@@ -216,6 +215,7 @@
 
             //Main display
             function mainReviewDisplay() {
+                let reviewDisplay = document.getElementById('reviewsDisplay');
                 reviewDisplay.innerHTML = '';
                 people.forEach((person) => {
                     person.receivedReviews.forEach((review) => {
@@ -225,13 +225,11 @@
                     });
                 });
                 loadDeleteButtons();
-                if (reviewDisplay.innerHTML === '') {
-                    searchResults.innerHTML = 'You have no ratings';
-                }
             }
 
             //Delete button functionality
             function loadDeleteButtons() {
+                let reviewDisplay = document.getElementById('reviewsDisplay');
                 let deleteButtons = document.querySelectorAll('.deleteReview');
 
                 deleteButtons.forEach((button) => {
@@ -253,6 +251,9 @@
                                 throw new Error('Network response was not ok');
                             } else {
                                 reviewCard.remove();
+                                if (reviewDisplay.innerHTML === '') {
+                                    searchResults.innerHTML = 'You have no ratings';
+                                }
                             }
                         }).catch(error => {
                             console.error('There was a problem with the fetch operation:', error);
@@ -287,6 +288,7 @@
                                 }
                             });
                         });
+
                         if (found) {
                             loadDeleteButtons();
                         } else {
@@ -299,13 +301,22 @@
 
             let databaseSearch = '';
             async function main() {
+                let reviewDisplay = document.getElementById('reviewsDisplay');
+                searchResults = document.getElementById('searchResults');
+
                 await fetchData();
                 await checkLogin();
                 await setLoggedInUser();
                 await mainReviewDisplay();
+
+                if (reviewDisplay.innerHTML === '') {
+                    searchResults.innerHTML = 'You have no ratings';
+                }
             }
 
-            main();
+            document.addEventListener('DOMContentLoaded', function() {
+                main();
+            });
         </script>
     </head>
     <body>

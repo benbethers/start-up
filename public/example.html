@@ -313,7 +313,9 @@
                 await setUpPage();
             }
 
-            main();
+            document.addEventListener('DOMContentLoaded', function() {
+                main();
+            });
         </script>
     </head>
     <body>

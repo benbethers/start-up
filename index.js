@@ -35,9 +35,9 @@ async function runServer() {
             }
         });
 
-        apiRouter.delete('/logins/delete/:username', async (req, res) => {
+        apiRouter.delete('/logins/delete', async (req, res) => {
             try {
-                await logins.deleteOne({ linkedUsername: req.params.username });
+                await logins.deleteOne({ linkedUsername: req.body.username });
                 res.sendStatus(200);
             } catch (error) {
                 console.error('Invalid request', error);
@@ -63,10 +63,6 @@ async function runServer() {
 
         apiRouter.get('/users/admins', (req, res) => {
             res.send(adminUsername);
-        });
-
-        apiRouter.get('/users/loggedInUsername', (req, res) => {
-            res.send(loggedInUsername);
         });
 
         apiRouter.put('/users/add/:username/:name/:password/:sex/:type', async (req, res) => {
@@ -124,17 +120,17 @@ async function runServer() {
             }
         });
 
-        apiRouter.delete('/users/delete/:index', async (req, res) => {
-            const index = parseInt(req.params.index);
+        apiRouter.delete('/users/delete', async (req, res) => {
+            let deletedUsername = req.body.username;
             try {
-                console.log(users[index].name + ' successfully deleted');
-                const deletedUser = users[index];
-                await users.updateMany(
+                let deletedUser = users.findOne({username: deletedUsername});
+                console.log(deletedUser.name + ' successfully deleted');
+                await users.updateOne(
                     {},
-                    { $pull: { receivedReviews: { ownerUsername: deletedUser.username } } }
+                    { $pull: { receivedReviews: { ownerUsername: deletedUsername } } }
                 );
-                await logins.deleteOne({ linkedUsername: deletedUser.username });
-                await users.deleteOne({ username: deletedUser.username });
+                await logins.deleteOne({ linkedUsername: deletedUsername });
+                await users.deleteOne({ username: deletedUsername });
                 res.sendStatus(200);
             } catch (error) {
                 console.error('Invalid request', error);
