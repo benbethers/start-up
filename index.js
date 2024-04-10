@@ -1,11 +1,9 @@
 const { MongoClient } = require('mongodb');
 const express = require('express');
+const path = require('path');
 const config = require('./dbConfig.json');
 const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
-
-app.use(express.json());
-app.use(express.static('public'));
 
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
@@ -19,30 +17,37 @@ async function runServer() {
         const logins = startupDatabase.collection('logins');
         const users = startupDatabase.collection('users');
         let adminUsername = 'benbethers';
-        let loggedInUsername = '';
 
         const apiRouter = express.Router();
         app.use(`/api`, apiRouter);
+        app.use(express.json());
+        app.use(express.static('public'));
+
+        app.get('/', (req, res, next) => {
+            res.sendFile(path.join(__dirname, 'index.html'));
+        });
+        
+        app.get('/ratings', (req, res, next) => {
+            res.sendFile(path.join(__dirname, 'database.html'));
+        });
 
         // Logins routes
-        apiRouter.get('/logins', async (req, res) => {
-            try {
-                const loginsReturn = await logins.find({}).toArray();
-                res.send(loginsReturn);
-            } catch (error) {
-                console.error('Error fetching logins:', error);
-                res.sendStatus(500);
-            }
+        apiRouter.post('/login', async (req, res, next) => {
+            let username = req.body.username;
+            let password = req.body.password;
+            let user = await logins.findOne({linkedUsername: username, password: password});
+            res.send(JSON.stringify(user));
         });
 
         apiRouter.delete('/logins/delete', async (req, res) => {
             try {
-                await logins.deleteOne({ linkedUsername: req.body.username });
+                await logins.deleteOne({linkedUsername: req.body.username});
                 res.sendStatus(200);
             } catch (error) {
                 console.error('Invalid request', error);
-                res.sendStatus(400);
+                res.sendStatus(401);
             }
+            return;
         });
 
         // Function to assign image based on sex
@@ -65,23 +70,28 @@ async function runServer() {
             res.send(adminUsername);
         });
 
-        apiRouter.put('/users/add/:username/:name/:password/:sex/:type', async (req, res) => {
-            let username = req.params.username;
-            let name = req.params.name;
-            let password = req.params.password;
-            let sex = req.params.sex;
-            let type = req.params.type;
+        apiRouter.put('/users/add', async (req, res) => {
+            let username = req.body.username;
+            let name = req.body.name;
+            let password = req.body.password;
+            let sex = req.body.sex;
+            let type = req.body.type;
             try {
-                await logins.insertOne({ linkedUsername: username, password: password });
-                await users.insertOne({
-                    name: name,
-                    type: type,
-                    sex: sex,
-                    receivedReviews: [],
-                    username: username,
-                    image: assignImage(sex)
-                });
-                res.sendStatus(200);
+                let user = await users.findOne({username: username});
+                if (user) {
+                    res.sendStatus(409);
+                } else {
+                    await logins.insertOne({ linkedUsername: username, password: password });
+                    await users.insertOne({
+                        name: name,
+                        type: type,
+                        sex: sex,
+                        receivedReviews: [],
+                        username: username,
+                        image: assignImage(sex)
+                    });
+                    res.sendStatus(200);
+                }
             } catch (error) {
                 console.error('Failed', error);
                 res.sendStatus(400);

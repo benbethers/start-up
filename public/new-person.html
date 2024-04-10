@@ -180,16 +180,6 @@
                 }
             }
 
-            //Check username
-            function checkUsername(inputUsername) {
-                for (let i = 0; i < people.length; i++) {
-                    if (inputUsername === people[i].username) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-
             //Submit form
             function formSubmit() {
                 let name = document.getElementById('name');
@@ -203,14 +193,35 @@
                 submitButton.addEventListener('click', () => {
                     if (name.value.includes(' ') !== true) {
                         failure.innerHTML = 'You must have your first and last name in the name field';
-                    } else if (password.value.length < 9) {
+                    } else if (password.value.length < 10) {
                         failure.innerHTML = 'Your password must be at least ten characters long';
-                    } else if (checkUsername(usernameInput.value) === false) {
-                        failure.innerHTML = 'The username ' + usernameInput.value + ' has already been taken';
                     } else {
-                        fetch(`/api/users/add/${usernameInput.value}/${name.value}/${password.value}/${sexSelector.value}/${typeSelector.value}`, { method: 'PUT' });
-                        localStorage.setItem('username', usernameInput.value);
-                        window.location.replace('database.html');
+                        let userData = {
+                            username: usernameInput.value,
+                            name: name.value,
+                            password: password.value,
+                            sex: sexSelector.value,
+                            type: typeSelector.value
+                        };
+
+                        fetch(`/api/users/add`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(userData)
+                        }).then(response => {
+                            if (response.status === 200) {
+                                localStorage.setItem('username', usernameInput.value);
+                                window.location.replace('database.html');
+                            } else if (response.status === 409) {
+                                failure.innerHTML = 'The username ' + usernameInput.value + ' is already in use';
+                            } else {
+                                throw new Error;
+                            }
+                        }).catch(error => {
+                            failure.innerHTML = 'Failed to create user';
+                        });
                     }
                 });
             }

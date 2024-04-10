@@ -141,19 +141,6 @@
             }
         </style>
         <script>
-            //Declare variables
-            let logins;
-            async function fetchData() {
-                try {
-                    let loginsResponse = await fetch('/api/logins', { method: 'GET' });
-                    logins = await loginsResponse.json() || [];
-                    localStorage.setItem('username', '');
-                } catch (error) {
-                    console.error('Fetch error:', error);
-                }
-                return;
-            }
-            
             //Sign in functionality
             function signInFunctionality() {
                 let usernameInput = document.getElementById('username');
@@ -162,21 +149,38 @@
                 let signUpButton = document.getElementById('sign up');
                 let failure = document.getElementById('failure');
 
-                loginButton.addEventListener('click', () => {
-                    let found = false;
-                    logins.forEach((login) => {
-                        if (usernameInput.value === login.linkedUsername && passwordInput.value === login.password) {
-                            localStorage.setItem('username', usernameInput.value);
-                            window.location.replace('database.html');
-                            found = true;
+                loginButton.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent the default form submission
+                    
+                    fetch('/api/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            username: usernameInput.value,
+                            password: passwordInput.value
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('Login failed');
                         }
+                    })
+                    .then(data => {
+                        console.log(data);
+                        localStorage.setItem('username', usernameInput.value);
+                        window.location.replace('database.html');
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        failure.innerHTML = 'Could not find username or password';
                     });
-                    if (!found) {
-                        passwordInput.value = '';
-                        failure.innerHTML = 'Could not find username or password, please try again or make a new account.';
-                    }
                 });
-                signUpButton.addEventListener('click', function() {
+
+                signUpButton.addEventListener('click', () => {
                     window.location.replace('new-person.html');
                 });
             }
@@ -193,7 +197,7 @@
 
             //Load content
             async function main() {
-                await fetchData();
+                localStorage.setItem('username', '')
                 await signInFunctionality();
                 await quoteOfTheDay();
             }
