@@ -156,14 +156,15 @@
                         username: usernameInput.value,
                         password: passwordInput.value
                     })
-                })
-                .then(response => {
+                }).then(response => {
                     if (response.status === 200) {
-                        localStorage.setItem('username', usernameInput.value);
-                        window.location.replace('database.html');
+                        return response.json();
                     } else if (response.status === 401) {
                         failure.innerHTML = 'Could not find username or password'
                     }
+                }).then(data => {
+                    localStorage.setItem('token', data.token);
+                    window.location.replace('database.html');
                 }).catch(error => {
                     console.error(error);
                     failure.innerHTML = 'Error';
@@ -180,12 +181,17 @@
                     });
             }
 
+            
             //Load content
             async function main() {
-                let user = localStorage.getItem('username');
-                if (user) {
-                    window.location.replace('database.html');
-                } else {
+                try {
+                    let token = localStorage.getItem('token');
+                    if (token) {
+                        window.location.replace('database.html');
+                    } else {
+                        throw new Error;
+                    }
+                } catch {
                     let passwordInput = document.getElementById('password');
                     let loginButton = document.getElementById('login');
                     let signUpButton = document.getElementById('sign up');

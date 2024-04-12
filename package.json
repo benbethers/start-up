@@ -12,6 +12,7 @@
     "mongodb": "^6.5.0",
     "node": "^18.20.2",
     "path": "^0.12.7",
+    "typescript": "^5.4.5",
     "uuid": "^9.0.1",
     "uuid.v4": "^1.0.0"
   },
@@ -24,5 +25,8 @@
   "main": "server.js",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.7"
+  }
 }

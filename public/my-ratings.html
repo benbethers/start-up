@@ -331,7 +331,6 @@
                 let reviewDisplay = document.getElementById('reviewsDisplay');
                 searchResults = document.getElementById('searchResults');
                 await fetchData();
-                await checkLogin();
                 await signOut();
                 await setLoggedInUser();
                 await mainReviewDisplay();

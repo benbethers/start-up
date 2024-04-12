@@ -47,7 +47,7 @@ async function runServer() {
                             httpOnly: true,
                             sameSite: 'strict',
                         });
-                        res.status(200).send({username: login.linkedUsername});
+                        res.status(200).send({token: login.token});
                         return;
                     }
                 }
@@ -55,6 +55,15 @@ async function runServer() {
             } catch (error) {
                 console.error('Error during login:', error);
                 res.status(500).send({msg: 'Internal Server Error'});
+            }
+        });
+
+        apiRouter.post('/login/auth', async (req, res) => {
+            let login = await logins.findOne({token: req.body.token});
+            if (login) {
+                res.status(200).send({username: login.linkedUsername});
+            } else {
+                res.sendStatus(401);
             }
         });
 
