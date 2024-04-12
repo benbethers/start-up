@@ -151,19 +151,19 @@
 
                 loginButton.addEventListener('click', (event) => {
                     event.preventDefault();
-                    console.log('test');
                     fetch('/api/login', {
-                        method: 'POST',
+                        method: 'post',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
                             username: usernameInput.value,
-                            password: password.value
+                            password: passwordInput.value
                         })
                     })
                     .then(response => {
                         if (response.status === 200) {
+                            console.log(response);
                             localStorage.setItem('username', usernameInput.value);
                             window.location.replace('database.html');
                         }

@@ -165,47 +165,50 @@
                 let sexSelector = document.getElementById('sex-selector');
                 let usernameInput = document.getElementById('username');
                 let password = document.getElementById('password');
-                let submitButton = document.getElementById('submit');
                 let failure = document.getElementById('failure');
 
-                submitButton.addEventListener('click', () => {
-                    if (name.value.includes(' ') !== true) {
-                        failure.innerHTML = 'You must have your first and last name in the name field';
-                    } else if (password.value.length < 10) {
-                        failure.innerHTML = 'Your password must be at least ten characters long';
-                    } else {
-                        console.log(usernameInput.value);
-                        fetch(`/api/users/add`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                username: usernameInput.value,
-                                name: name.value,
-                                password: password.value,
-                                sex: sexSelector.value,
-                                type: typeSelector.value
-                            })
-                        }).then(response => {
-                            if (response.status === 200) {
-                                localStorage.setItem('username', usernameInput.value);
-                                window.location.replace('database.html');
-                            } else if (response.status === 409) {
-                                failure.innerHTML = 'The username ' + usernameInput.value + ' is already in use';
-                            } else {
-                                throw new Error;
-                            }
-                        }).catch(error => {
-                            failure.innerHTML = 'Failure to create user';
-                        });
+                if (name.value.includes(' ') !== true) {
+                    failure.innerHTML = 'You must have your first and last name in the name field';
+                } else if (password.value.length < 10) {
+                    failure.innerHTML = 'Your password must be at least ten characters long';
+                } else {
+                    console.log(usernameInput.value);
+                    const user = {
+                        username: 'usernameInput.value',
+                        name: 'name.value',
+                        password: 'password.value',
+                        sex: 'sexSelector.value',
+                        type: 'typeSelector.value'
                     }
-                });
+                    console.log(user);
+                    fetch(`/api/users/add`, {
+                        method: 'post',
+                        headers: {
+                            'content-type': 'application/json',
+                        },
+                        body: JSON.stringify(user)
+                    }).then(response => {
+                        console.log(response);
+                        if (response.status === 200) {
+                            localStorage.setItem('username', usernameInput.value);
+                            //window.location.replace('database.html');
+                        } else if (response.status === 409) {
+                            failure.innerHTML = 'The username ' + usernameInput.value + ' is already in use';
+                        } else {
+                            throw new Error;
+                        }
+                    }).catch(error => {
+                        failure.innerHTML = 'Failure to create user';
+                    });
+                }
             }
 
             //Load content
             async function main() {
-                await formSubmit();
+                submitButton = document.getElementById('submit');
+                submitButton.addEventListener('click', async () => {
+                    await formSubmit();
+                })
             }
 
             document.addEventListener('DOMContentLoaded', function() {

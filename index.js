@@ -10,26 +10,34 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 const url = `mongodb+srv://${config.username}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
 
+const apiRouter = express.Router();
+app.use(`/api`, apiRouter);
+app.use(express.static('public'));
+app.use(express.json());
+app.use(cookieParser());
+
+
+const startupDatabase = client.db('startup');
+const logins = startupDatabase.collection('logins');
+const users = startupDatabase.collection('users');
+let adminUsername = 'benbethers';
+
+(async function testConnection() {
+    await client.connect();
+    await startupDatabase.command({ ping: 1 });
+})().catch((ex) => {
+    console.log(`Unable to connect to database with ${url} because ${ex.message}`);
+    process.exit(1);
+});
+
 async function runServer() {
     try {
         await client.connect();
         console.log('Connected to MongoDB');
 
-        const startupDatabase = client.db('startup');
-        const logins = startupDatabase.collection('logins');
-        const users = startupDatabase.collection('users');
-        let adminUsername = 'benbethers';
-
-        const apiRouter = express.Router();
-        app.use(`/api`, apiRouter);
-        app.use(express.json());
-        app.use(express.static('public'));
-        app.use(cookieParser());
-
         //Logins routes
         apiRouter.post('/login', async (req, res) => {
-            console.log(req.body.password);
-            console.log(req.body.username);
+            console.log(req.json());
             try {
                 let login = await logins.findOne({ linkedUsername: req.body.username });
                 if (login) {
@@ -80,7 +88,7 @@ async function runServer() {
             res.send(adminUsername);
         });
 
-        apiRouter.put('/users/add', async (req, res) => {
+        apiRouter.post('/users/add', async (req, res) => {
             try {
                 let user = await users.findOne({username: req.body.username});
                 if (user) {
@@ -97,15 +105,15 @@ async function runServer() {
                         username: req.body.username,
                         image: assignImage(sex)
                     });
-                    //res.cookie('token', login.token, {
-                        //secure: true,
-                        //httpOnly: true,
-                        //sameSite: 'strict',
-                    //});
+                    res.cookie('token', login.token, {
+                        secure: true,
+                        httpOnly: true,
+                        sameSite: 'strict',
+                    });
                     res.sendStatus(200);
                 }
             } catch (error) {
-                res.send(500).send({msg: 'Failed to create new user'});
+                res.status(500).send({msg: 'Failed to create new user'});
             }
         });
 
@@ -159,9 +167,13 @@ async function runServer() {
             }
         });
 
+        app.use(function (err, req, res, next) {
+            res.status(500).send({ type: err.name, message: err.message });
+        });
+
         app.use((_req, res) => {
             res.sendFile('index.html', { root: 'public' });
-          });
+        });
 
         app.listen(port, () => {
             console.log(`Server is running on :${port}`);
