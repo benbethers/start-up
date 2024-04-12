@@ -161,9 +161,16 @@
                 return;
             }
 
+            function signOut() {
+                let signOutButton = document.getElementById('sign out');
+                signOutButton.addEventListener('click', () => {
+                    localStorage.setItem('username', '');
+                    window.location.replace('index.html');
+                });
+            }
+
             //Check login
             function checkLogin() {
-                console.log(username);
                 if (username === '') {
                     window.location.replace('index.html');
                 }
@@ -214,6 +221,7 @@
             async function main() {
                 await fetchData();
                 await checkLogin();
+                await signOut();
                 await setLoggedInUser();
                 await submitButtonFunctionality();
             }
@@ -231,7 +239,7 @@
                 <div><a href="http://simon.cs260.click/">Simon</a></div>
                 <div><a href="database.html">Database</a></div>
                 <div><a href="my-ratings.html">My Account</a></div>
-                <div><a href="index.html">Sign Out</a></div>
+                <div><a id="sign out">Sign Out</a></div>
             </nav>
         </header>
         <main>

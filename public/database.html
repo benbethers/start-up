@@ -176,12 +176,19 @@
             async function fetchData() {
                 let usersResponse = await fetch('/api/users', { method: 'GET' });
                 people = await usersResponse.json() || [];
-                console.log(JSON.stringify(people));
 
                 username = localStorage.getItem('username');
 
                 let adminUsernameResponse = await fetch('/api/users/admins', { method: 'GET' });
                 adminUsername = await adminUsernameResponse.text();
+            }
+
+            function signOut() {
+                let signOutButton = document.getElementById('sign out');
+                signOutButton.addEventListener('click', () => {
+                    localStorage.setItem('username', '');
+                    window.location.replace('index.html');
+                });
             }
 
             //Check login
@@ -215,8 +222,6 @@
                 let cardDisplay = document.getElementById('cardsDisplay');
                 let deleteButtons = document.querySelectorAll('.deleteCard');
 
-                console.log(adminUsername);
-                console.log(username);
                 if (username === adminUsername) {
                     deleteButtons.forEach((button) => {
                         button.addEventListener('click', () => {
@@ -335,10 +340,10 @@
             async function main() {
                 await fetchData();
                 await checkLogin();
+                await signOut();
                 await setLoggedInUser();
                 await mainCardDisplay();
                 await searchFunctionality();
-                console.log('finished');
             }
 
             document.addEventListener('DOMContentLoaded', function() {
@@ -354,7 +359,7 @@
                 <div><a href="http://simon.cs260.click/">Simon</a></div>
                 <div><a href="database.html">Database</a></div>
                 <div><a href="my-ratings.html">My Account</a></div>
-                <div><a href="index.html">Sign Out</a></div>
+                <div><a id="sign out">Sign Out</a></div>
             </nav>
         </header>
         <main>

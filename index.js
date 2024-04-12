@@ -38,7 +38,6 @@ async function runServer() {
 
         //Logins routes
         apiRouter.post('/login', async (req, res) => {
-            console.log(req.body);
             try {
                 let login = await logins.findOne({ linkedUsername: req.body.username });
                 if (login) {
@@ -100,11 +99,11 @@ async function runServer() {
                     let login = await logins.findOne({linkedUsername: req.body.username});
                     await users.insertOne({
                         name: req.body.name,
-                        type: req.body.type,
-                        sex: req.body.sex,
-                        receivedReviews: [],
                         username: req.body.username,
-                        image: assignImage(sex)
+                        sex: req.body.sex,
+                        type: req.body.type,
+                        receivedReviews: [],
+                        image: assignImage(req.body.sex)
                     });
                     res.cookie('token', login.token, {
                         secure: true,
@@ -154,7 +153,6 @@ async function runServer() {
             try {
                 let deletedUsername = req.body.username;
                 let deletedUser = await users.findOne({username: deletedUsername});
-                console.log(deletedUser.name + ' successfully deleted');
                 await users.updateOne(
                     {},
                     { $pull: { receivedReviews: { ownerUsername: deletedUsername } } }

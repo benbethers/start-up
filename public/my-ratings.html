@@ -200,6 +200,14 @@
                 return;
             }
 
+            function signOut() {
+                let signOutButton = document.getElementById('sign out');
+                signOutButton.addEventListener('click', () => {
+                    localStorage.setItem('username', '');
+                    window.location.replace('index.html');
+                });
+            }
+
             //Check login functionality
             function checkLogin() {
                 if (username === '') {
@@ -303,12 +311,11 @@
             async function main() {
                 let reviewDisplay = document.getElementById('reviewsDisplay');
                 searchResults = document.getElementById('searchResults');
-
                 await fetchData();
                 await checkLogin();
+                await signOut();
                 await setLoggedInUser();
                 await mainReviewDisplay();
-
                 if (reviewDisplay.innerHTML === '') {
                     searchResults.innerHTML = 'You have no ratings';
                 }
@@ -327,7 +334,7 @@
                 <div><a href="http://simon.cs260.click/">Simon</a></div>
                 <div><a href="database.html">Database</a></div>
                 <div><a href="my-ratings.html">My Account</a></div>
-                <div><a href="index.html">Sign Out</a></div>
+                <div><a id="sign out">Sign Out</a></div>
             </nav>
         </header>
         <main>

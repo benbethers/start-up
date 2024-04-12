@@ -200,7 +200,6 @@
 
                     if (sessionStorage.getItem('visitedUsername') !== '' && sessionStorage.getItem('visitedUsername') !== undefined) {
                         visitedUsername = sessionStorage.getItem('visitedUsername');
-                        console.log(visitedUsername);
                     } else {
                         window.location.replace('database.html');
                     }
@@ -208,6 +207,14 @@
                     console.error('Fetch error:', error);
                 }
                 return;
+            }
+
+            function signOut() {
+                let signOutButton = document.getElementById('sign out');
+                signOutButton.addEventListener('click', () => {
+                    localStorage.setItem('username', '');
+                    window.location.replace('index.html');
+                });
             }
 
             //Check login
@@ -244,9 +251,7 @@
                                     window.location.replace('new-rating.html');
                                 } 
                                 person.receivedReviews.forEach((review) => {
-                                    console.log('here' + review.ownerUsername + username)
                                     if (review.ownerUsername === username) {
-                                        console.log('here' + review.ownerUsername + username)
                                         let failure = document.getElementById('failure');
                                         submitButton.style.marginBottom = '2px';
                                         failure.innerHTML = 'You have already rated this person, you must delete or edit your current review.';
@@ -308,6 +313,7 @@
             async function main() {
                 await fetchData();
                 await checkLogin();
+                await signOut();
                 await setLoggedInUser();
                 await makeTitleName();
                 await setUpPage();
@@ -326,7 +332,7 @@
                 <div><a href="http://simon.cs260.click/">Simon</a></div>
                 <div><a href="database.html">Database</a></div>
                 <div><a href="my-ratings.html">My Account</a></div>
-                <div><a href="index.html">Sign Out</a></div>
+                <div><a id="sign out">Sign Out</a></div>
             </nav>
         </header>
         <main>
