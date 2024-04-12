@@ -289,7 +289,7 @@
 
             //Create HTML for person object
             function createPersonCard(person) {
-                return '<div class="card" id="' + person.username + '"><image id="profile-picture" src="' + person.image + '" alt="Avatar"/><div class="container"><b><a class="hyperlink">' + person.name + '</a></b><p>' + person.type + '<br>' + averageRating(person) + ' Stars<br>(' + (person.receivedReviews ? person.receivedReviews.length : 0) + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
+                return '<div class="card" id="' + person.username + '"><image id="profile-picture" src="' + person.image + '" alt="Avatar"/><div class="container"><b><a class="hyperlink">' + person.name + '</a></b><p>' + person.username + '<br>' + person.type + '<br>' + averageRating(person) + ' Stars<br>(' + (person.receivedReviews ? person.receivedReviews.length : 0) + ' reviews)</p><button class="deleteCard" style="color:rgb(0, 68, 255)">Delete</button></div></div>';
             }
 
             //Display all cards
