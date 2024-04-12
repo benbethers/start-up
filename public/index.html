@@ -145,36 +145,29 @@
             function signInFunctionality() {
                 let usernameInput = document.getElementById('username');
                 let passwordInput = document.getElementById('password');
-                let loginButton = document.getElementById('login');
-                let signUpButton = document.getElementById('sign up');
                 let failure = document.getElementById('failure');
 
-                loginButton.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    fetch('/api/login', {
-                        method: 'post',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            username: usernameInput.value,
-                            password: passwordInput.value
-                        })
+                fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: usernameInput.value,
+                        password: passwordInput.value
                     })
-                    .then(response => {
-                        if (response.status === 200) {
-                            console.log(response);
-                            localStorage.setItem('username', usernameInput.value);
-                            window.location.replace('database.html');
-                        }
-                    }).catch(error => {
-                        console.error(error);
-                        failure.innerHTML = 'Could not find username or password';
-                    });
-                });
-
-                signUpButton.addEventListener('click', () => {
-                    window.location.replace('new-person.html');
+                })
+                .then(response => {
+                    if (response.status === 200) {
+                        console.log(response);
+                        localStorage.setItem('username', usernameInput.value);
+                        window.location.replace('database.html');
+                    } else if (response.status === 401) {
+                        failure.innerHTML = 'Could not find username or password'
+                    }
+                }).catch(error => {
+                    console.error(error);
+                    failure.innerHTML = 'Error';
                 });
             }
             
@@ -191,7 +184,12 @@
             //Load content
             async function main() {
                 localStorage.setItem('username', '')
-                await signInFunctionality();
+                let passwordInput = document.getElementById('password');
+                let loginButton = document.getElementById('login');
+                let signUpButton = document.getElementById('sign up');
+                passwordInput.addEventListener('keydown', (event) => {if (event.key === 'enter') {signInFunctionality()}});
+                loginButton.addEventListener('click', () => {signInFunctionality()});
+                signUpButton.addEventListener('click', () => {window.location.replace('new-person.html');});
                 await quoteOfTheDay();
             }
 

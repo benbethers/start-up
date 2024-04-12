@@ -10,11 +10,12 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 const url = `mongodb+srv://${config.username}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
 
+app.use(express.json());
 const apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 app.use(express.static('public'));
-app.use(express.json());
 app.use(cookieParser());
+app.set('trust proxy', true);
 
 
 const startupDatabase = client.db('startup');
@@ -37,17 +38,17 @@ async function runServer() {
 
         //Logins routes
         apiRouter.post('/login', async (req, res) => {
-            console.log(req.json());
+            console.log(req.body);
             try {
                 let login = await logins.findOne({ linkedUsername: req.body.username });
                 if (login) {
-                    if (req.body.username === login.username) {//await bcrypt.compare(req.body.password, login.password)) {
+                    if (await bcrypt.compare(req.body.password, login.password)) {
                         res.cookie('token', login.token, {
                             secure: true,
                             httpOnly: true,
                             sameSite: 'strict',
                         });
-                        res.status(200).send({ username: login.linkedUsername });
+                        res.status(200).send({username: login.linkedUsername});
                         return;
                     }
                 }

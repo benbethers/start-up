@@ -182,9 +182,9 @@
                     }
                     console.log(user);
                     fetch(`/api/users/add`, {
-                        method: 'post',
+                        method: 'POST',
                         headers: {
-                            'content-type': 'application/json',
+                            'Content-Type': 'application/json',
                         },
                         body: JSON.stringify(user)
                     }).then(response => {
