@@ -186,13 +186,15 @@
                         })
                     }).then(response => {
                         if (response.status === 200) {
-                            localStorage.setItem('username', usernameInput.value);
-                            window.location.replace('database.html');
+                            return res.json()
                         } else if (response.status === 409) {
                             failure.innerHTML = 'The username ' + usernameInput.value + ' is already in use';
                         } else {
                             throw new Error;
                         }
+                    }).then(data => {
+                        localStorage.setItem('token', data.token)
+                        window.location.replace('database.html');
                     }).catch(error => {
                         failure.innerHTML = 'Failure to create user';
                     });

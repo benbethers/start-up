@@ -35,10 +35,21 @@ This start up has taught me by far the most so far in this class, through trial 
 - Creating a smooth and user friendly application
 
 ## Startup Service Deliverable
-This startup was hard for me but it taught me alot of thing including the following:
+This startup was hard for me, but it taught me alot of thing including the following:
 - Greater security practices
 - How to use fetch
 - Greater ability in promises and async await
 - Changing and accessing variables on the backend
 - Express functionality
 - Node functionality
+
+## Login Deliverable
+This startup was easy and hard for me, I understood all of the concepts and learned them even better when I tried to debug one little thing that turned out to be small but had me racking my brains, here are the things I learned:
+- Order really matters for your middleware, if you are having a problem in your endpoints or server, check that first on stack overflow
+- Connect to and set up mongodb
+- Use password encryption to make it harder for people to hack into your user's account
+- User multiple layers of security
+- Using local storage for cookies and to keep user logged in
+- Keep unauthorized users out
+- Better knowledge in fetch request bodies and headers
+- Better git capabilities and organizational skills

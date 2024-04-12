@@ -8,12 +8,12 @@ All across the country countless college students get into dorms and sign up for
 
 ### Design
 
-![](assets/images/One.jpg)
-![](assets/images/Two.jpg)
+![](./public/assets/images/One.jpg)
+![](./public/assets/images/Two.jpg)
 
 Here is an example of how the users interact with the server, rate other users, and view other user's ratings
 
-![Here is an example of how the users interact with the server, rate other users, and view other user's ratings](assets/images/Three.jpg)
+![Here is an example of how the users interact with the server, rate other users, and view other user's ratings](./public/assets/images/Three.jpg)
 
 ### Key Features
 
@@ -78,3 +78,13 @@ For this deliverable, I made use of express to change and retrieve important
 - Using node and express to create backend servers
 - Creating login and users services listening on different points, all services with thier own endpoint
 - Retreiving and changing reviews and people using fetch and express
+
+## Login Deliverable
+For this deliverable, I made use of MongoDB to store user credentials and bcrypt to encrypt passwords:
+- Use local storage and cookies to keep users logged into the website
+- Delete cookies when the user signs out for security
+- Connect all endpoint services to MongoDB to store users and user credentials
+- Use of bcrypt to encrypt user information
+- Encrypted login for existing users
+- Creation of new encrypted users
+- Use of uuid to create a token, then use this token to authenticate an already logged in user

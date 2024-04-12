@@ -174,10 +174,10 @@
             let adminUsername;
             sessionStorage.setItem('visitedUsername', '');
             async function fetchData() {
+                await checkLogin();
+
                 let usersResponse = await fetch('/api/users', { method: 'GET' });
                 people = await usersResponse.json() || [];
-
-                username = localStorage.getItem('username');
 
                 let adminUsernameResponse = await fetch('/api/users/admins', { method: 'GET' });
                 adminUsername = await adminUsernameResponse.text();
@@ -186,16 +186,35 @@
             function signOut() {
                 let signOutButton = document.getElementById('sign out');
                 signOutButton.addEventListener('click', () => {
-                    localStorage.setItem('username', '');
+                    localStorage.removeItem('token');
                     window.location.replace('index.html');
                 });
             }
 
             //Check login
             function checkLogin() {
-                if (username === '') {
+                fetch('/api/login/auth', 
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: {
+                            token: localStorage.getItem('token')
+                        }
+                    }
+                ).then(response => {
+                    if (response.status === 200) {
+                        return response.json()
+                    } else {
+                        throw new Error;
+                    }
+                }).then(data => {
+                    username = data.username;
+                }).catch(error => {
+                    localStorage.removeItem('token');
                     window.location.replace('index.html');
-                }
+                });
             }
 
             //Set logged in user at the footer
@@ -241,7 +260,7 @@
                                     } else {
                                         button.parentNode.parentNode.remove();
                                         if (deletedPerson.username === username) {
-                                            localStorage.setItem('username', '');
+                                            localStorage.removeItem('token');
                                             window.location.replace('index.html');
                                         }
                                     }

@@ -190,10 +190,10 @@
             let searchResults = document.getElementById('searchResults');
             async function fetchData() {
                 try {
+                    await checkLogin();
+
                     let usersResponse = await fetch('/api/users', { method: 'GET' });
                     people = await usersResponse.json() || [];
-
-                    username = localStorage.getItem('username');
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
@@ -203,16 +203,35 @@
             function signOut() {
                 let signOutButton = document.getElementById('sign out');
                 signOutButton.addEventListener('click', () => {
-                    localStorage.setItem('username', '');
+                    localStorage.removeItem('token');
                     window.location.replace('index.html');
                 });
             }
 
             //Check login functionality
             function checkLogin() {
-                if (username === '') {
+                fetch('/api/login/auth', 
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: {
+                            token: localStorage.getItem('token')
+                        }
+                    }
+                ).then(response => {
+                    if (response.status === 200) {
+                        return response.json()
+                    } else {
+                        throw new Error;
+                    }
+                }).then(data => {
+                    username = data.username;
+                }).catch(error => {
+                    localStorage.removeItem('token');
                     window.location.replace('index.html');
-                }
+                });
             }
 
             //Set logged in username in footer
@@ -245,7 +264,7 @@
                         let reviewCard = button.closest('.card');
                         let requestBody = {
                             deletedUsername: button.closest('.card').getAttribute('id'),
-                            username: localStorage.getItem('username'),
+                            username: username,
                         };
                         fetch(`/api/users/delete/rating`, {
                             method: 'DELETE',
