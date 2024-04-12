@@ -167,7 +167,7 @@
                     window.location.replace('database.html');
                 }).catch(error => {
                     console.error(error);
-                    failure.innerHTML = 'Error';
+                    failure.innerHTML = 'Could not find username or password';
                 });
             }
             
@@ -196,7 +196,7 @@
                     let loginButton = document.getElementById('login');
                     let signUpButton = document.getElementById('sign up');
                     passwordInput.addEventListener('keydown', (event) => {
-                        if (event.key === 'enter') {
+                        if (event.key === 'Enter') {
                             signInFunctionality()
                         }
                     });

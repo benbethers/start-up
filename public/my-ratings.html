@@ -216,16 +216,12 @@
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: {
+                        body: JSON.stringify({
                             token: localStorage.getItem('token')
-                        }
+                        })
                     }
                 ).then(response => {
-                    if (response.status === 200) {
-                        return response.json()
-                    } else {
-                        throw new Error;
-                    }
+                    return response.json()
                 }).then(data => {
                     username = data.username;
                 }).catch(error => {

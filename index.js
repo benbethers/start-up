@@ -119,7 +119,8 @@ async function runServer() {
                         httpOnly: true,
                         sameSite: 'strict',
                     });
-                    res.sendStatus(200);
+                    res.status(200).send({token: login.token});
+                    return;
                 }
             } catch (error) {
                 res.status(500).send({msg: 'Failed to create new user'});
