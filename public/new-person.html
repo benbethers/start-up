@@ -158,28 +158,6 @@
             }
         </style>
         <script>
-            //Declare variables
-            let people;
-            let username;
-            async function fetchData() {
-                try {
-                    let usersResponse = await fetch('/api/users', { method: 'GET' });
-                    people = await usersResponse.json() || [];
-
-                    username = localStorage.getItem('username');
-                } catch (error) {
-                    console.error('Fetch error:', error);
-                }
-                return;
-            }
-
-            //Check login
-            function checkLogin() {
-                if (username === '') {
-                    window.location.replace('index.html');
-                }
-            }
-
             //Submit form
             function formSubmit() {
                 let name = document.getElementById('name');
@@ -196,20 +174,19 @@
                     } else if (password.value.length < 10) {
                         failure.innerHTML = 'Your password must be at least ten characters long';
                     } else {
-                        let userData = {
-                            username: usernameInput.value,
-                            name: name.value,
-                            password: password.value,
-                            sex: sexSelector.value,
-                            type: typeSelector.value
-                        };
-
+                        console.log(usernameInput.value);
                         fetch(`/api/users/add`, {
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify(userData)
+                            body: JSON.stringify({
+                                username: usernameInput.value,
+                                name: name.value,
+                                password: password.value,
+                                sex: sexSelector.value,
+                                type: typeSelector.value
+                            })
                         }).then(response => {
                             if (response.status === 200) {
                                 localStorage.setItem('username', usernameInput.value);
@@ -220,7 +197,7 @@
                                 throw new Error;
                             }
                         }).catch(error => {
-                            failure.innerHTML = 'Failed to create user';
+                            failure.innerHTML = 'Failure to create user';
                         });
                     }
                 });
@@ -228,7 +205,6 @@
 
             //Load content
             async function main() {
-                await fetchData();
                 await formSubmit();
             }
 

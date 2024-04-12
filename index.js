@@ -1,11 +1,13 @@
 const { MongoClient } = require('mongodb');
 const express = require('express');
-const path = require('path');
+const bcrypt = require('bcrypt');
+const uuid = require('uuid');
 const config = require('./dbConfig.json');
+const cookieParser = require('cookie-parser');
 const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
-const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
+const url = `mongodb+srv://${config.username}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
 
 async function runServer() {
@@ -22,35 +24,43 @@ async function runServer() {
         app.use(`/api`, apiRouter);
         app.use(express.json());
         app.use(express.static('public'));
+        app.use(cookieParser());
 
-        app.get('/', (req, res, next) => {
-            res.sendFile(path.join(__dirname, 'index.html'));
-        });
-        
-        app.get('/ratings', (req, res, next) => {
-            res.sendFile(path.join(__dirname, 'database.html'));
+        //Logins routes
+        apiRouter.post('/login', async (req, res) => {
+            console.log(req.body.password);
+            console.log(req.body.username);
+            try {
+                let login = await logins.findOne({ linkedUsername: req.body.username });
+                if (login) {
+                    if (req.body.username === login.username) {//await bcrypt.compare(req.body.password, login.password)) {
+                        res.cookie('token', login.token, {
+                            secure: true,
+                            httpOnly: true,
+                            sameSite: 'strict',
+                        });
+                        res.status(200).send({ username: login.linkedUsername });
+                        return;
+                    }
+                }
+                res.status(401).send({msg: 'Unauthorized'});
+            } catch (error) {
+                console.error('Error during login:', error);
+                res.status(500).send({msg: 'Internal Server Error'});
+            }
         });
 
-        // Logins routes
-        apiRouter.post('/login', async (req, res, next) => {
-            let username = req.body.username;
-            let password = req.body.password;
-            let user = await logins.findOne({linkedUsername: username, password: password});
-            res.send(JSON.stringify(user));
-        });
 
         apiRouter.delete('/logins/delete', async (req, res) => {
             try {
                 await logins.deleteOne({linkedUsername: req.body.username});
                 res.sendStatus(200);
             } catch (error) {
-                console.error('Invalid request', error);
-                res.sendStatus(401);
+                console.error('Error during login deletion:', error);
+                res.sendStatus(500);
             }
-            return;
         });
 
-        // Function to assign image based on sex
         function assignImage(sex) {
             return sex === 'Female' ? '../assets/images/FemaleAvatar.png' : '../assets/images/MaleAvatar.png';
         }
@@ -71,54 +81,55 @@ async function runServer() {
         });
 
         apiRouter.put('/users/add', async (req, res) => {
-            let username = req.body.username;
-            let name = req.body.name;
-            let password = req.body.password;
-            let sex = req.body.sex;
-            let type = req.body.type;
             try {
-                let user = await users.findOne({username: username});
+                let user = await users.findOne({username: req.body.username});
                 if (user) {
                     res.sendStatus(409);
+                    return;
                 } else {
-                    await logins.insertOne({ linkedUsername: username, password: password });
+                    await logins.insertOne({linkedUsername: req.body.username, password: await bcrypt.hash(req.body.password, 10), token: uuid.v4()});
+                    let login = await logins.findOne({linkedUsername: req.body.username});
                     await users.insertOne({
-                        name: name,
-                        type: type,
-                        sex: sex,
+                        name: req.body.name,
+                        type: req.body.type,
+                        sex: req.body.sex,
                         receivedReviews: [],
-                        username: username,
+                        username: req.body.username,
                         image: assignImage(sex)
                     });
+                    //res.cookie('token', login.token, {
+                        //secure: true,
+                        //httpOnly: true,
+                        //sameSite: 'strict',
+                    //});
                     res.sendStatus(200);
                 }
             } catch (error) {
-                console.error('Failed', error);
-                res.sendStatus(400);
+                res.send(500).send({msg: 'Failed to create new user'});
             }
         });
 
         apiRouter.put('/users/add/rating', async (req, res) => {
-            let visitedUsername = req.body.visitedUsername;
-            let loggedInUsername = req.body.username;
-            let rating = req.body.rating;
-            let description = req.body.description;
             try {
+                let visitedUsername = req.body.visitedUsername;
+                let loggedInUsername = req.body.username;
+                let rating = req.body.rating;
+                let description = req.body.description;
                 await users.updateOne(
                     { username: visitedUsername },
                     { $push: { receivedReviews: { ownerUsername: loggedInUsername, rating: rating, description: description } } }
                 );
                 res.sendStatus(200);
             } catch (error) {
-                console.error(error);
+                console.error('Error adding rating:', error);
                 res.sendStatus(500);
             }
         });
 
         apiRouter.delete('/users/delete/rating', async (req, res) => {
-            let deletedUsername = req.body.deletedUsername;
-            let username = req.body.username;
             try {
+                let deletedUsername = req.body.deletedUsername;
+                let username = req.body.username;
                 await users.updateOne(
                     { username: deletedUsername },
                     { $pull: { receivedReviews: { ownerUsername: username } } }
@@ -131,9 +142,9 @@ async function runServer() {
         });
 
         apiRouter.delete('/users/delete', async (req, res) => {
-            let deletedUsername = req.body.username;
             try {
-                let deletedUser = users.findOne({username: deletedUsername});
+                let deletedUsername = req.body.username;
+                let deletedUser = await users.findOne({username: deletedUsername});
                 console.log(deletedUser.name + ' successfully deleted');
                 await users.updateOne(
                     {},
@@ -143,10 +154,14 @@ async function runServer() {
                 await users.deleteOne({ username: deletedUsername });
                 res.sendStatus(200);
             } catch (error) {
-                console.error('Invalid request', error);
-                res.sendStatus(400);
+                console.error('Error deleting user:', error);
+                res.sendStatus(500);
             }
         });
+
+        app.use((_req, res) => {
+            res.sendFile('index.html', { root: 'public' });
+          });
 
         app.listen(port, () => {
             console.log(`Server is running on :${port}`);

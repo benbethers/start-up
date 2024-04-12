@@ -150,8 +150,8 @@
                 let failure = document.getElementById('failure');
 
                 loginButton.addEventListener('click', (event) => {
-                    event.preventDefault(); // Prevent the default form submission
-                    
+                    event.preventDefault();
+                    console.log('test');
                     fetch('/api/login', {
                         method: 'POST',
                         headers: {
@@ -159,22 +159,15 @@
                         },
                         body: JSON.stringify({
                             username: usernameInput.value,
-                            password: passwordInput.value
+                            password: password.value
                         })
                     })
                     .then(response => {
-                        if (response.ok) {
-                            return response.json();
-                        } else {
-                            throw new Error('Login failed');
+                        if (response.status === 200) {
+                            localStorage.setItem('username', usernameInput.value);
+                            window.location.replace('database.html');
                         }
-                    })
-                    .then(data => {
-                        console.log(data);
-                        localStorage.setItem('username', usernameInput.value);
-                        window.location.replace('database.html');
-                    })
-                    .catch(error => {
+                    }).catch(error => {
                         console.error(error);
                         failure.innerHTML = 'Could not find username or password';
                     });
