@@ -207,14 +207,15 @@ async function runServer() {
             });
         });
       
-        // Keep track of all the connections so we can forward messages
+        //List for active connections
         let connections = [];
       
+        //Web socket connections
         wss.on('connection', (ws) => {
             const connection = { id: uuid.v4(), alive: true, ws: ws };
             connections.push(connection);
-      
-            // Forward messages to everyone except the sender
+            
+            //Action on send
             ws.on('message', function message(data) {
                 connections.forEach(async (c) => {
                     if (c.id !== connection.id) {
@@ -223,25 +224,23 @@ async function runServer() {
                 });
             });
       
-            // Remove the closed connection so we don't try to forward anymore
+            //Close connection
             ws.on('close', () => {
                 const pos = connections.findIndex((o, i) => o.id === connection.id);
-      
                 if (pos >= 0) {
                     connections.splice(pos, 1);
                 }
             });
       
-            // Respond to pong messages by marking the connection alive
+            //Ensure connectoin is alive
             ws.on('pong', () => {
                 connection.alive = true;
             });
         });
       
-        // Keep active connections alive
+        //Keep connection alive
         setInterval(() => {
             connections.forEach((c) => {
-                // Kill any connection that didn't respond to the ping last time
                 if (!c.alive) {
                     c.ws.terminate();
                 } else {
