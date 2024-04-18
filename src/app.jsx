@@ -1,16 +1,15 @@
 import React from 'react';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
-import { Play } from './play/play';
-import { Scores } from './scores/scores';
-import { About } from './about/about';
-import { AuthState } from './login/authState';
+import { MyRatings } from './account/my-ratings';
+import { Database } from './database/database';
+import { User } from './user/user';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
 function App() {
-  const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
-  const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
+  const [username, setUsername] = React.useState(localStorage.getItem('username') || '');
+  const currentAuthState = username ? false : true;
   const [authState, setAuthState] = React.useState(currentAuthState);
 
   return (
@@ -19,31 +18,31 @@ function App() {
         <header className='container-fluid'>
           <nav className='navbar fixed-top navbar-dark'>
             <div className='navbar-brand'>
-              Simon<sup>&reg;</sup>
+              Ratings<sup>&reg;</sup>
             </div>
             <menu className='navbar-nav'>
               <li className='nav-item'>
-                <NavLink className='nav-link' to=''>
+                <NavLink className='nav-link' to='/'>
                   Login
                 </NavLink>
               </li>
-              {authState === AuthState.Authenticated && (
-                <li className='nav-item'>
-                  <NavLink className='nav-link' to='play'>
-                    Play
-                  </NavLink>
-                </li>
-              )}
-              {authState === AuthState.Authenticated && (
-                <li className='nav-item'>
-                  <NavLink className='nav-link' to='scores'>
-                    Scores
-                  </NavLink>
-                </li>
+              {authState === true && (
+                <>
+                  <li className='nav-item'>
+                    <NavLink className='nav-link' to='/database'>
+                      Database
+                    </NavLink>
+                  </li>
+                  <li className='nav-item'>
+                    <NavLink className='nav-link' to='/account'>
+                      My Ratings
+                    </NavLink>
+                  </li>
+                </>
               )}
               <li className='nav-item'>
-                <NavLink className='nav-link' to='about'>
-                  About
+                <NavLink className='nav-link' to='/login'>
+                  Sign Out
                 </NavLink>
               </li>
             </menu>
@@ -55,26 +54,27 @@ function App() {
             path='/'
             element={
               <Login
-                userName={userName}
+                username={username}
                 authState={authState}
-                onAuthChange={(userName, authState) => {
+                onAuthChange={(username, authState) => {
                   setAuthState(authState);
-                  setUserName(userName);
+                  setUsername(username);
                 }}
               />
             }
             exact
           />
-          <Route path='/play' element={<Play userName={userName} />} />
-          <Route path='/scores' element={<Scores />} />
-          <Route path='/about' element={<About />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/user' element={<User />} />
+          <Route path='/database' element={<Database />} />
+          <Route path='/account' element={<MyRatings />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
 
-        <footer className='bg-dark text-dark text-muted'>
+        <footer className='bg-dark text-light'>
           <div className='container-fluid'>
-            <span className='text-reset'>Benamin Bethers</span>
-            <a className='text-reset' href='https://github.com/webprogramming260/simon-react'>GitHub</a>
+            <span className='text-reset'>Benjamin Bethers</span>
+            <a className='text-reset' href='https://github.com/benbethers/start-up'>GitHub</a>
           </div>
         </footer>
       </div>
