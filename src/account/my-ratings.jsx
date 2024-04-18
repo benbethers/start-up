@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './my-ratings.css'; // Import your CSS file
+import './my-ratings.css';
 
 export function MyRatings() {
   const [people, setPeople] = useState([]);
@@ -151,11 +151,16 @@ export function MyRatings() {
   }, [people]);
 
   return (
-    <div className="main-content">
-      <h2>My Ratings</h2>
-      <input id="reviewSearch" type="text" placeholder="Search my ratings"/>
-      <p id="searchResults">{searchResults}</p>
-      <div id="reviewsDisplay"></div>
-    </div>
+    <main>
+      <video width="100%" height="auto" autoplay loop muted>
+        <source src="./assets/videos/StarsFalling.mp4" type="video/mp4"/>
+      </video>
+      <section>  
+        <h2>My Ratings</h2>
+        <input id="reviewSearch" type="text" placeholder="Search my ratings"/>
+        <p id="searchResults"></p>
+      </section>
+      <section id="reviewsDisplay"></section>
+    </main>
   );
 }
