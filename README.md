@@ -88,3 +88,11 @@ For this deliverable, I made use of MongoDB to store user credentials and bcrypt
 - Encrypted login for existing users
 - Creation of new encrypted users
 - Use of uuid to create a token, then use this token to authenticate an already logged in user
+
+## WebSocket Deliverable
+For this deliverable, I made use of WebSocket to update connection to update my database display as users join the program
+- Use websocket on the backend to distribute data to other users live time
+- Send data from the front end of a user using websocket
+- Send a message to the users letting them know who joined the website using a websocket connection
+- Update the client end of a user who did not update the data, receivin the data from the WebSocket in the server code
+- Upgrading an HTTP connection to a WebSocket connection when necessary
