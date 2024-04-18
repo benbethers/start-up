@@ -94,5 +94,5 @@ For this deliverable, I made use of WebSocket to update connection to update my 
 - Use websocket on the backend to distribute data to other users live time
 - Send data from the front end of a user using websocket
 - Send a message to the users letting them know who joined the website using a websocket connection
-- Update the client end of a user who did not update the data, receivin the data from the WebSocket in the server code
+- Update the client end of a user who did not update the data, receiving the data from the WebSocket in the server code
 - Upgrading an HTTP connection to a WebSocket connection when necessary
