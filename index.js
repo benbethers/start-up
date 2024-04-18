@@ -218,8 +218,7 @@ async function runServer() {
             ws.on('message', function message(data) {
                 connections.forEach(async (c) => {
                     if (c.id !== connection.id) {
-                        let person = JSON.parse(data.toString('utf8'));
-                        c.ws.send(JSON.stringify(await users.findOne({ username: person.username })));
+                        c.ws.send(JSON.stringify(await users.findOne({ username: JSON.parse(data.toString('utf8')).username })));
                     }
                 });
             });
