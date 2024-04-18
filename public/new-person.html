@@ -188,7 +188,6 @@
                         })
                     }).then(response => {
                         if (response.status === 200) {
-                            return response.json();
                             const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
                             const socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
                             socket.onopen = () => {
@@ -196,6 +195,7 @@
                                     username: usernameInput.value.toLowerCase(),
                                 }));
                             };
+                            return response.json();
                         }
                     }).then(data => {
                         localStorage.setItem('token', data.token);
