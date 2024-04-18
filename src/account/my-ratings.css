@@ -1,53 +1,178 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+* {
+  text-decoration: none;
+  color: white;
+  font-family: sans-serif;
+}
+
+button, a {
+  cursor: pointer;
+}
+
+video {
+  mask-image: linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0, 0))
+}
+
+input {
+  width: 20%;
+  padding: 10px;
+  margin: 6px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 225, 0.25);
+  color: white;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  background-color: black;
+}
+
+header {
+  font-family: "Cinzel";
+  flex: 0 50px;
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(255, 255, 255, 0);
+  max-height: 50px;
+}
+
+header h1 {
+  flex: 1;
+  margin-top: 7px;
+  font-family: "Cinzel";
+}
+
+header image {
+  margin-top: 9px;
+  flex: .17;
+  align-items: center;
+}
+
+nav {
+  flex: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+nav div {
+  flex: 1;
+}
+
+nav div a {
+  font-family: "Cinzel";
+}
+
+nav div a:hover {
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+main {
+  flex: 0 87vh;
+  text-align: center;
+}
+
+main video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  z-index: -1;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(56, 122, 255, 0.3);
+  transition: 0.3s;
+  width: wrap;
+  height: wrap;
+  border-radius: 12px;
+  text-align: center;
+  background-color: rgba(0, 46, 80, 0.603);
+  margin: 10px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.card * {
+  color: white;
+  text-align: center;
+}
+
+.card p {
+  margin-top: 6px;
+  margin-bottom: 2px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(13, 60, 168, 0.7);
+}
+
+button {
+  background-color: rgba(255, 255, 255, 0);
+  width: 100px;
+  padding: 7px;
+  border: 2px solid white;
+  border-radius: 15px;
+  margin: 10px;
+  box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+      box-shadow: 0 0 10px 0 white inset, 0 0 10px 3px white;
+      background-color: rgb(255, 255, 255, 0);
   }
-  
-  /* Table styles */
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-  }
-  
-  .table th,
-  .table td {
-    padding: 0.5rem;
-    border-bottom: 1px solid #ccc;
-    text-align: left;
-  }
-  
-  /* Header row styles */
-  .table th {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  /* Table body styles */
-  .table tbody tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  /* Button styles */
-  .button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  
-  .button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Error message styles */
-  .error-message {
-    color: red;
-    margin-top: 0.5rem;
-  }
+}
+
+div button {
+  background-color: rgba(255, 255, 255, 0);
+  width: 100px;
+  border: 2px solid rgb(0, 68, 255);
+  border-radius: 15px;
+  margin: 10px;
+  box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
+  transition: all 150ms ease-in-out;
+  padding: 2px;
+}
+
+div button:hover {
+  box-shadow: 0 0 2px 0 rgb(0, 68, 255) inset, 0 0 2px 1px rgb(0, 68, 255);
+  background-color: rgb(255, 0, 0, 0);
+}
+
+.card {
+  margin: 10px;
+  padding: 5px;
+  border-radius: 10px;
+  min-width: 90vw;
+  height: wrap;
+  background-color: white;
+  color: black;
+  display: inline-block;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(255, 255, 255, 0.7);
+}
+
+footer {
+  flex: 0 20px;
+  text-align: center;
+  font-size: 13px;
+}
+
+@font-face {
+  font-family: "Cinzel";
+  src: url("./assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 10px rgb(255, 255, 255), 0 0 20px rgb(255, 255, 255), 0 0 30px rgb(255, 255, 255), 0 0 40px #0ff,0 0 50px #0ff;
+}
+
+to {
+    text-shadow: 0 0 60px rgb(255, 255, 255), 0 0 70px rgb(255, 255, 255);
+}
+}
