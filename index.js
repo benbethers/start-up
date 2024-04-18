@@ -1,3 +1,4 @@
+//Import necessary technologies
 const { WebSocketServer } = require('ws');
 const { MongoClient } = require('mongodb');
 const express = require('express');
@@ -18,13 +19,14 @@ app.use(express.static('public'));
 app.use(cookieParser());
 app.set('trust proxy', true);
 
-
+//Declare database and server variables
 const startupDatabase = client.db('startup');
 let logins = startupDatabase.collection('logins');
 const users = startupDatabase.collection('users');
 let httpServer;
 let adminUsername = 'benbethers';
 
+//Test connection to MongoDB
 (async function testConnection() {
     await client.connect();
     await startupDatabase.command({ ping: 1 });
@@ -33,6 +35,7 @@ let adminUsername = 'benbethers';
     process.exit(1);
 });
 
+//Run server function
 async function runServer() {
     try {
         await client.connect();
@@ -60,6 +63,7 @@ async function runServer() {
             }
         });
 
+        //Authorize user and return username
         apiRouter.post('/login/auth', async (req, res) => {
             let login = await logins.findOne({token: req.body.token});
             if (login) {
@@ -69,7 +73,7 @@ async function runServer() {
             }
         });
 
-
+        //Delete login
         apiRouter.delete('/logins/delete', async (req, res) => {
             try {
                 await logins.deleteOne({linkedUsername: req.body.username});
@@ -80,11 +84,12 @@ async function runServer() {
             }
         });
 
+        //Assign image to user based on sex
         function assignImage(sex) {
             return sex === 'Female' ? '../assets/images/FemaleAvatar.png' : '../assets/images/MaleAvatar.png';
         }
 
-        // Users routes
+        //Return users
         apiRouter.get('/users', async (req, res) => {
             try {
                 const usersReturn = await users.find({}).toArray();
@@ -95,10 +100,12 @@ async function runServer() {
             }
         });
 
+        //Get admin username
         apiRouter.get('/users/admins', (req, res) => {
             res.send(adminUsername);
         });
 
+        //Add user
         apiRouter.post('/users/add', async (req, res) => {
             try {
                 let user = await users.findOne({username: req.body.username});
@@ -129,6 +136,7 @@ async function runServer() {
             }
         });
 
+        //Add rating
         apiRouter.put('/users/add/rating', async (req, res) => {
             try {
                 let visitedUsername = req.body.visitedUsername;
