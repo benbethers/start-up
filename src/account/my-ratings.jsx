@@ -53,8 +53,8 @@ export function MyRatings() {
       person.receivedReviews.forEach((review) => {
         if (review.ownerUsername === username) {
           reviewDisplay.innerHTML += `
-            <div class="card">
-              <div class="name" style="color: black; font-weight: bold;">${person.name}<br></div>
+            <div class="card" key=${review.id}> <!-- Added key prop -->
+              <div class="name" style="color: white; font-weight: bold;">${person.name}<br></div>
               ${review.rating} Stars<br>
               "${review.description}"<br>
               <button class="deleteReview" style="color: blue; margin: 5px">Delete</button>
@@ -117,7 +117,7 @@ export function MyRatings() {
             if (person.name.toLowerCase().includes(reviewSearch.toLowerCase()) && review.ownerUsername === username) {
               searchNumbers++;
               reviewDisplay.innerHTML += `
-                <div class="card">
+                <div class="card" key=${review.id}> <!-- Added key prop -->
                   <div style="color: black; font-weight: bold;">${person.name}<br></div>
                   ${review.rating} Stars<br>
                   "${review.description}"<br>
@@ -152,13 +152,13 @@ export function MyRatings() {
 
   return (
     <main>
-      <video width="100%" height="auto" autoplay loop muted>
+      <video width="100%" height="auto" autoPlay loop muted>
         <source src="./assets/videos/StarsFalling.mp4" type="video/mp4"/>
       </video>
       <section>  
         <h2>My Ratings</h2>
         <input id="reviewSearch" type="text" placeholder="Search my ratings"/>
-        <p id="searchResults"></p>
+        <p id="searchResults">{searchResults}</p> {/* Display search results */}
       </section>
       <section id="reviewsDisplay"></section>
     </main>

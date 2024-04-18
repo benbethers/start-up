@@ -75,7 +75,7 @@ export function Database() {
             <div className="card" key={person.username}>
                 <img id="profile-picture" src={person.image} alt="Avatar" />
                 <div className="container">
-                    <Link to="../user"><a className="hyperlink" onClick={() => {console.log(JSON.stringify(person)); sessionStorage.setItem('visitedUsername', person.username)}}>{person.name}</a></Link>
+                    <Link to="../user" className="hyperlink" onClick={() => {console.log(JSON.stringify(person)); sessionStorage.setItem('visitedUsername', person.username)}}>{person.name}</Link>
                     <p>{person.type}<br />{averageRating(person)} Stars<br />{person.receivedReviews ? person.receivedReviews.length : 0} reviews</p>
                     {renderDeleteButton(person)}
                 </div>

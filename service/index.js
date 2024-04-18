@@ -183,7 +183,7 @@ async function runServer() {
         });
 
         app.use((_req, res) => {
-            res.sendFile('index.html', {root: '../'});
+            res.sendFile('index.html', {root: 'public'});
         });
 
         httpServer = app.listen(port, () => {
