@@ -1,48 +1,134 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+* {
+  text-decoration: none;
+  color: white;
+  font-family: sans-serif;
+}
+
+button, a {
+  cursor: pointer;
+}
+
+video {
+  mask-image: linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0, 0))
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  background: rgb(0, 0, 0);
+}
+
+header {
+  font-family: "Cinzel";
+  flex: 0 50px;
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(255, 255, 255, 0);
+  max-height: 50px;
+}
+
+header h1 {
+  flex: 1;
+  margin-top: 7px;
+  font-family: "Cinzel";
+}
+
+header image {
+  margin-top: 9px;
+  flex: .17;
+  align-items: center;
+}
+
+nav {
+  flex: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+nav div {
+  flex: 1;
+}
+
+nav div a {
+  font-family: "Cinzel";
+}
+
+nav div a:hover {
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+main {
+  flex: 0 87vh;
+  text-align: center;
+  height: 50%;
+}
+
+main video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  z-index: -1;
+}
+
+main h2 {
+  height: 12px;
+  margin: 17px;
+}
+
+main input {
+  width: 20%;
+  padding: 10px;
+  margin: 6px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 225, 0.25);
+  color: white;
+}
+
+main button {
+  background-color: rgba(255, 255, 255, 0);
+  width: 100px;
+  padding: 7px;
+  border: 2px solid white;
+  border-radius: 15px;
+  margin: 10px;
+  color: #fff;
+  box-shadow: 0 0 40px 40px rgb(0, 0, 53, 0) inset;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+      box-shadow: 0 0 10px 0 white inset, 0 0 10px 3px white;
+      background-color: rgb(255, 255, 255, 0);
   }
-  
-  .form-group {
-    margin-bottom: 1rem;
-  }
-  
-  label {
-    color: white;
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-  }
-  
-  input[type='text'],
-  input[type='password'] {
-    width: 100%;
-    padding: 0.5rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 1rem;
-  }
-  
-  input[type='submit'] {
-    width: 100%;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  
-  input[type='submit']:hover {
-    background-color: #0056b3;
-  }
-  
-  .error-message {
-    color: red;
-    margin-top: 0.5rem;
-  }
+}
+
+#failure {
+  color: red;
+  font-style: italic;
+  margin: 5px;
+  font-size: 10px;
+}
+
+footer {
+  flex: 0 20px;
+  text-align: center;
+  font-size: 13px;
+}
+
+@font-face {
+  font-family: "Cinzel";
+  src: url("./assets/fonts/Cinzel/Cinzel-VariableFont_wght.ttf");
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 10px rgb(255, 255, 255), 0 0 20px rgb(255, 255, 255), 0 0 30px rgb(255, 255, 255), 0 0 40px #0ff,0 0 50px #0ff;
+}
+
+to {
+    text-shadow: 0 0 60px rgb(255, 255, 255), 0 0 70px rgb(255, 255, 255);
+}
+}
