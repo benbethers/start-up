@@ -1,110 +1,161 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './my-ratings.css'; // Import your CSS file
 
 export function MyRatings() {
-    const [people, setPeople] = useState([]);
-    const [username, setUsername] = useState('');
-    const [searchResults, setSearchResults] = useState('');
-    const [filteredReviews, setFilteredReviews] = useState([]);
+  const [people, setPeople] = useState([]);
+  const [username, setUsername] = useState('');
+  const [searchResults, setSearchResults] = useState('');
 
-    useEffect(() => {
-        main();
-    }, []);
+  useEffect(() => {
+    fetchData();
+    checkLogin();
+  }, []);
 
-    async function fetchData() {
-        try {
-            const response = await fetch('/api/users');
-            const data = await response.json();
-            setPeople(data);
-        } catch (error) {
-            console.error('Fetch error:', error);
+  async function fetchData() {
+    try {
+      const usersResponse = await fetch('/api/users');
+      const peopleData = await usersResponse.json() || [];
+      setPeople(peopleData);
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  }
+
+  function signOut() {
+    localStorage.removeItem('token');
+    window.location.replace('/login');
+  }
+
+  async function checkLogin() {
+    try {
+      const response = await fetch('/api/login/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          token: localStorage.getItem('token')
+        })
+      });
+
+      const data = await response.json();
+      setUsername(data.username);
+    } catch (error) {
+      localStorage.removeItem('token');
+      window.location.replace('/login');
+    }
+  }
+
+  function mainReviewDisplay() {
+    const reviewDisplay = document.getElementById('reviewsDisplay');
+    reviewDisplay.innerHTML = '';
+    people.forEach((person) => {
+      person.receivedReviews.forEach((review) => {
+        if (review.ownerUsername === username) {
+          reviewDisplay.innerHTML += `
+            <div class="card">
+              <div class="name" style="color: black; font-weight: bold;">${person.name}<br></div>
+              ${review.rating} Stars<br>
+              "${review.description}"<br>
+              <button class="deleteReview" style="color: blue; margin: 5px">Delete</button>
+            </div>
+          `;
         }
-    }
+      });
+    });
+    loadDeleteButtons();
+  }
 
-    async function checkLogin() {
-        try {
-            const response = await fetch('/api/login/auth', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    token: localStorage.getItem('token')
-                })
-            });
+  function loadDeleteButtons() {
+    const reviewDisplay = document.getElementById('reviewsDisplay');
+    const deleteButtons = reviewDisplay.querySelectorAll('.deleteReview');
 
-            const data = await response.json();
-            setUsername(data.username);
-        } catch (error) {
-            localStorage.removeItem('token');
-            window.location.replace('/login');
+    deleteButtons.forEach((button) => {
+      button.addEventListener('click', function() {
+        const reviewCard = button.closest('.card');
+        const requestBody = {
+          deletedUsername: reviewCard.getAttribute('id'),
+          username: username,
+        };
+        fetch(`/api/users/delete/rating`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          } else {
+            reviewCard.remove();
+            if (reviewDisplay.innerHTML === '') {
+              setSearchResults('You have no ratings');
+            }
+          }
+        }).catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+      });
+    });
+  }
+
+  function searchFunctionality() {
+    const reviewInput = document.getElementById('reviewSearch');
+
+    reviewInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        let found = false;
+        let reviewSearch = reviewInput.value;
+        let searchNumbers = 0;
+        reviewInput.value = '';
+        setSearchResults('');
+        const reviewDisplay = document.getElementById('reviewsDisplay');
+        reviewDisplay.innerHTML = '';
+        people.forEach((person) => {
+          person.receivedReviews.forEach((review) => {
+            if (person.name.toLowerCase().includes(reviewSearch.toLowerCase()) && review.ownerUsername === username) {
+              searchNumbers++;
+              reviewDisplay.innerHTML += `
+                <div class="card">
+                  <div style="color: black; font-weight: bold;">${person.name}<br></div>
+                  ${review.rating} Stars<br>
+                  "${review.description}"<br>
+                  <button class="deleteReview" style="color: blue; margin: 5px">Delete</button>
+                </div>
+              `;
+              if (searchNumbers === 1) {
+                setSearchResults(searchNumbers + ' result found');
+              } else {
+                setSearchResults(searchNumbers + ' results found');
+              }
+              found = true;
+            }
+          });
+        });
+
+        if (!found) {
+          setSearchResults('No results found');
+          mainReviewDisplay();
         }
-    }
+      }
+    });
+  }
 
-    function signOut() {
-        localStorage.removeItem('token');
-        window.location.replace('/login');
-    }
+  useEffect(() => {
+    searchFunctionality();
+  }, [people, username]);
 
-    function filterReviews(query) {
-        const filtered = people.reduce((acc, person) => {
-            const reviews = person.receivedReviews.filter(review =>
-                review.ownerUsername === username && person.name.toLowerCase().includes(query.toLowerCase())
-            );
-            return [...acc, ...reviews];
-        }, []);
-        setFilteredReviews(filtered);
-        setSearchResults(`${filtered.length} result${filtered.length !== 1 ? 's' : ''} found`);
-    }
+  useEffect(() => {
+    mainReviewDisplay();
+  }, [people]);
 
-    function handleSearchChange(event) {
-        const query = event.target.value;
-        if (!query) {
-            setSearchResults('');
-            setFilteredReviews([]);
-            return;
-        }
-        filterReviews(query);
-    }
-
-    async function main() {
-        await fetchData();
-        checkLogin();
-    }
-
-    return (
-        <>
-            <main>
-                <video width="100%" height="auto" autoPlay loop muted>
-                    <source src="./assets/videos/StarsFalling.mp4" type="video/mp4" />
-                </video>
-                <section>
-                    <h2>My Ratings</h2>
-                    <input
-                        id="reviewSearch"
-                        type="text"
-                        placeholder="Search my ratings"
-                        onChange={handleSearchChange}
-                    />
-                    <p id="searchResults">{searchResults}</p>
-                </section>
-                <section id="reviewsDisplay">
-                    {filteredReviews.map(review => (
-                        <div key={review._id} className="card">
-                            <div className="name" style={{ color: 'black', fontWeight: 'bold' }}>{review.ownerUsername}</div>
-                            {review.rating} Stars<br />
-                            "{review.description}"<br />
-                            <button className="deleteReview" style={{ color: 'blue', margin: '5px' }}>Delete</button>
-                        </div>
-                    ))}
-                </section>
-            </main>
-            <footer>
-                <p id="loggedInUser">Logged In User: {username}</p>
-                Benjamin Bethers<br />
-                <a href="http://github.com/benbethers/start-up">GitHub</a>
-                <button id="signOut" onClick={signOut}>Sign Out</button>
-            </footer>
-        </>
-    );
+  return (
+    <div className="main-content">
+      <h2>My Ratings</h2>
+      <input id="reviewSearch" type="text" placeholder="Search my ratings"/>
+      <p id="searchResults">{searchResults}</p>
+      <div id="reviewsDisplay"></div>
+    </div>
+  );
 }

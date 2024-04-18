@@ -25,6 +25,7 @@ export function Login() {
             }
         }).then(data => {
             localStorage.setItem('token', data.token);
+            localStorage.setItem('username', username)
             window.location.replace('/database');
         }).catch(error => {
             console.error(error);
@@ -45,7 +46,7 @@ export function Login() {
     }
 
     function handleSignUpClick() {
-        window.location.replace('/new-person');
+        window.location.replace('../new-person');
     }
 
     React.useEffect(() => {
