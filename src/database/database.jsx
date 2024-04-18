@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './database.css'; // Import your CSS file
 
 export function Database() {
@@ -52,8 +53,8 @@ export function Database() {
                 await fetch(`/api/login/${person.username}`);
                 fetchData();
                 if (person.username === username) {
-                    localStorage.setItem('username', '');
-                    window.location.replace('index.html');
+                    localStorage.setItem('token', '');
+                    window.location.replace('/login');
                 }
             } catch (error) {
                 console.error('Delete error:', error);
@@ -74,20 +75,13 @@ export function Database() {
             <div className="card" key={person.username}>
                 <img id="profile-picture" src={person.image} alt="Avatar" />
                 <div className="container">
-                    <b><a className="hyperlink" onClick={() => sessionStorage.setItem('visitedUsername', person.username)}>{person.name}</a></b>
+                    <Link to="../user"><a className="hyperlink" onClick={() => {console.log(JSON.stringify(person)); sessionStorage.setItem('visitedUsername', person.username)}}>{person.name}</a></Link>
                     <p>{person.type}<br />{averageRating(person)} Stars<br />{person.receivedReviews ? person.receivedReviews.length : 0} reviews</p>
                     {renderDeleteButton(person)}
                 </div>
             </div>
         );
     }
-
-    useEffect(() => {
-        const hyperlinks = document.querySelectorAll('.hyperlink');
-        hyperlinks.forEach(hyperlink => {
-            hyperlink.addEventListener('click', () => window.location.replace('example.html'));
-        });
-    }, []);
 
     function mainCardDisplay() {
         return people.map(person => createPersonCard(person));

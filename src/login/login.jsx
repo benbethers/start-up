@@ -25,7 +25,7 @@ export function Login() {
             }
         }).then(data => {
             localStorage.setItem('token', data.token);
-            window.location.replace('database.html');
+            window.location.replace('/database');
         }).catch(error => {
             console.error(error);
             setFailureMessage('Could not find username or password');
@@ -45,13 +45,13 @@ export function Login() {
     }
 
     function handleSignUpClick() {
-        window.location.replace('new-person.html');
+        window.location.replace('/new-person');
     }
 
     React.useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            window.location.replace('database.html');
+            window.location.replace('/database');
         } else {
             quoteOfTheDay();
         }

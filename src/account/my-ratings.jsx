@@ -25,7 +25,7 @@ export function MyRatings() {
         const signOutButton = document.getElementById('sign out');
         signOutButton.addEventListener('click', () => {
             localStorage.removeItem('token');
-            window.location.replace('index.html');
+            window.location.replace('/login');
         });
     }
 
@@ -45,7 +45,7 @@ export function MyRatings() {
             setUsername(data.username);
         } catch (error) {
             localStorage.removeItem('token');
-            window.location.replace('index.html');
+            window.location.replace('/login');
         }
     }
 
