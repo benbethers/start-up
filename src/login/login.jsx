@@ -59,10 +59,6 @@ export function Login() {
 
     return (
         <div>
-            <header>
-                <image src="./assets/images/StarCluster.png" height="54px" width="54px" alt="StarCluster"></image>
-                <h1>Ratings</h1>
-            </header>
             <main>
                 <video width="100%" height="auto" autoPlay loop muted>
                     <source src="./assets/videos/StarsFalling.mp4" type="video/mp4"/>
@@ -93,10 +89,6 @@ export function Login() {
                 <h4>Quote of the Day</h4>
                 <p>{quote}</p>
             </main>
-            <footer>
-                Benjamin Bethers<br />
-                <a href="http://github.com/benbethers/start-up">GitHub</a>
-            </footer>
         </div>
     );
 }

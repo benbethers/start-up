@@ -4,7 +4,6 @@ import { Login } from './login/login';
 import { MyRatings } from './account/my-ratings';
 import { Database } from './database/database';
 import { User } from './user/user';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
 function App() {
@@ -16,36 +15,28 @@ function App() {
     <BrowserRouter>
       <div className='body bg-dark text-light'>
         <header className='container-fluid'>
+        <img src="./assets/images/StarCluster.png" height="54px" width="54px"></img>
+          <h1>Ratings</h1>
           <nav className='navbar fixed-top navbar-dark'>
-            <div className='navbar-brand'>
-              Ratings<sup>&reg;</sup>
-            </div>
-            <menu className='navbar-nav'>
-              <li className='nav-item'>
+              <div className='nav-item'>
                 <NavLink className='nav-link' to='/'>
                   Login
                 </NavLink>
-              </li>
+              </div>
               {authState === true && (
                 <>
-                  <li className='nav-item'>
+                  <div className='nav-item'>
                     <NavLink className='nav-link' to='/database'>
                       Database
                     </NavLink>
-                  </li>
-                  <li className='nav-item'>
+                  </div>
+                  <div className='nav-item'>
                     <NavLink className='nav-link' to='/account'>
                       My Ratings
                     </NavLink>
-                  </li>
+                  </div>
                 </>
               )}
-              <li className='nav-item'>
-                <NavLink className='nav-link' to='/login'>
-                  Sign Out
-                </NavLink>
-              </li>
-            </menu>
           </nav>
         </header>
 
@@ -57,7 +48,7 @@ function App() {
                 username={username}
                 authState={authState}
                 onAuthChange={(username, authState) => {
-                  setAuthState(authState);
+                  setAuthState(false);
                   setUsername(username);
                 }}
               />
