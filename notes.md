@@ -53,3 +53,10 @@ This startup was easy and hard for me, I understood all of the concepts and lear
 - Keep unauthorized users out
 - Better knowledge in fetch request bodies and headers
 - Better git capabilities and organizational skills
+
+## WebSocket Deliverable
+This start up was reletively easy, but it still taught me the following valuable skills regarding WebSocket:
+- How to translate buffer objects in the WebSocket in the server
+- How to add WebSocket to the server
+- How to add WebSocket to the client end to send messages through the server
+- How to update both html and to message on all users displays other that the one that sent it
