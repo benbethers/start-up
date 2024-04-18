@@ -298,6 +298,18 @@
                 people.forEach(function(person) {
                     cardDisplay.innerHTML += createPersonCard(person);
                 });
+                const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+                const socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+                socket.onmessage = (event) => {
+                    person = JSON.parse(event.data)
+                    cardDisplay.innerHTML += createPersonCard(person);
+                    loadDeleteButtons();
+                    let messagesDisplay = document.getElementById('messages');
+                    messages.innerHTML = person.username + ' has joined'
+                    setTimeout(() => {
+                        messagesDisplay.innerHTML = '';
+                    }, 2000);
+                };
                 loadDeleteButtons();
                 setVisitedUsernameListener();
             }
@@ -370,7 +382,7 @@
             <image src="./assets/images/StarCluster.png" height="54px" width="54px"></image>
             <h1>Ratings</h1>
             <nav>
-                <div><a href="http://simon.cs260.click/">Simon</a></div>
+                <div><a href="http://simon.benbethers.click/">Simon</a></div>
                 <div><a href="database.html">Database</a></div>
                 <div><a href="my-ratings.html">My Account</a></div>
                 <div><a id="sign out">Sign Out</a></div>
@@ -388,6 +400,7 @@
             <section id="cardsDisplay"></section>
         </main>
         <footer>
+            <p id="messages"></p>
             <p id="loggedInUser" style="margin: 0px; font-size: 13px"></p>
             Benjamin Bethers<br>
             <a href="http://github.com/benbethers/start-up">GitHub</a>

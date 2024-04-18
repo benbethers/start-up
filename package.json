@@ -14,7 +14,8 @@
     "path": "^0.12.7",
     "typescript": "^5.4.5",
     "uuid": "^9.0.1",
-    "uuid.v4": "^1.0.0"
+    "uuid.v4": "^1.0.0",
+    "ws": "^8.16.0"
   },
   "scripts": {
     "start": "node server.js"
