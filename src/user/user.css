@@ -110,7 +110,7 @@ section {
 }
 
 .main-card * {
-  color: black;
+  color: white;
   text-align: center;
 }
 
@@ -121,7 +121,7 @@ section {
   min-width: 90vw;
   height: wrap;
   background-color: white;
-  color: black;
+  color: white;
   display: inline-block;
 }
 

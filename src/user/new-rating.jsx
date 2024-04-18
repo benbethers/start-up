@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './new-rating.css';
 
 export function NewRating() {
@@ -74,19 +75,6 @@ export function NewRating() {
 
     return (
         <>
-            <header>
-                <img src="assets/images/StarCluster.png" height="54px" width="54px" alt="Star Cluster" />
-                <h1>Ratings</h1>
-                <nav>
-                    <div><a href="http://simon.benbethers.click/">Simon</a></div>
-                    <div><a href="database.html">Database</a></div>
-                    <div><a href="my-ratings.html">My Account</a></div>
-                    <div><a onClick={() => {
-                        localStorage.removeItem('token');
-                        window.location.replace('/login');
-                    }}>Sign Out</a></div>
-                </nav>
-            </header>
             <main>
                 <video width="100%" height="auto" autoPlay loop muted>
                     <source src="assets/videos/StarsFalling.mp4" type="video/mp4" />
@@ -109,13 +97,8 @@ export function NewRating() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 /><br />
-                <button id="submit" onClick={submitRating}>Submit</button>
+                <Link to="../user"><button id="submit" onClick={submitRating}>Submit</button></Link>
             </main>
-            <footer>
-                <p id="loggedInUser" style={{ margin: '0px', fontSize: '13px' }}>Logged In User: {username}</p>
-                Benjamin Bethers<br />
-                <a href="http://github.com/benbethers/start-up">GitHub</a>
-            </footer>
         </>
     );
 }

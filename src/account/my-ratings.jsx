@@ -5,7 +5,7 @@ export function MyRatings() {
     const [people, setPeople] = useState([]);
     const [username, setUsername] = useState('');
     const [searchResults, setSearchResults] = useState('');
-    const [reviewDisplay, setReviewDisplay] = useState('');
+    const [filteredReviews, setFilteredReviews] = useState([]);
 
     useEffect(() => {
         main();
@@ -13,20 +13,12 @@ export function MyRatings() {
 
     async function fetchData() {
         try {
-            const usersResponse = await fetch('/api/users');
-            const peopleData = await usersResponse.json() || [];
-            setPeople(peopleData);
+            const response = await fetch('/api/users');
+            const data = await response.json();
+            setPeople(data);
         } catch (error) {
             console.error('Fetch error:', error);
         }
-    }
-
-    function signOut() {
-        const signOutButton = document.getElementById('sign out');
-        signOutButton.addEventListener('click', () => {
-            localStorage.removeItem('token');
-            window.location.replace('/login');
-        });
     }
 
     async function checkLogin() {
@@ -49,104 +41,36 @@ export function MyRatings() {
         }
     }
 
-    function setLoggedInUser() {
-        const usernameNotification = document.getElementById('loggedInUser');
-        usernameNotification.innerHTML = 'Logged In User: ' + username;
+    function signOut() {
+        localStorage.removeItem('token');
+        window.location.replace('/login');
     }
 
-    function mainReviewDisplay() {
-        let display = '';
-        people.forEach((person) => {
-            person.receivedReviews.forEach((review) => {
-                if (review.ownerUsername === username) {
-                    display += '<div class="card"><div class="name" style="color: black; font-weight: bold;">' + person.name + '<br></div>' + review.rating + ' Stars<br>"' + review.description + '"<br><button class="deleteReview" style="color: blue; margin: 5px">Delete</button></div>';
-                }
-            });
-        });
-        setReviewDisplay(display);
+    function filterReviews(query) {
+        const filtered = people.reduce((acc, person) => {
+            const reviews = person.receivedReviews.filter(review =>
+                review.ownerUsername === username && person.name.toLowerCase().includes(query.toLowerCase())
+            );
+            return [...acc, ...reviews];
+        }, []);
+        setFilteredReviews(filtered);
+        setSearchResults(`${filtered.length} result${filtered.length !== 1 ? 's' : ''} found`);
     }
 
-    function loadDeleteButtons() {
-        const deleteButtons = document.querySelectorAll('.deleteReview');
-
-        deleteButtons.forEach((button) => {
-            button.addEventListener('click', function() {
-                const reviewCard = button.closest('.card');
-                const requestBody = {
-                    deletedUsername: button.closest('.card').getAttribute('id'),
-                    username: username,
-                };
-                fetch(`/api/users/delete/rating`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(requestBody)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    } else {
-                        reviewCard.remove();
-                        if (reviewDisplay === '') {
-                            setSearchResults('You have no ratings');
-                        }
-                    }
-                }).catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                });
-            });
-        });
-    }
-
-    function searchFunctionality() {
-        const reviewInput = document.getElementById('reviewSearch');
-
-        reviewInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                let found = false;
-                let searchNumbers = 0;
-                const reviewSearch = reviewInput.value;
-                reviewInput.value = '';
-                setSearchResults('');
-                setReviewDisplay('');
-                people.forEach(function(person) {
-                    person.receivedReviews.forEach((review) => {
-                        if (person.name.toLowerCase().includes(reviewSearch.toLowerCase()) && review.ownerUsername === username) {
-                            searchNumbers++;
-                            setReviewDisplay(reviewDisplay => reviewDisplay + '<div class="card"><div style="color: black; font-weight: bold;">' + person.name + '<br></div>' + review.rating + ' Stars<br>"' + review.description + '"<br><button class="deleteReview" style="color: blue; margin: 5px">Delete</button></div>');
-                            if (searchNumbers === 1) {
-                                setSearchResults(searchNumbers + ' result found');
-                            } else {
-                                setSearchResults(searchNumbers + ' results found');
-                            }
-                            found = true;
-                        }
-                    });
-                });
-
-                if (!found) {
-                    setSearchResults('No results found');
-                    mainReviewDisplay();
-                }
-            }
-        });
+    function handleSearchChange(event) {
+        const query = event.target.value;
+        if (!query) {
+            setSearchResults('');
+            setFilteredReviews([]);
+            return;
+        }
+        filterReviews(query);
     }
 
     async function main() {
         await fetchData();
-        signOut();
         checkLogin();
-        setLoggedInUser();
-        mainReviewDisplay();
-        if (reviewDisplay === '') {
-            setSearchResults('You have no ratings');
-        }
     }
-
-    useEffect(() => {
-        searchFunctionality();
-    }, [people, username]);
 
     return (
         <>
@@ -154,17 +78,32 @@ export function MyRatings() {
                 <video width="100%" height="auto" autoPlay loop muted>
                     <source src="./assets/videos/StarsFalling.mp4" type="video/mp4" />
                 </video>
-                <section>  
+                <section>
                     <h2>My Ratings</h2>
-                    <input id="reviewSearch" type="text" placeholder="Search my ratings"/>
+                    <input
+                        id="reviewSearch"
+                        type="text"
+                        placeholder="Search my ratings"
+                        onChange={handleSearchChange}
+                    />
                     <p id="searchResults">{searchResults}</p>
                 </section>
-                <section id="reviewsDisplay" dangerouslySetInnerHTML={{__html: reviewDisplay}}></section>
+                <section id="reviewsDisplay">
+                    {filteredReviews.map(review => (
+                        <div key={review._id} className="card">
+                            <div className="name" style={{ color: 'black', fontWeight: 'bold' }}>{review.ownerUsername}</div>
+                            {review.rating} Stars<br />
+                            "{review.description}"<br />
+                            <button className="deleteReview" style={{ color: 'blue', margin: '5px' }}>Delete</button>
+                        </div>
+                    ))}
+                </section>
             </main>
             <footer>
-                <p id="loggedInUser" style={{ margin: '0px', fontSize: '13px' }}></p>
+                <p id="loggedInUser">Logged In User: {username}</p>
                 Benjamin Bethers<br />
                 <a href="http://github.com/benbethers/start-up">GitHub</a>
+                <button id="signOut" onClick={signOut}>Sign Out</button>
             </footer>
         </>
     );
